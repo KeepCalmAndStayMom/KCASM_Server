@@ -1,6 +1,7 @@
 package server;
 
 import server.api.ApiService;
+import server.peso.SogliePeso;
 
 public class MainServer {
 
@@ -9,5 +10,7 @@ public class MainServer {
         subscriber.start();
 
         new ApiService();
+
+        new SogliePeso();
     }
 }
