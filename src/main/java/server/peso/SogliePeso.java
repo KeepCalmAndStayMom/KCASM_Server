@@ -45,6 +45,14 @@ public class SogliePeso {
         float j;
         float inc1 = (value/4)/DAY_INC1, inc2 = ((value/4)*3)/DAY_INC2;
 
+        /*
+        Da sistemare i valori incrementali in quanto troppo piccoli per essere utilizzati dai float
+
+         */
+        System.out.println(value);
+        System.out.println(value/4);
+        System.out.println(value/4/DAY_INC1);
+
         ArrayList<Float> list = new ArrayList<>();
 
         for(i=0, j=0; i<DAY_INC1; i++, j+=inc1)
