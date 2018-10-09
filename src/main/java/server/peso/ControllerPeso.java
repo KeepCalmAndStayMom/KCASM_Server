@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ControllerPeso {
@@ -43,7 +44,34 @@ public class ControllerPeso {
         test_pesi.put("2018-04-03", 60.5f);
         test_pesi.put("2018-04-02", 60f);
 
+        Map<String, Object> test_dieta = new HashMap<>();
+        Map<String, Object> test_attivita = new HashMap<>();
+        List<Map<String, Object>> list_test_dieta = new ArrayList<>();
+        List<Map<String, Object>> list_test_attivita = new ArrayList<>();
+
+        test_dieta.put("data", "2018-09-01");
+        test_dieta.put("categoria", "Ingrassante");
+        list_test_dieta.add(test_dieta);
+        test_dieta.clear();
+        test_dieta.put("data", "2018-10-01");
+        test_dieta.put("categoria", "Dimagrante");
+        list_test_dieta.add(test_dieta);
+
+        test_attivita.put("data", "2018-10-01");
+        test_attivita.put("categoria", "Nessuna");
+        list_test_attivita.add(test_attivita);
+        test_attivita.clear();
+        test_attivita.put("data", "2018-08-05");
+        test_attivita.put("categoria", "Relax");
+        list_test_attivita.add(test_attivita);
+
         System.out.println(DataFilter.dayPesoOut(start_date, start_peso, test_pesi));
+
+        System.out.println(DataFilter.typeDietaOrAttivita(list_test_dieta));
+        System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_dieta));
+
+        System.out.println(DataFilter.typeDietaOrAttivita(list_test_attivita));
+        System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_attivita));
     }
 
     public static int checkPeso(int week, float start_peso, float actual_peso){

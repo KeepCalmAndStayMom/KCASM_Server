@@ -1,7 +1,9 @@
 package server.peso;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class DataFilter {
@@ -21,4 +23,18 @@ public class DataFilter {
 
         return count;
     }
+
+    public static String typeDietaOrAttivita(List<Map<String, Object>> list){
+        if(list==null)
+            return "Nessuna";
+        return String.valueOf(list.get(list.size()-1).get("categoria"));
+    }
+
+    public static int weekOfDietaOrAttivita(List<Map<String, Object>> list){
+        if(list==null)
+            return 0;
+        LocalDate date_start_dieta = LocalDate.parse(String.valueOf(list.get(list.size()-1).get("data")));
+        return (int) ChronoUnit.WEEKS.between(date_start_dieta, LocalDate.now());
+    }
+
 }
