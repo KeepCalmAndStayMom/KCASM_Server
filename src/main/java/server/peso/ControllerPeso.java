@@ -1,5 +1,6 @@
 package server.peso;
 
+import server.database.PesoDB;
 import server.database.UserInitialDateDB;
 
 import java.io.ObjectStreamClass;
@@ -14,35 +15,20 @@ import java.util.Map;
 
 public class ControllerPeso {
 
-    public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    /*
-    LocalDate localDate = LocalDate.now();
-    HomestationSettings.DTF.format(localDate),
-    */
-
-
     private static ArrayList<Float> list_min, list_max;
+    private LocalDate start_date;
+    private float start_peso;
+    private boolean gemelli;
+    private BMI bmi;
 
     public ControllerPeso(int homestation_id){
 
-        Map<String, Object> map = UserInitialDateDB.getUserInitialDate(homestation_id);
-
-        LocalDate start_date = LocalDate.parse(String.valueOf(map.get("data_inizio_gravidanza")));
-        float start_peso = Float.valueOf(String.valueOf(map.get("peso")));
-        boolean gemelli = Boolean.valueOf(String.valueOf(map.get("gemelli")));
-        BMI bmi = getBMI(String.valueOf(map.get("BMI")));
+        getUserData(UserInitialDateDB.getUserInitialDate(homestation_id));
 
         list_min = getListSogliaMin(bmi, gemelli);
         list_max = getListSogliaMax(bmi, gemelli);
 
-        Map<String, Float> test_pesi = new HashMap<>();
-        test_pesi.put("2018-04-09", 63f);
-        test_pesi.put("2018-04-08", 62f);
-        test_pesi.put("2018-04-06", 61.5f);
-        test_pesi.put("2018-04-05", 61f);
-        test_pesi.put("2018-04-03", 60.5f);
-        test_pesi.put("2018-04-02", 60f);
+        Map<String, Float> test_pesi = PesoDB.getPeso(homestation_id);
 
         Map<String, Object> test_dieta = new HashMap<>();
         Map<String, Object> test_attivita = new HashMap<>();
@@ -74,8 +60,16 @@ public class ControllerPeso {
         System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_attivita));
     }
 
-    public static int checkPeso(int week, float start_peso, float actual_peso){
+    public void getUserData(Map<String, Object> map)
+    {
+        start_date = LocalDate.parse(String.valueOf(map.get("data_inizio_gravidanza")));
+        start_peso = Float.valueOf(String.valueOf(map.get("peso")));
+        gemelli = Boolean.valueOf(String.valueOf(map.get("gemelli")));
+        bmi = getBMI(String.valueOf(map.get("BMI")));
+    }
 
+    public static int checkPeso(int week, float start_peso, float actual_peso)
+    {
         if(actual_peso < (start_peso + list_min.get(week)))
             return -1;
 
