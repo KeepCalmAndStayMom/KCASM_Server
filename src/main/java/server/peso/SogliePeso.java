@@ -3,8 +3,8 @@ package server.peso;
 import java.util.ArrayList;
 
 public class SogliePeso {
-    private static final int    DAY_INC1 = 93,
-                                DAY_INC2 = 186,
+    private static final int    WEEK_INC1 = 15,
+                                WEEK_INC2 = 30,
                                 SOTT_GEM_MIN = 18,
                                 SOTT_GEM_MAX = 26,
                                 SOTT_MIN = 12,
@@ -42,23 +42,19 @@ public class SogliePeso {
 
     public static ArrayList<Float> createList(int value) {
         int i;
-        float j;
-        float inc1 = (value/4)/DAY_INC1, inc2 = ((value/4)*3)/DAY_INC2;
+        float j=0;
+        float inc1 = ((float)value/4)/WEEK_INC1, inc2 = (((float)value/4)*3)/WEEK_INC2;
 
         /*
         Da sistemare i valori incrementali in quanto troppo piccoli per essere utilizzati dai float
-
-         */
-        System.out.println(value);
-        System.out.println(value/4);
-        System.out.println(value/4/DAY_INC1);
+        */
 
         ArrayList<Float> list = new ArrayList<>();
 
-        for(i=0, j=0; i<DAY_INC1; i++, j+=inc1)
+        for(i=0; i<WEEK_INC1; i++, j+=inc1)
             list.add(j);
 
-        for(i=0, j=0; i<DAY_INC2; i++, j+=inc2)
+        for(i=0; i<WEEK_INC2; i++, j+=inc2)
             list.add(j);
 
         return list;
