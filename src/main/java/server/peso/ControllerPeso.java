@@ -1,5 +1,7 @@
 package server.peso;
 
+import server.database.AttivitaDB;
+import server.database.DietaDB;
 import server.database.PesoDB;
 import server.database.UserInitialDateDB;
 
@@ -29,27 +31,8 @@ public class ControllerPeso {
         list_max = getListSogliaMax(bmi, gemelli);
 
         Map<String, Float> test_pesi = PesoDB.getPeso(homestation_id);
-
-        Map<String, Object> test_dieta = new HashMap<>();
-        Map<String, Object> test_attivita = new HashMap<>();
-        List<Map<String, Object>> list_test_dieta = new ArrayList<>();
-        List<Map<String, Object>> list_test_attivita = new ArrayList<>();
-
-        test_dieta.put("data", "2018-09-01");
-        test_dieta.put("categoria", "Ingrassante");
-        list_test_dieta.add(test_dieta);
-        test_dieta.clear();
-        test_dieta.put("data", "2018-10-01");
-        test_dieta.put("categoria", "Dimagrante");
-        list_test_dieta.add(test_dieta);
-
-        test_attivita.put("data", "2018-10-01");
-        test_attivita.put("categoria", "Nessuna");
-        list_test_attivita.add(test_attivita);
-        test_attivita.clear();
-        test_attivita.put("data", "2018-08-05");
-        test_attivita.put("categoria", "Relax");
-        list_test_attivita.add(test_attivita);
+        List<Map<String, Object>> list_test_dieta = DietaDB.getDietaPrograms(homestation_id);
+        List<Map<String, Object>> list_test_attivita = AttivitaDB.getAttivitaPrograms(homestation_id);
 
         System.out.println(DataFilter.dayPesoOut(start_date, start_peso, test_pesi));
 
