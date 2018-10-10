@@ -24,10 +24,28 @@ public class DataFilter {
         return count;
     }
 
-    public static String typeDietaOrAttivita(List<Map<String, Object>> list){
+    public static int typeDieta(List<Map<String, Object>> list){
         if(list==null)
-            return "Nessuna";
-        return String.valueOf(list.get(list.size()-1).get("categoria"));
+            return 0;
+        switch (String.valueOf(list.get(list.size()-1).get("categoria")))
+        {
+            case "Nessuna": return 0;
+            case "Ingrassante": return 1;
+            case "Dimagrante": return 2;
+        }
+        return 0;
+    }
+
+    public static int typeAttivita(List<Map<String, Object>> list){
+        if(list==null)
+            return 0;
+        switch (String.valueOf(list.get(list.size()-1).get("categoria")))
+        {
+            case "Nessuna": return 0;
+            case "Relax": return 1;
+            case "Dimagrante": return 2;
+        }
+        return 0;
     }
 
     public static int weekOfDietaOrAttivita(List<Map<String, Object>> list){

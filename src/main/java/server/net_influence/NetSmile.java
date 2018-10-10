@@ -4,9 +4,9 @@ import smile.Network;
 
 public class NetSmile {
 
-    Network net;
+    private static Network net;
 
-    public NetSmile(String file){
+    static{
 
         System.setProperty("jsmile.native.library", "C:\\Users\\Gabriele\\IdeaProjects\\KCASM_Server\\lib\\jsmile.dll");
 
@@ -30,18 +30,18 @@ public class NetSmile {
         );
 
         net = new Network();
-        net.readFile(file);
+        net.readFile("src\\main\\resources\\Prova2.xdsl");
     }
 
-    public void runNet(){
+    public static void runNet(){
         net.updateBeliefs();
     }
 
-    public void clearNet(){
+    public static void clearNet(){
         net.clearAllEvidence();
     }
 
-    public void setAllEvidence(int[] evidence){
+    public static void setAllEvidence(int[] evidence){
         net.setEvidence("Peso",EvidenceFilter.getPeso(evidence[0]));
         net.setEvidence("Dieta",EvidenceFilter.getDieta(evidence[1]));
         net.setEvidence("Attivita",EvidenceFilter.getAttività(evidence[2]));
@@ -50,7 +50,7 @@ public class NetSmile {
         net.setEvidence("Tempo_Attivita", EvidenceFilter.getTempo(evidence[5]));
     }
 
-    public String getResultUtility(){
+    public static String getResultUtility(){
 
         double[] result = net.getNodeValue("Utility");
         return "Avvisare = "+result[0]+"\nNon Avvisare = "+result[1];

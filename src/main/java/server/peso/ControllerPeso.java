@@ -4,6 +4,7 @@ import server.database.AttivitaDB;
 import server.database.DietaDB;
 import server.database.PesoDB;
 import server.database.UserInitialDateDB;
+import server.net_influence.NetSmile;
 
 import java.io.ObjectStreamClass;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class ControllerPeso {
     private boolean gemelli;
     private BMI bmi;
 
-    public ControllerPeso(int homestation_id){
+    public ControllerPeso(int homestation_id, String date_actual, float peso_actual){
 
         getUserData(UserInitialDateDB.getUserInitialDate(homestation_id));
 
@@ -34,13 +35,27 @@ public class ControllerPeso {
         List<Map<String, Object>> list_test_dieta = DietaDB.getDietaPrograms(homestation_id);
         List<Map<String, Object>> list_test_attivita = AttivitaDB.getAttivitaPrograms(homestation_id);
 
+        System.out.println(checkPeso(getWeekOfPregnancy(start_date, LocalDate.parse(date_actual)), start_peso, peso_actual));
         System.out.println(DataFilter.dayPesoOut(start_date, start_peso, test_pesi));
 
-        System.out.println(DataFilter.typeDietaOrAttivita(list_test_dieta));
+        System.out.println(DataFilter.typeDieta(list_test_dieta));
         System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_dieta));
 
-        System.out.println(DataFilter.typeDietaOrAttivita(list_test_attivita));
+        System.out.println(DataFilter.typeAttivita(list_test_attivita));
         System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_attivita));
+
+        int[] testEvidence = new int[] {checkPeso(getWeekOfPregnancy(start_date, LocalDate.parse(date_actual)), start_peso, peso_actual),
+                                        DataFilter.typeDieta(list_test_dieta),
+                                        DataFilter.typeAttivita(list_test_attivita),
+                                        DataFilter.dayPesoOut(start_date, start_peso, test_pesi),
+                                        DataFilter.weekOfDietaOrAttivita(list_test_dieta),
+                                        DataFilter.weekOfDietaOrAttivita(list_test_attivita)};
+
+        NetSmile.clearNet();
+        NetSmile.setAllEvidence(testEvidence);
+        NetSmile.runNet();
+
+        System.out.println(NetSmile.getResultUtility());
     }
 
     public void getUserData(Map<String, Object> map)
