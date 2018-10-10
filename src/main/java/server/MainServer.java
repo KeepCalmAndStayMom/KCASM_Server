@@ -1,7 +1,6 @@
 package server;
 
 import server.api.ApiService;
-import server.peso.ControllerPeso;
 
 public class MainServer {
 
