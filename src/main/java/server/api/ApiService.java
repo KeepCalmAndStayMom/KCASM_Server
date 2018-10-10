@@ -15,6 +15,8 @@ public class ApiService {
         new ApiUser();
         new ApiMedic();
         new ApiLogin();
+
+        new ApiPeso();
     }
 
     private void sparkGetServer() {
