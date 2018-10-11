@@ -7,8 +7,8 @@ import java.sql.SQLException;
 
 public class UserDB {
 
-    public static boolean addUser(int homestation_id, String name, int age, int height, int weight, int medic_id) {
-        final String sql = "INSERT INTO user(homestation_id, name, age, height, weight, medic_id) VALUES (?, ?, ?, ?, ?, ?)";
+    public static boolean addUser(int homestation_id, String name, int age, int height, int weight, int medic_id, String home_address, String hospital_address) {
+        final String sql = "INSERT INTO user(homestation_id, name, age, height, weight, medic_id, home_address, hospital_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -19,6 +19,8 @@ public class UserDB {
             st.setInt(4, height);
             st.setInt(5, weight);
             st.setInt(6, medic_id);
+            st.setString(7, home_address);
+            st.setString(8, hospital_address);
             st.executeUpdate();
             conn.close();
         } catch(SQLException e) {
@@ -44,7 +46,9 @@ public class UserDB {
             builder.append("\"age\": ").append(rs.getInt("age")).append(",");
             builder.append("\"height\": ").append(rs.getInt("height")).append(",");
             builder.append("\"weight\": ").append(rs.getInt("weight")).append(",");
-            builder.append("\"medic_id\": ").append(rs.getInt("medic_id")).append("}");
+            builder.append("\"medic_id\": ").append(rs.getInt("medic_id")).append(",");
+            builder.append("\"home_address\": \"").append(rs.getString("home_address")).append("\",");
+            builder.append("\"hospital_address\": \"").append(rs.getString("hospital_address")).append("\"}");
 
             conn.close();
 
@@ -56,8 +60,8 @@ public class UserDB {
         return null;
     }
 
-    public static boolean updateUser(int homestation_id, String name, Integer age, Integer height, Integer weight) {
-        final String sql = "UPDATE user SET name=?, age=?, height=?, weight=? WHERE homestation_id=?";
+    public static boolean updateUser(int homestation_id, String name, Integer age, Integer height, Integer weight, String home_address, String hospital_address) {
+        final String sql = "UPDATE user SET name=?, age=?, height=?, weight=?, home_address=?, hospital_address=? WHERE homestation_id=?";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -68,6 +72,8 @@ public class UserDB {
             st.setInt(3, height);
             st.setInt(4, weight);
             st.setInt(5, homestation_id);
+            st.setString(6, home_address);
+            st.setString(7, hospital_address);
 
             if(st.executeUpdate() == 0) {
                 conn.close();
