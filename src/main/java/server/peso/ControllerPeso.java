@@ -38,18 +38,23 @@ public class ControllerPeso {
         System.out.println(checkPeso(getWeekOfPregnancy(start_date, LocalDate.parse(date_actual)), start_peso, peso_actual));
         System.out.println(DataFilter.dayPesoOut(start_date, start_peso, test_pesi));
 
-        System.out.println(DataFilter.typeDieta(list_test_dieta));
-        System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_dieta));
+        System.out.println(DataFilter.typeDietaOrAttivita(list_test_dieta));
+        System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_dieta, LocalDate.parse(date_actual)));
 
-        System.out.println(DataFilter.typeAttivita(list_test_attivita));
-        System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_attivita));
+        System.out.println(DataFilter.typeDietaOrAttivita(list_test_attivita));
+        System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_attivita, LocalDate.parse(date_actual)));
 
-        int[] testEvidence = new int[] {checkPeso(getWeekOfPregnancy(start_date, LocalDate.parse(date_actual)), start_peso, peso_actual),
-                                        DataFilter.typeDieta(list_test_dieta),
-                                        DataFilter.typeAttivita(list_test_attivita),
-                                        DataFilter.dayPesoOut(start_date, start_peso, test_pesi),
-                                        DataFilter.weekOfDietaOrAttivita(list_test_dieta),
-                                        DataFilter.weekOfDietaOrAttivita(list_test_attivita)};
+        System.out.println(DataFilter.weekOfLastAvviso(NetSmile.getLastAvviso(homestation_id), LocalDate.parse(date_actual)));
+
+        Map<String, Object> testEvidence = new HashMap<>();
+        testEvidence.put("Peso", checkPeso(getWeekOfPregnancy(start_date, LocalDate.parse(date_actual)), start_peso, peso_actual));
+        testEvidence.put("Dieta", DataFilter.typeDietaOrAttivita(list_test_dieta));
+        testEvidence.put("Attivita", DataFilter.typeDietaOrAttivita(list_test_attivita));
+        testEvidence.put("Tempo_Peso", DataFilter.dayPesoOut(start_date, start_peso, test_pesi));
+        testEvidence.put("Tempo_Dieta", DataFilter.weekOfDietaOrAttivita(list_test_dieta, LocalDate.parse(date_actual)));
+        testEvidence.put("Tempo_Attivita", DataFilter.weekOfDietaOrAttivita(list_test_attivita, LocalDate.parse(date_actual)));
+
+        testEvidence.put("Ultimo_Avviso", DataFilter.weekOfLastAvviso(NetSmile.getLastAvviso(homestation_id), LocalDate.parse(date_actual)));
 
         NetSmile.clearNet();
         NetSmile.setAllEvidence(testEvidence);

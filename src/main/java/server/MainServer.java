@@ -1,6 +1,7 @@
 package server;
 
 import server.api.ApiService;
+import server.peso.ControllerPeso;
 
 public class MainServer {
 
@@ -11,6 +12,6 @@ public class MainServer {
 
         new ApiService();
 
-        //new ControllerPeso(1, "2018-04-08", 63);
+        new ControllerPeso(1, "2018-10-10", 63);
     }
 }

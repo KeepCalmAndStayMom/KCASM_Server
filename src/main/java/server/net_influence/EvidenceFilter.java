@@ -7,33 +7,19 @@ public class EvidenceFilter {
         switch (peso)
         {
             case -1: return "Inferiore";
+            case 0: return "Normale";
             case 1: return "Superiore";
         }
 
         return null;
     }
 
-    public static String getDieta(int dieta){
-
-        switch (dieta)
-        {
-            case 0: return "Nessuna";
-            case 1: return "Ingrassante";
-            case 2: return "Dimagrante";
-        }
-
-        return null;
+    public static String getDieta(String dieta){
+        return dieta;
     }
 
-    public static String getAttività(int attivita){
-
-        switch (attivita)
-        {
-            case 0: return "Nessuna";
-            case 1: return "Relax";
-            case 2: return "Dimagrante";
-        }
-        return null;
+    public static String getAttività(String attivita){
+        return attivita;
     }
 
     public static String getTempo(int settimane){

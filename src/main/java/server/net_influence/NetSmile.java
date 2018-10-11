@@ -2,9 +2,14 @@ package server.net_influence;
 
 import smile.Network;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
 public class NetSmile {
 
     private static Network net;
+    private static HashMap<Integer, String> avvisi;
 
     static{
 
@@ -30,7 +35,26 @@ public class NetSmile {
         );
 
         net = new Network();
-        net.readFile("src\\main\\resources\\Prova2.xdsl");
+        net.readFile("src\\main\\resources\\RetePeso.xdsl");
+
+        avvisi = new HashMap<>();
+    }
+
+    public static String getLastAvviso(int homestation_id)
+    {
+        if(avvisi.get(homestation_id)!=null)
+            return avvisi.get(homestation_id);
+        return null;
+    }
+
+    public static void addLastAvviso(int homestation_id, String date)
+    {
+        avvisi.put(homestation_id, date);
+    }
+
+    public static void removeID(int homestation_id)
+    {
+        avvisi.remove(homestation_id);
     }
 
     public static void runNet(){
@@ -41,13 +65,21 @@ public class NetSmile {
         net.clearAllEvidence();
     }
 
-    public static void setAllEvidence(int[] evidence){
-        net.setEvidence("Peso",EvidenceFilter.getPeso(evidence[0]));
-        net.setEvidence("Dieta",EvidenceFilter.getDieta(evidence[1]));
-        net.setEvidence("Attivita",EvidenceFilter.getAttività(evidence[2]));
-        net.setEvidence("Tempo_Peso", EvidenceFilter.getTempo(evidence[3]));
-        net.setEvidence("Tempo_Dieta", EvidenceFilter.getTempo(evidence[4]));
-        net.setEvidence("Tempo_Attivita", EvidenceFilter.getTempo(evidence[5]));
+    public static void setAllEvidence(Map<String, Object> evidences){
+        if(evidences.get("Peso")!=null)
+            net.setEvidence("Peso",EvidenceFilter.getPeso((Integer) evidences.get("Peso")));
+        if(evidences.get("Dieta")!=null)
+            net.setEvidence("Dieta",EvidenceFilter.getDieta((String) evidences.get("Dieta")));
+        if(evidences.get("Attivita")!=null)
+            net.setEvidence("Attivita",EvidenceFilter.getAttività((String) evidences.get("Attivita")));
+        if(evidences.get("Tempo_Peso")!=null)
+            net.setEvidence("Tempo_Peso", EvidenceFilter.getTempo((Integer) evidences.get("Tempo_Peso")));
+        if(evidences.get("Tempo_Dieta")!=null)
+            net.setEvidence("Tempo_Dieta", EvidenceFilter.getTempo((Integer) evidences.get("Tempo_Dieta")));
+        if(evidences.get("Tempo_Attivita")!=null)
+            net.setEvidence("Tempo_Attivita", EvidenceFilter.getTempo((Integer) evidences.get("Tempo_Attivita")));
+        if(evidences.get("Ultimo_Avviso")!=null)
+            net.setEvidence("Ultimo_Avviso", EvidenceFilter.getTempo((Integer) evidences.get("Ultimo_Avviso")));
     }
 
     public static String getResultUtility(){
