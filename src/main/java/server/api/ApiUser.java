@@ -131,7 +131,7 @@ class ApiUser {
 
             if (result == null) {
                 response.status(404);
-                return "{ \"Errore 404\": \"risorsa non trovata\" }";
+                return "{\"Errore 404\": \"risorsa non trovata\"}";
             }
 
             String json = gson.toJson(result);

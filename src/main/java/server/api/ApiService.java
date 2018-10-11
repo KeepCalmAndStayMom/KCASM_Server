@@ -17,6 +17,7 @@ public class ApiService {
         new ApiLogin();
 
         new ApiPeso();
+        new ApiAttivita();
     }
 
     private void sparkGetServer() {
