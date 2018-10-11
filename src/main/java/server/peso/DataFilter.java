@@ -11,17 +11,28 @@ public class DataFilter {
 
 
     public static int dayPesoOut(LocalDate start_date, float start_peso, Map<String, Float> pesi){
-        int count = 0;
+        int count = 1;
         Object[] date = pesi.keySet().toArray();
         int last_date_index = date.length-1;
-        int week = ControllerPeso.getWeekOfPregnancy(start_date, LocalDate.parse(String.valueOf(date[last_date_index])));
-        while(ControllerPeso.checkPeso(week, start_peso, pesi.get(date[last_date_index]))!=0)
-        {
-            count++;
-            last_date_index--;
-            if(date[last_date_index]==null)
-                break;
-        }
+
+        int check;
+        int week;
+        LocalDate previous_date = LocalDate.parse(String.valueOf(date[last_date_index]));
+        LocalDate actual_date = LocalDate.parse(String.valueOf(date[last_date_index]));
+
+        do {
+            week = ControllerPeso.getWeekOfPregnancy(start_date, actual_date);
+            check = ControllerPeso.checkPeso(week, start_peso, pesi.get(date[last_date_index]));
+            if(check!=0)
+            {
+                count += (int) ChronoUnit.DAYS.between(actual_date, previous_date);
+                previous_date = actual_date;
+                last_date_index--;
+                if(date[last_date_index]==null)
+                    break;
+                actual_date = LocalDate.parse(String.valueOf(date[last_date_index]));
+            }
+        }while(check!=0);
 
         return count;
     }

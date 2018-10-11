@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PesoDB {
@@ -28,7 +29,7 @@ public class PesoDB {
     }
 
     public static Map<String,Float> getPeso(int homestation_id){
-        final String sql = "SELECT * FROM peso WHERE homestation_id=?";
+        final String sql = "SELECT * FROM peso WHERE homestation_id=? order by data";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -37,7 +38,7 @@ public class PesoDB {
 
             ResultSet rs = st.executeQuery();
 
-            HashMap<String, Float> map = new HashMap<>();
+            LinkedHashMap<String, Float> map = new LinkedHashMap<>();
 
             while(rs.next())
                 map.put(rs.getString("data"), rs.getFloat("peso"));
