@@ -12,6 +12,8 @@ public class MainServer {
 
         new ApiService();
 
-        new ControllerPeso(1, "2018-10-10", 63);
+        new ControllerPeso(1, "2018-01-15", 61);
+        new ControllerPeso(2, "2018-05-10", 70);
+        new ControllerPeso(3, "2018-06-07", 72);
     }
 }

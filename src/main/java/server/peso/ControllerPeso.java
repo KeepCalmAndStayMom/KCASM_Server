@@ -24,7 +24,7 @@ public class ControllerPeso {
     private boolean gemelli;
     private BMI bmi;
 
-    public ControllerPeso(int homestation_id, String date_actual, float peso_actual){
+    public ControllerPeso(int homestation_id, String date_actual, float peso_actual) {
 
         getUserData(UserInitialDateDB.getUserInitialDate(homestation_id));
 
@@ -35,34 +35,50 @@ public class ControllerPeso {
         List<Map<String, Object>> list_test_dieta = DietaDB.getDietaPrograms(homestation_id);
         List<Map<String, Object>> list_test_attivita = AttivitaDB.getAttivitaPrograms(homestation_id);
 
-        System.out.println(checkPeso(getWeekOfPregnancy(start_date, LocalDate.parse(date_actual)), start_peso, peso_actual));
-        System.out.println(DataFilter.dayPesoOut(start_date, start_peso, test_pesi));
-
-        System.out.println(DataFilter.typeDietaOrAttivita(list_test_dieta));
-        System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_dieta, LocalDate.parse(date_actual)));
-
-        System.out.println(DataFilter.typeDietaOrAttivita(list_test_attivita));
-        System.out.println(DataFilter.weekOfDietaOrAttivita(list_test_attivita, LocalDate.parse(date_actual)));
-
-        System.out.println(DataFilter.weekOfLastAvviso(NetSmile.getLastAvviso(homestation_id), LocalDate.parse(date_actual)));
+        int week = getWeekOfPregnancy(start_date, LocalDate.parse(date_actual));
+        int checkpeso = checkPeso(week, start_peso, peso_actual);
+        int dayPesoOut = DataFilter.dayPesoOut(start_date, start_peso, test_pesi);
+        String dieta = DataFilter.typeDietaOrAttivita(list_test_dieta);
+        int weekDieta = DataFilter.weekOfDietaOrAttivita(list_test_dieta, LocalDate.parse(date_actual));
+        String attivita = DataFilter.typeDietaOrAttivita(list_test_attivita);
+        int weekAttivita = DataFilter.weekOfDietaOrAttivita(list_test_attivita, LocalDate.parse(date_actual));
+        int weekAvviso = DataFilter.weekOfLastAvviso(NetSmile.getLastAvviso(homestation_id), LocalDate.parse(date_actual));
 
         Map<String, Object> testEvidence = new HashMap<>();
-        testEvidence.put("Peso", checkPeso(getWeekOfPregnancy(start_date, LocalDate.parse(date_actual)), start_peso, peso_actual));
-        testEvidence.put("Dieta", DataFilter.typeDietaOrAttivita(list_test_dieta));
-        testEvidence.put("Attivita", DataFilter.typeDietaOrAttivita(list_test_attivita));
-        testEvidence.put("Tempo_Peso", DataFilter.dayPesoOut(start_date, start_peso, test_pesi));
-        testEvidence.put("Tempo_Dieta", DataFilter.weekOfDietaOrAttivita(list_test_dieta, LocalDate.parse(date_actual)));
-        testEvidence.put("Tempo_Attivita", DataFilter.weekOfDietaOrAttivita(list_test_attivita, LocalDate.parse(date_actual)));
-
-        testEvidence.put("Ultimo_Avviso", DataFilter.weekOfLastAvviso(NetSmile.getLastAvviso(homestation_id), LocalDate.parse(date_actual)));
+        testEvidence.put("Peso", checkpeso);
+        testEvidence.put("Dieta", dieta);
+        testEvidence.put("Attivita", attivita);
+        testEvidence.put("Tempo_Peso", dayPesoOut);
+        testEvidence.put("Tempo_Dieta", weekDieta);
+        testEvidence.put("Tempo_Attivita", weekAttivita);
+        testEvidence.put("Ultimo_Avviso", weekAvviso);
 
         NetSmile.clearNet();
         NetSmile.setAllEvidence(testEvidence);
         NetSmile.runNet();
 
-        System.out.println(NetSmile.getResultUtility());
-    }
+        String result = NetSmile.getResultUtility();
 
+        System.out.println("homestation_id: " + homestation_id);
+        System.out.println("lista_min: " + list_min);
+        System.out.println("lista_max: " + list_max);
+        System.out.println("start_date: " + start_date);
+        System.out.println("start_peso: " + start_peso);
+        System.out.println("BMI: " + bmi);
+        System.out.println("actual_date: " + date_actual);
+        System.out.println("actual_peso: " + peso_actual);
+        System.out.println("week: " + week);
+        System.out.println("checkpeso: " + checkpeso);
+        System.out.println("daypeso: " + dayPesoOut);
+        System.out.println("dieta: " + dieta);
+        System.out.println("weekDieta: " +weekDieta);
+        System.out.println("attivita: " + attivita);
+        System.out.println("weekattivita: " + weekAttivita);
+        System.out.println("weekAvviso: " + weekAvviso);
+        System.out.println("result net: " + result);
+        System.out.println("\n\n");
+
+    }
     public void getUserData(Map<String, Object> map)
     {
         start_date = LocalDate.parse(String.valueOf(map.get("data_inizio_gravidanza")));

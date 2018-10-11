@@ -38,13 +38,13 @@ public class DataFilter {
     }
 
     public static String typeDietaOrAttivita(List<Map<String, Object>> list){
-        if(list==null)
+        if(list.size()==0)
             return "Nessuna";
         return String.valueOf(list.get(list.size()-1).get("categoria"));
     }
 
     public static int weekOfDietaOrAttivita(List<Map<String, Object>> list, LocalDate actual_date){
-        if(list==null)
+        if(list.size()==0)
             return 0;
         LocalDate date_start_dieta = LocalDate.parse(String.valueOf(list.get(list.size()-1).get("data")));
         return (int) ChronoUnit.WEEKS.between(date_start_dieta, actual_date);
