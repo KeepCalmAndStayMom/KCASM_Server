@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class PesoDB {
 
-    public static void addPeso(int homestation_id, String data, Float peso) {
+    public static boolean addPeso(int homestation_id, String data, Float peso) {
         final String sql = "INSERT INTO peso(homestation_id, data, peso) VALUES (?, ?, ?)";
 
         try {
@@ -23,9 +23,11 @@ public class PesoDB {
             st.executeUpdate();
 
             conn.close();
+            return true;
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public static Map<String,Float> getPeso(int homestation_id){

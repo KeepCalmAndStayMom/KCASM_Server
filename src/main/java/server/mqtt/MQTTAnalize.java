@@ -1,4 +1,4 @@
-package server;
+package server.mqtt;
 
 import com.google.gson.Gson;
 import server.database.FitbitDB;

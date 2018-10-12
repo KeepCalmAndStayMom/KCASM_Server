@@ -1,6 +1,7 @@
 package server;
 
 import server.api.ApiService;
+import server.mqtt.MQTTSubscriber;
 import server.peso.ControllerPeso;
 
 public class MainServer {

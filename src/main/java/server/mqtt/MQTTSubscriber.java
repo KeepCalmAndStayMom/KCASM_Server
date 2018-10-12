@@ -1,15 +1,15 @@
-package server;
+package server.mqtt;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import server.database.HomestationDB;
 
-class MQTTSubscriber {
+public class MQTTSubscriber {
 
     private static final String BROKER_URL = "tcp://localhost:1883";
     private static MqttClient mqttClient;
 
-    MQTTSubscriber() {
+    public MQTTSubscriber() {
         try {
             mqttClient = new MqttClient(BROKER_URL, MqttClient.generateClientId());
 
@@ -18,7 +18,7 @@ class MQTTSubscriber {
         }
     }
 
-    void start() {
+    public void start() {
         try {
             mqttClient.setCallback(new SubscribeCallBack());
             mqttClient.connect();

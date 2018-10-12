@@ -32,9 +32,13 @@ public class ApiPeso {
                 String data = String.valueOf(addRequest.get("data"));
                 Float peso = ((Double) addRequest.get("peso")).floatValue();
 
-                PesoDB.addPeso(homestation_id, data, peso);
-
-                new ControllerPeso(homestation_id, data, peso);
+                if(PesoDB.addPeso(homestation_id, data, peso))
+                    new ControllerPeso(homestation_id, data, peso);
+                else
+                {
+                    response.status(400);
+                    return "{\"Errore 400\": \"risorsa non aggiunta\" }";
+                }
             }
             else {
                 response.status(400);
