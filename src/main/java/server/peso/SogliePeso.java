@@ -45,10 +45,6 @@ public class SogliePeso {
         float j=0;
         float inc1 = ((float)value/4)/WEEK_INC1, inc2 = (((float)value/4)*3)/WEEK_INC2;
 
-        /*
-        Da sistemare i valori incrementali in quanto troppo piccoli per essere utilizzati dai float
-        */
-
         ArrayList<Float> list = new ArrayList<>();
 
         for(i=0; i<WEEK_INC1; i++, j+=inc1)

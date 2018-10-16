@@ -5,6 +5,7 @@ import server.database.PesoDB;
 import server.database.TaskDB;
 import server.peso.ControllerPeso;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import static spark.Spark.post;
@@ -33,7 +34,7 @@ public class ApiPeso {
                 Float peso = ((Double) addRequest.get("peso")).floatValue();
 
                 if(PesoDB.addPeso(homestation_id, data, peso))
-                    new ControllerPeso(homestation_id, data, peso);
+                    ControllerPeso.startcheck(homestation_id, LocalDate.parse(data), peso);
                 else
                 {
                     response.status(400);

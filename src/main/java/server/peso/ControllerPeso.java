@@ -18,40 +18,52 @@ import java.util.Map;
 
 public class ControllerPeso {
 
-    private static ArrayList<Float> list_min, list_max;
-    private LocalDate start_date;
-    private float start_peso;
-    private boolean gemelli;
-    private BMI bmi;
+    public static ArrayList<Float> list_min, list_max;
+    public static LocalDate start_date;
+    public static float start_peso;
+    public static boolean gemelli;
+    public static BMI bmi;
+    public static HashMap<Integer, LocalDate> avvisi;
+    public static StrategyInterfacePeso strategyPeso;
 
-    public ControllerPeso(int homestation_id, String date_actual, float peso_actual) {
+    static {
+        avvisi = new HashMap<>();
+        strategyPeso = new StrategyPeso1();
+    }
 
-        getUserData(UserInitialDateDB.getUserInitialDate(homestation_id));
+    public static LocalDate getLastAvviso(int homestation_id)
+    {
+        if(avvisi.get(homestation_id)!=null)
+            return avvisi.get(homestation_id);
+        return null;
+    }
+
+    public static void addLastAvviso(int homestation_id, LocalDate date)
+    {
+        avvisi.put(homestation_id, date);
+    }
+
+    public static void removeID(int homestation_id)
+    {
+        avvisi.remove(homestation_id);
+    }
+
+    public static void startcheck(int homestation_id, LocalDate actual_date, float actual_peso) {
+
+        setUserInitialData(homestation_id);
 
         list_min = getListSogliaMin(bmi, gemelli);
         list_max = getListSogliaMax(bmi, gemelli);
 
-        Map<String, Float> test_pesi = PesoDB.getPeso(homestation_id);
-        List<Map<String, Object>> list_test_dieta = DietaDB.getDietaPrograms(homestation_id);
-        List<Map<String, Object>> list_test_attivita = AttivitaDB.getAttivitaPrograms(homestation_id);
+        int checkpeso = DataFilter.checkPeso(start_date, actual_date, start_peso, actual_peso);
+        int dayPesoOut = DataFilter.dayPesoOut(homestation_id, start_date, start_peso);
+        String dieta = DataFilter.typeDieta(homestation_id);
+        int weekDieta = DataFilter.weekOfDieta(homestation_id, actual_date);
+        String attivita = DataFilter.typeAttivita(homestation_id);
+        int weekAttivita = DataFilter.weekOfAttivita(homestation_id, actual_date);
+        int weekAvviso = DataFilter.weekOfLastAvviso(getLastAvviso(homestation_id), actual_date);
 
-        int week = getWeekOfPregnancy(start_date, LocalDate.parse(date_actual));
-        int checkpeso = checkPeso(week, start_peso, peso_actual);
-        int dayPesoOut = DataFilter.dayPesoOut(start_date, start_peso, test_pesi);
-        String dieta = DataFilter.typeDietaOrAttivita(list_test_dieta);
-        int weekDieta = DataFilter.weekOfDietaOrAttivita(list_test_dieta, LocalDate.parse(date_actual));
-        String attivita = DataFilter.typeDietaOrAttivita(list_test_attivita);
-        int weekAttivita = DataFilter.weekOfDietaOrAttivita(list_test_attivita, LocalDate.parse(date_actual));
-        int weekAvviso = DataFilter.weekOfLastAvviso(NetSmile.getLastAvviso(homestation_id), LocalDate.parse(date_actual));
-
-        Map<String, Object> testEvidence = new HashMap<>();
-        testEvidence.put("Peso", checkpeso);
-        testEvidence.put("Dieta", dieta);
-        testEvidence.put("Attivita", attivita);
-        testEvidence.put("Tempo_Peso", dayPesoOut);
-        testEvidence.put("Tempo_Dieta", weekDieta);
-        testEvidence.put("Tempo_Attivita", weekAttivita);
-        testEvidence.put("Ultimo_Avviso", weekAvviso);
+        Map<String, Object> testEvidence = strategyPeso.getMapOfStrategy(homestation_id, start_date, actual_date, start_peso, actual_peso);
 
         NetSmile.clearNet();
         NetSmile.setAllEvidence(testEvidence);
@@ -65,9 +77,8 @@ public class ControllerPeso {
         System.out.println("start_date: " + start_date);
         System.out.println("start_peso: " + start_peso);
         System.out.println("BMI: " + bmi);
-        System.out.println("actual_date: " + date_actual);
-        System.out.println("actual_peso: " + peso_actual);
-        System.out.println("week: " + week);
+        System.out.println("actual_date: " + actual_date);
+        System.out.println("actual_peso: " + actual_peso);
         System.out.println("checkpeso: " + checkpeso);
         System.out.println("daypeso: " + dayPesoOut);
         System.out.println("dieta: " + dieta);
@@ -79,31 +90,16 @@ public class ControllerPeso {
         System.out.println("\n\n");
 
     }
-    public void getUserData(Map<String, Object> map)
+    public static void setUserInitialData(int homestation_id)
     {
+        Map<String, Object> map = UserInitialDateDB.getUserInitialDate(homestation_id);
         start_date = LocalDate.parse(String.valueOf(map.get("data_inizio_gravidanza")));
         start_peso = Float.valueOf(String.valueOf(map.get("peso")));
         gemelli = Boolean.valueOf(String.valueOf(map.get("gemelli")));
         bmi = getBMI(String.valueOf(map.get("BMI")));
     }
 
-    public static int checkPeso(int week, float start_peso, float actual_peso)
-    {
-        if(actual_peso < (start_peso + list_min.get(week)))
-            return -1;
-
-        if(actual_peso > (start_peso + list_max.get(week)))
-            return 1;
-
-        return 0;
-    }
-
-    public static int getWeekOfPregnancy(LocalDate start_date, LocalDate date)
-    {
-        return (int) ChronoUnit.WEEKS.between(start_date, date);
-    }
-
-    public BMI getBMI(String bmi)
+    public static BMI getBMI(String bmi)
     {
         switch (bmi)
         {
@@ -119,7 +115,7 @@ public class ControllerPeso {
         return null;
     }
 
-    public ArrayList<Float> getListSogliaMin(BMI bmi, boolean gemelli)
+    public static ArrayList<Float> getListSogliaMin(BMI bmi, boolean gemelli)
     {
         if(gemelli)
         {
@@ -150,7 +146,7 @@ public class ControllerPeso {
         return null;
     }
 
-    public ArrayList<Float> getListSogliaMax(BMI bmi, boolean gemelli)
+    public static ArrayList<Float> getListSogliaMax(BMI bmi, boolean gemelli)
     {
         if(gemelli)
         {

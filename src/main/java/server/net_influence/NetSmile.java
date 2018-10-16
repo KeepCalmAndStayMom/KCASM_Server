@@ -9,7 +9,6 @@ import java.util.Map;
 public class NetSmile {
 
     private static Network net;
-    private static HashMap<Integer, String> avvisi;
 
     static{
 
@@ -36,25 +35,6 @@ public class NetSmile {
 
         net = new Network();
         net.readFile("src\\main\\resources\\RetePeso.xdsl");
-
-        avvisi = new HashMap<>();
-    }
-
-    public static String getLastAvviso(int homestation_id)
-    {
-        if(avvisi.get(homestation_id)!=null)
-            return avvisi.get(homestation_id);
-        return null;
-    }
-
-    public static void addLastAvviso(int homestation_id, String date)
-    {
-        avvisi.put(homestation_id, date);
-    }
-
-    public static void removeID(int homestation_id)
-    {
-        avvisi.remove(homestation_id);
     }
 
     public static void runNet(){
