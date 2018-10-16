@@ -1,5 +1,6 @@
 package server.peso;
 
+import server.MainServer;
 import server.database.AttivitaDB;
 import server.database.DietaDB;
 import server.database.PesoDB;
@@ -65,11 +66,9 @@ public class ControllerPeso {
 
         Map<String, Object> testEvidence = strategyPeso.getMapOfStrategy(homestation_id, start_date, actual_date, start_peso, actual_peso);
 
-        NetSmile.clearNet();
-        NetSmile.setAllEvidence(testEvidence);
-        NetSmile.runNet();
-
-        String result = NetSmile.getResultUtility();
+        MainServer.net.setAllEvidence(testEvidence);
+        MainServer.net.runNet();
+        String result = MainServer.net.getResultUtility();
 
         System.out.println("homestation_id: " + homestation_id);
         System.out.println("lista_min: " + list_min);

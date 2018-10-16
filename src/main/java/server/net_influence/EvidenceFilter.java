@@ -31,4 +31,13 @@ public class EvidenceFilter {
         return "Alto";
     }
 
+    public static String getTempoLastAvviso(int settimane){
+
+        if(settimane<=1)
+            return "Basso";
+        if(settimane<=3)
+            return "Medio";
+        return "Alto";
+    }
+
 }
