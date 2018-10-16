@@ -57,7 +57,7 @@ public class NetSmileRetePeso implements NetSmile {
         if(evidences.get("Dieta")!=null)
             net.setEvidence("Dieta",EvidenceFilter.getDieta((String) evidences.get("Dieta")));
         if(evidences.get("Attivita")!=null)
-            net.setEvidence("Attivita",EvidenceFilter.getAttività((String) evidences.get("Attivita")));
+            net.setEvidence("Attivita",EvidenceFilter.getAttivita((String) evidences.get("Attivita")));
         if(evidences.get("Tempo_Peso")!=null)
             net.setEvidence("Tempo_Peso", EvidenceFilter.getTempo((Integer) evidences.get("Tempo_Peso")));
         if(evidences.get("Tempo_Dieta")!=null)

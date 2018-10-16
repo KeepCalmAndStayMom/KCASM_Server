@@ -2,15 +2,11 @@ package server.api;
 
 import com.google.gson.Gson;
 import server.database.PesoDB;
-import server.database.TaskDB;
-import server.peso.ControllerPeso;
-
-import java.time.LocalDate;
 import java.util.Map;
 
 import static spark.Spark.post;
 
-public class ApiPeso {
+class ApiPeso {
 
     private Gson gson = new Gson();
     private String baseURL = "/api";
@@ -33,13 +29,7 @@ public class ApiPeso {
                 String data = String.valueOf(addRequest.get("data"));
                 Float peso = ((Double) addRequest.get("peso")).floatValue();
 
-                if(PesoDB.addPeso(homestation_id, data, peso))
-                    ControllerPeso.startcheck(homestation_id, LocalDate.parse(data), peso);
-                else
-                {
-                    response.status(400);
-                    return "{\"Errore 400\": \"risorsa non aggiunta\" }";
-                }
+                PesoDB.addPeso(homestation_id, data, peso);
             }
             else {
                 response.status(400);

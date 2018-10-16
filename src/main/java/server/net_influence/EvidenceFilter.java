@@ -1,8 +1,8 @@
 package server.net_influence;
 
-public class EvidenceFilter {
+class EvidenceFilter {
 
-    public static String getPeso(int peso){
+    static String getPeso(int peso){
 
         switch (peso)
         {
@@ -11,18 +11,22 @@ public class EvidenceFilter {
             case 1: return "Superiore";
         }
 
-        return null;
+        return "Normale";
     }
 
-    public static String getDieta(String dieta){
+    static String getDieta(String dieta){
+        if(dieta==null)
+            return "Nessuna";
         return dieta;
     }
 
-    public static String getAttività(String attivita){
+    static String getAttivita(String attivita){
+        if(attivita==null)
+            return "Nessuna";
         return attivita;
     }
 
-    public static String getTempo(int settimane){
+    static String getTempo(int settimane){
 
         if(settimane<=2)
             return "Basso";
@@ -31,7 +35,7 @@ public class EvidenceFilter {
         return "Alto";
     }
 
-    public static String getTempoLastAvviso(int settimane){
+    static String getTempoLastAvviso(int settimane){
 
         if(settimane<=1)
             return "Basso";

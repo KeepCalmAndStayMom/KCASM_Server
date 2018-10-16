@@ -1,9 +1,12 @@
 package server.database;
 
+import server.peso.ControllerPeso;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,7 +24,7 @@ public class PesoDB {
             st.setFloat(3, peso);
 
             st.executeUpdate();
-
+            ControllerPeso.startcheck(homestation_id, LocalDate.parse(data), peso);
             conn.close();
             return true;
         } catch(SQLException e) {
