@@ -21,7 +21,7 @@ public class DBConnect {
         }
     }
 
-    Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         try {
             return DriverManager.getConnection(dbLoc);
         } catch (SQLException e) {

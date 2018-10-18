@@ -21,7 +21,7 @@ public class LoginDB {
             if (!json.equalsIgnoreCase("{}"))
                 return json;
 
-            //conn = DBConnect.getInstance().getConnection();//vedere se è possibile togliere questa riga
+            //conn = DBConnect2.getInstance().getConnection();//vedere se è possibile togliere questa riga
             st = conn.prepareStatement(sqlUser);
             st.setString(1, name);
             st.setString(2, password);
