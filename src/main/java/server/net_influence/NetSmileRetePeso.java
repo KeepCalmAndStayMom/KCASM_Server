@@ -52,20 +52,27 @@ public class NetSmileRetePeso implements NetSmile {
 
     @Override
     public void setAllEvidence(Map<String, Object> evidences){
+
         if(evidences.get("Peso")!=null)
-            net.setEvidence("Peso",EvidenceFilter.getPeso((Integer) evidences.get("Peso")));
+            setPeso((Integer) evidences.get("Peso"));
+
         if(evidences.get("Dieta")!=null)
-            net.setEvidence("Dieta",EvidenceFilter.getDieta((String) evidences.get("Dieta")));
+            setDieta((String) evidences.get("Dieta"));
+
         if(evidences.get("Attivita")!=null)
-            net.setEvidence("Attivita",EvidenceFilter.getAttivita((String) evidences.get("Attivita")));
+            setAttivita((String) evidences.get("Attivita"));
+
         if(evidences.get("Tempo_Peso")!=null)
-            net.setEvidence("Tempo_Peso", EvidenceFilter.getTempo((Integer) evidences.get("Tempo_Peso")));
+            net.setEvidence("Tempo_Peso", getTempo((Integer) evidences.get("Tempo_Peso")));
+
         if(evidences.get("Tempo_Dieta")!=null)
-            net.setEvidence("Tempo_Dieta", EvidenceFilter.getTempo((Integer) evidences.get("Tempo_Dieta")));
+            net.setEvidence("Tempo_Dieta", getTempo((Integer) evidences.get("Tempo_Dieta")));
+
         if(evidences.get("Tempo_Attivita")!=null)
-            net.setEvidence("Tempo_Attivita", EvidenceFilter.getTempo((Integer) evidences.get("Tempo_Attivita")));
+            net.setEvidence("Tempo_Attivita", getTempo((Integer) evidences.get("Tempo_Attivita")));
+
         if(evidences.get("Ultimo_Avviso")!=null)
-            net.setEvidence("Ultimo_Avviso", EvidenceFilter.getTempoLastAvviso((Integer) evidences.get("Ultimo_Avviso")));
+            net.setEvidence("Ultimo_Avviso", setUltimoAvviso((Integer) evidences.get("Ultimo_Avviso")));
     }
 
     @Override
@@ -73,5 +80,59 @@ public class NetSmileRetePeso implements NetSmile {
 
         double[] result = net.getNodeValue("Utility");
         return "Avvisare = "+result[0]+"\nNon Avvisare = "+result[1];
+    }
+
+    private void setPeso(int peso){
+
+        switch (peso)
+        {
+            case -1: net.setEvidence("Peso", "Inferiore"); break;
+            case 0: net.setEvidence("Peso", "Normale"); break;
+            case 1: net.setEvidence("Peso","Superiore"); break;
+        }
+
+        net.setEvidence("Peso", "Normale");
+    }
+
+    private void setDieta(String dieta){
+
+        switch (dieta)
+        {
+            case "Ingrassante_Lieve":
+            case "Ingrassante_Forte":
+            case "Dimagrante_Lieve":
+            case "Dimagrante_Forte": net.setEvidence("Dieta", dieta); break;
+        }
+
+        net.setEvidence("Dieta", "Nessuna");
+    }
+
+    private void setAttivita(String attivita){
+
+        switch (attivita)
+        {
+            case "Relax":
+            case "Dimagrante": net.setEvidence("Attivita", attivita); break;
+        }
+
+        net.setEvidence("Attivita", "Nessuna");
+    }
+
+    private String getTempo(int settimane){
+
+        if(settimane<=2)
+            return "Basso";
+        if(settimane<=5)
+            return "Medio";
+        return "Alto";
+    }
+
+    private String setUltimoAvviso(int settimane){
+
+        if(settimane<=1)
+            return "Basso";
+        if(settimane<=3)
+            return "Medio";
+        return "Alto";
     }
 }

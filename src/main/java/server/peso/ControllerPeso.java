@@ -46,7 +46,14 @@ public class ControllerPeso {
         list_min = getListSogliaMin(bmi, gemelli);
         list_max = getListSogliaMax(bmi, gemelli);
 
-        Map<String, Object> testEvidence = strategyPeso.getMapOfStrategy(homestation_id, start_date, actual_date, start_peso, actual_peso);
+        Map<String, Object> map = new HashMap<>();
+        map.put("homestation_id", homestation_id);
+        map.put("start_date", start_date);
+        map.put("actual_date", actual_date);
+        map.put("start_peso", start_peso);
+        map.put("actual_peso", actual_peso);
+
+        Map<String, Object> testEvidence = strategyPeso.getMapOfStrategy(map);
 
         MainServer.net.setAllEvidence(testEvidence);
         MainServer.net.runNet();

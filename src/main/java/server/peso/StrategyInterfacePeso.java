@@ -5,5 +5,5 @@ import java.util.Map;
 
 public interface StrategyInterfacePeso {
 
-    Map<String, Object> getMapOfStrategy(int homestation_id, LocalDate start_date, LocalDate actual_date, float start_peso, float actual_peso);
+    Map<String, Object> getMapOfStrategy(Map<String, Object> map);
 }
