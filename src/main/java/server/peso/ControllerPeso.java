@@ -1,7 +1,8 @@
 package server.peso;
 
-import server.MainServer;
 import server.database.UserInitialDateDB;
+import server.net_influence.NetSmile;
+import server.net_influence.NetSmileRetePeso;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,10 +17,12 @@ public class ControllerPeso {
     private static BMI bmi;
     private static HashMap<Integer, LocalDate> avvisi;
     private static StrategyInterfacePeso strategyPeso;
+    private static NetSmile net;
 
     static {
         avvisi = new HashMap<>();
         strategyPeso = new StrategyPeso1();
+        net = new NetSmileRetePeso();
     }
 
     static LocalDate getLastAvviso(int homestation_id)
@@ -55,9 +58,9 @@ public class ControllerPeso {
 
         Map<String, Object> testEvidence = strategyPeso.getMapOfStrategy(map);
 
-        MainServer.net.setAllEvidence(testEvidence);
-        MainServer.net.runNet();
-        String result = MainServer.net.getResultUtility();
+        net.setAllEvidence(testEvidence);
+        net.runNet();
+        String result = net.getResultUtility();
 
         System.out.println("result net: "+ result);
     }
