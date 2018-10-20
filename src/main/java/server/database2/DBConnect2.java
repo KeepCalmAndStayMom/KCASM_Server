@@ -25,9 +25,17 @@ public class DBConnect2 {
 
     Connection getConnection() throws SQLException {
         try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
             return DriverManager.getConnection(dbOnline, user, password);
         } catch (SQLException e) {
             throw new SQLException("Cannot get connection to " + dbOnline, e);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }

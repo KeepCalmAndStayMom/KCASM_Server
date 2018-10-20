@@ -24,6 +24,7 @@ public class MainServer {
 
         //test database2
 
+        /*
         Map<String, Object> map = new HashMap<>();
         map.put("name", "test");
         map.put("surname", "test");
@@ -32,6 +33,6 @@ public class MainServer {
         map.put("address_home", "test");
         map.put("address_hospital", "test");
 
-        PatientDB.Insert(map);
+        PatientDB.Insert(map);*/
     }
 }
