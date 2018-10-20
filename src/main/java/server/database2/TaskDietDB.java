@@ -43,13 +43,13 @@ public class TaskDietDB {
     }
 
     static public boolean Update(Map<String, Object> map) {
-        final String sql = "UPDATE Task_Diet SET Patient_id=?, 'date'=?, category=?, description=?, starting_program=?, executed=? WHERE id=?";
+        final String sql = "UPDATE Task_Diet SET Patient_id=?, date=?, category=?, description=?, starting_program=?, executed=? WHERE id=?";
 
         return SharedTaskFunctionDB.executeUpdate(sql, map);
     }
 
     static public boolean Insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Task_Diet(id, Patient_id, Medic_id, 'date', category, description, starting_program, executed) VALUES (null, ?, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Task_Diet(id, Patient_id, Medic_id, date, category, description, starting_program, executed) VALUES (null, ?, ?, ?, ?, ?, ?, ?)";
 
         return SharedTaskFunctionDB.executeInsert(sql, map);
     }

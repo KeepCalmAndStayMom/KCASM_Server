@@ -67,7 +67,7 @@ public class WeightDB {
     }
 
     static public boolean Insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Weight(Patient_id, 'date', weight) VALUES (?, ?, ?)";
+        final String sql = "INSERT INTO Weight(Patient_id, date, weight) VALUES (?, ?, ?)";
 
         try {
             conn = DBConnect2.getInstance().getConnection();
