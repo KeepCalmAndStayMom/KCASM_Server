@@ -1,38 +1,78 @@
 package server.database2;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MedicHasPatientDB implements ClassDB {
+public class MedicHasPatientDB {
 
-    /*NON NECESSARIA*/
-    @Override
-    public List<Map<String, Object>> Select(int id) {
+    static Connection conn;
+
+    static public List<Integer> SelectPatients(int Medic_id) {
+
+        final String sql = "SELECT * FROM Medic_has_Patient WHERE Medic_id=?";
+        try {
+            conn = DBConnect2.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, Medic_id);
+            ResultSet rs = st.executeQuery();
+
+            List<Integer> list = new ArrayList<>();
+
+            while(rs.next()) {
+                list.add(rs.getInt("Patient_id"));
+            }
+
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    public List<Map<String, Object>> SelectPatients(int Medic_id) {
+    static public List<Integer> SelectMedics(int Patient_id) {
+
+        final String sql = "SELECT * FROM Medic_has_Patient WHERE Patient_id=?";
+        try {
+            conn = DBConnect2.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, Patient_id);
+            ResultSet rs = st.executeQuery();
+
+            List<Integer> list = new ArrayList<>();
+
+            while(rs.next()) {
+                list.add(rs.getInt("Medic_id"));
+            }
+
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    public List<Map<String, Object>> SelectMedics(int Patient_id) {
-        return null;
-    }
+    static public boolean Insert(Map<String, Object> map) {
 
-    /*NON NECESSARIA*/
-    @Override
-    public boolean Update(Map<String, Object> map) {
+        final String sql = "INSERT INTO Medic_has_Patient(Medic_id, Patient_id) VALUES (?, ?)";
+
+        try {
+            conn = DBConnect2.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, (Integer) map.get("Medic_Id"));
+            st.setInt(2, (Integer) map.get("Patient_Id"));
+            st.executeUpdate();
+            conn.close();
+            return true;
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
-    @Override
-    public boolean Insert(Map<String, Object> map) {
-        return false;
-    }
-
-    /*NON NECESSARIA*/
-    @Override
-    public boolean Delete(Map<String, Object> map) {
-        return false;
-    }
 }

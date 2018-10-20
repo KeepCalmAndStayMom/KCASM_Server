@@ -9,12 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PatientInitialDB implements ClassDB{
+public class PatientInitialDB {
 
-    Connection conn;
+    static Connection conn;
 
-    @Override
-    public List<Map<String, Object>> Select(int id) {
+    static public Map<String, Object> Select(int id) {
         final String sql = "SELECT * FROM Patient_Initial WHERE Patient_id=?";
         try {
             conn = DBConnect2.getInstance().getConnection();
@@ -22,28 +21,23 @@ public class PatientInitialDB implements ClassDB{
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
-            List<Map<String, Object>> list = new ArrayList<>();
-            LinkedHashMap<String, Object> map;
+            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
-            while(rs.next()) {
-                map = new LinkedHashMap<>();
-                map.put("pregnancy_start_date", rs.getString("pregnancy_start_date"));
-                map.put("weight", rs.getDouble("weight"));
-                map.put("height", rs.getDouble("height"));
-                map.put("bmi", rs.getString("bmi"));
-                map.put("twin", rs.getBoolean("twin"));
-                list.add(map);
-            }
+            rs.next();
+            map.put("pregnancy_start_date", rs.getString("pregnancy_start_date"));
+            map.put("weight", rs.getDouble("weight"));
+            map.put("height", rs.getDouble("height"));
+            map.put("bmi", rs.getString("bmi"));
+            map.put("twin", rs.getBoolean("twin"));
 
-            return list;
+            return map;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override
-    public boolean Update(Map<String, Object> map) {
+    static public boolean Update(Map<String, Object> map) {
         final String sql = "UPDATE Patient_Initial SET twin=? WHERE Patient_id=?";
 
         try {
@@ -64,14 +58,27 @@ public class PatientInitialDB implements ClassDB{
         return false;
     }
 
-    @Override
-    public boolean Insert(Map<String, Object> map) {
+    static public boolean Insert(Map<String, Object> map) {
+
+        final String sql = "INSERT INTO Patient_Initial(pregnancy_start_date, weight, height, bmi, twin, Patient_id) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try {
+            conn = DBConnect2.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, String.valueOf(map.get("pregnancy_start_date")));
+            st.setDouble(2, (Double) map.get("weight"));
+            st.setDouble(3, (Double) map.get("height"));
+            st.setString(4, String.valueOf(map.get("bmi")));
+            st.setBoolean(5, (Boolean) map.get("twin"));
+            st.setInt(6, (Integer) map.get("Patient_id"));
+            st.executeUpdate();
+            conn.close();
+            return true;
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
-    /*NON NECESSARIA*/
-    @Override
-    public boolean Delete(Map<String, Object> map) {
-        return false;
-    }
+
 }

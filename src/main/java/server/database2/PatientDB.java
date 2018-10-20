@@ -6,12 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class PatientDB implements ClassDB{
+public class PatientDB {
 
-    Connection conn;
+    static Connection conn;
 
-    @Override
-    public List<Map<String, Object>> Select(int id) {
+    static public Map<String, Object> Select(int id) {
         final String sql = "SELECT * FROM Patient WHERE id=?";
         try {
             conn = DBConnect2.getInstance().getConnection();
@@ -19,29 +18,24 @@ public class PatientDB implements ClassDB{
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
-            List<Map<String, Object>> list = new ArrayList<>();
-            LinkedHashMap<String, Object> map;
+            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
-            while(rs.next()) {
-                map = new LinkedHashMap<>();
-                map.put("name", rs.getString("name"));
-                map.put("surname", rs.getString("surname"));
-                map.put("age", rs.getInt("age"));
-                map.put("phone", rs.getString("phone"));
-                map.put("address_home", rs.getString("address_home"));
-                map.put("address_hospital", rs.getString("address_hospital"));
-                list.add(map);
-            }
+            rs.next();
+            map.put("name", rs.getString("name"));
+            map.put("surname", rs.getString("surname"));
+            map.put("age", rs.getInt("age"));
+            map.put("phone", rs.getString("phone"));
+            map.put("address_home", rs.getString("address_home"));
+            map.put("address_hospital", rs.getString("address_hospital"));
 
-            return list;
+            return map;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override
-    public boolean Update(Map<String, Object> map) {
+    static public boolean Update(Map<String, Object> map) {
         final String sql = "UPDATE Patient SET name=?, surname=?, age=?, phone=?, address_home=?, address_hospital=? WHERE id=?";
 
         try {
@@ -68,9 +62,8 @@ public class PatientDB implements ClassDB{
         return false;
     }
 
-    @Override
-    public boolean Insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO patient(id, name, surname, age, phone, address_home, address_hospital) VALUES (null, ?, ?, ?, ?, ?, ?)";
+    static public boolean Insert(Map<String, Object> map) {
+        final String sql = "INSERT INTO Patient(id, name, surname, age, phone, address_home, address_hospital) VALUES (null, ?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnect2.getInstance().getConnection();
@@ -90,8 +83,7 @@ public class PatientDB implements ClassDB{
         return false;
     }
 
-    @Override
-    public boolean Delete(Map<String, Object> map) {
+    static public boolean Delete(Map<String, Object> map) {
         final String sql = "DELETE from Patient WHERE id=?";
 
         try {

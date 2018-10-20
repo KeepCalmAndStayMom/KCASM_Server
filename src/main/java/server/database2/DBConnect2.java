@@ -6,7 +6,9 @@ import java.sql.SQLException;
 
 public class DBConnect2 {
 
-    static private final String dbLoc = "jdbc:sqlite:src/main/resources/keepcalmandstaymom.db";
+    static private final String dbOnline = "jdbc:mysql://sql7.freemysqlhosting.net:3306/sql7261794";
+    static private final String user = "sql7261794";
+    static private final String password = "LwVkxJwtFX";
     static private DBConnect2 instance2 = null;
 
     private DBConnect2() {
@@ -23,9 +25,9 @@ public class DBConnect2 {
 
     Connection getConnection() throws SQLException {
         try {
-            return DriverManager.getConnection("jdbc:mysql://sql7.freemysqlhosting.net:3306/sql7261794", "sql7261794", "LwVkxJwtFX");
+            return DriverManager.getConnection(dbOnline, user, password);
         } catch (SQLException e) {
-            throw new SQLException("Cannot get connection to " + dbLoc, e);
+            throw new SQLException("Cannot get connection to " + dbOnline, e);
         }
     }
 }
