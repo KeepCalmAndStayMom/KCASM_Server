@@ -19,7 +19,6 @@ class ApiMedic {
         sparkPostMedic();
         sparkPutMedic();
         sparkPutMedicLogin();
-
     }
 
     private void sparkGetMedic() {
