@@ -51,7 +51,8 @@ class ApiUser {
                     && addRequest.containsKey("weight")
                     && addRequest.containsKey("medic_id")
                     && addRequest.containsKey("home_address")
-                    && addRequest.containsKey("hospital_address"))
+                    && addRequest.containsKey("hospital_address")
+                    && addRequest.containsKey("phone_number"))
             {
                 Integer homestation_id = ((Double) addRequest.get("homestation_id")).intValue();
                 String name = String.valueOf(addRequest.get("name"));
@@ -61,8 +62,9 @@ class ApiUser {
                 Integer medic_id = ((Double) addRequest.get("medic_id")).intValue();
                 String home_address = String.valueOf(addRequest.get("home_address"));
                 String hospital_address = String.valueOf(addRequest.get("hospital_address"));
+                String phone_number = String.valueOf(addRequest.get("phone_number"));
 
-                if (!UserDB.addUser(homestation_id, name, age, height, weight, medic_id, home_address, hospital_address)) {
+                if (!UserDB.addUser(homestation_id, name, age, height, weight, medic_id, home_address, hospital_address, phone_number)) {
                     response.status(400);
                     return "{\"Errore 400\": \"richiesta non valida\"}";
                 }
@@ -90,7 +92,8 @@ class ApiUser {
                     && addRequest.containsKey("height")
                     && addRequest.containsKey("weight")
                     && addRequest.containsKey("home_address")
-                    && addRequest.containsKey("hospital_address"))
+                    && addRequest.containsKey("hospital_address")
+                    && addRequest.containsKey("phone_number"))
             {
 
                 if(!LoginDB.updateLogin(request.params(":username"),String.valueOf(addRequest.get("username")),
@@ -106,7 +109,8 @@ class ApiUser {
                         ((Double) addRequest.get("height")).intValue(),
                         ((Double) addRequest.get("weight")).intValue(),
                         String.valueOf(addRequest.get("home_address")),
-                        String.valueOf(addRequest.get("hospital_address"))))
+                        String.valueOf(addRequest.get("hospital_address")),
+                        String.valueOf(addRequest.get("phone_number"))))
                 {
                     response.status(400);
                     return "{\"Errore 400\": \"richiesta non valida\"}";
