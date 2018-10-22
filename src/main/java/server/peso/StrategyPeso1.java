@@ -22,8 +22,8 @@ public class StrategyPeso1 implements StrategyInterfacePeso {
             int homestation_id = (Integer) map.get("homestation_id");
             LocalDate start_date = (LocalDate) map.get("start_date");
             LocalDate actual_date = (LocalDate) map.get("actual_date");
-            float start_peso = (Float) map.get("start_peso");
-            float actual_peso = (Float) map.get("actual_peso");
+            double start_peso = (Double) map.get("start_peso");
+            double actual_peso = (Double) map.get("actual_peso");
 
             result_map.put("Peso", DataFilter.checkPeso(start_date, actual_date, start_peso, actual_peso));
             result_map.put("Dieta", DataFilter.typeDieta(homestation_id));

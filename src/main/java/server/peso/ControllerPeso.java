@@ -1,6 +1,8 @@
 package server.peso;
 
 import server.database.UserInitialDateDB;
+import server.database2.PatientDB;
+import server.database2.PatientInitialDB;
 import server.net_influence.NetSmile;
 import server.net_influence.NetSmileRetePeso;
 import java.time.LocalDate;
@@ -10,9 +12,9 @@ import java.util.Map;
 
 public class ControllerPeso {
 
-    static ArrayList<Float> list_min, list_max;
+    static ArrayList<Double> list_min, list_max;
     private static LocalDate start_date;
-    private static float start_peso;
+    private static double start_peso;
     private static boolean gemelli;
     private static BMI bmi;
     private static HashMap<Integer, LocalDate> avvisi;
@@ -42,7 +44,7 @@ public class ControllerPeso {
         avvisi.remove(homestation_id);
     }
 
-    public static void startcheck(int homestation_id, LocalDate actual_date, float actual_peso) {
+    public static void startcheck(int homestation_id, LocalDate actual_date, double actual_peso) {
 
         setUserInitialData(homestation_id);
 
@@ -66,12 +68,12 @@ public class ControllerPeso {
     }
     private static void setUserInitialData(int homestation_id)
     {
-        Map<String, Object> map = UserInitialDateDB.getUserInitialDate(homestation_id);
+        Map<String, Object> map = PatientInitialDB.Select(homestation_id);
         assert map != null;
-        start_date = LocalDate.parse(String.valueOf(map.get("data_inizio_gravidanza")));
-        start_peso = Float.valueOf(String.valueOf(map.get("peso")));
-        gemelli = Boolean.valueOf(String.valueOf(map.get("gemelli")));
-        bmi = getBMI(String.valueOf(map.get("BMI")));
+        start_date = LocalDate.parse(String.valueOf(map.get("pregnancy_start_date")));
+        start_peso = (Double) map.get("weight");
+        gemelli = (Boolean) map.get("twin");
+        bmi = getBMI(String.valueOf(map.get("bmi")));
     }
 
     private static BMI getBMI(String bmi)
@@ -90,7 +92,7 @@ public class ControllerPeso {
         return null;
     }
 
-    private static ArrayList<Float> getListSogliaMin(BMI bmi, boolean gemelli)
+    private static ArrayList<Double> getListSogliaMin(BMI bmi, boolean gemelli)
     {
         if(gemelli)
         {
@@ -121,7 +123,7 @@ public class ControllerPeso {
         return null;
     }
 
-    private static ArrayList<Float> getListSogliaMax(BMI bmi, boolean gemelli)
+    private static ArrayList<Double> getListSogliaMax(BMI bmi, boolean gemelli)
     {
         if(gemelli)
         {
