@@ -6,13 +6,13 @@
 			<state id="Superiore" />
 			<state id="Normale" />
 			<state id="Inferiore" />
-			<probabilities>0.2 0.6 0.2</probabilities>
+			<probabilities>0.25 0.6 0.15</probabilities>
 		</cpt>
 		<cpt id="Tempo_Peso">
 			<state id="Basso" />
 			<state id="Medio" />
 			<state id="Alto" />
-			<probabilities>0.7 0.2 0.1</probabilities>
+			<probabilities>0.6 0.25 0.15</probabilities>
 		</cpt>
 		<cpt id="Dieta">
 			<state id="Nessuna" />
@@ -20,49 +20,49 @@
 			<state id="Ingrassante_Forte" />
 			<state id="Dimagrante_Lieve" />
 			<state id="Dimagrante_Forte" />
-			<probabilities>0.4 0.2 0.1 0.2 0.1</probabilities>
+			<probabilities>0.3 0.09999999999999998 0.1 0.3 0.2</probabilities>
 		</cpt>
 		<cpt id="Tempo_Dieta">
 			<state id="Basso" />
 			<state id="Medio" />
 			<state id="Alto" />
-			<probabilities>0.6 0.3 0.1</probabilities>
+			<probabilities>0.3 0.5 0.2</probabilities>
 		</cpt>
 		<cpt id="Attivita">
 			<state id="Nessuna" />
 			<state id="Relax" />
 			<state id="Dimagrante" />
-			<probabilities>0.5 0.3 0.2</probabilities>
+			<probabilities>0.45 0.3500000000000001 0.2</probabilities>
 		</cpt>
 		<cpt id="Tempo_Attivita">
 			<state id="Basso" />
 			<state id="Medio" />
 			<state id="Alto" />
-			<probabilities>0.5 0.3 0.2</probabilities>
+			<probabilities>0.15 0.55 0.3</probabilities>
 		</cpt>
 		<cpt id="Dieta_Corretta">
 			<state id="Corretta" />
 			<state id="Sbagliata" />
 			<parents>Peso Dieta</parents>
-			<probabilities>0.3 0.7 0 1 0 1 0.7 0.3 1 0 0.5 0.5 0.2 0.8 0 1 0.6 0.4 0 1 0.7 0.3 0.8 0.2 1 0 0.2 0.7999999999999999 0 1</probabilities>
+			<probabilities>0.4 0.6 0.1 0.9 0 1 0.6 0.4 0.9 0.09999999999999998 0.5 0.5 0.25 0.7500000000000001 0 1 0.25 0.75 0 1 0.6 0.4 0.8 0.2 1 0 0.2 0.8 0 1</probabilities>
 		</cpt>
 		<cpt id="Attivita_Corretta">
 			<state id="Corretta" />
 			<state id="Sbagliata" />
 			<parents>Peso Attivita</parents>
-			<probabilities>0.2 0.7999999999999999 0.5 0.5 1 0 0.8 0.2 0.6 0.4 0.2 0.7999999999999999 1 0 0.3 0.7 0 1</probabilities>
+			<probabilities>0.2 0.8 0.6 0.4 1 0 0.7 0.3 0.7 0.3 0.3 0.7 1 0 0.3 0.7 0 1</probabilities>
 		</cpt>
 		<cpt id="Cambiare_Dieta">
 			<state id="Cambiare" />
 			<state id="Niente" />
 			<parents>Dieta_Corretta Tempo_Dieta Tempo_Peso</parents>
-			<probabilities>0 1 0.2 0.8 0.4 0.6 0.2 0.8 0.5 0.5 0.8 0.2 0.4 0.6 0.8 0.2 1 0 0.3 0.7 0.5 0.5 0.7 0.3 0.5 0.5 0.7 0.3 0.9 0.09999999999999998 0.7 0.3 1 0 1 0</probabilities>
+			<probabilities>0 1 0.15 0.85 0.3 0.7 0.1 0.9 0.5 0.5 0.8 0.2 0.3 0.7 0.8 0.2 1 0 0.2 0.7999999999999999 0.5 0.5 0.7 0.3 0.5 0.5 0.7 0.3 0.9 0.09999999999999998 0.6 0.4000000000000001 0.9 0.09999999999999998 1 0</probabilities>
 		</cpt>
 		<cpt id="Cambiare_Attivita">
 			<state id="Cambiare" />
 			<state id="Niente" />
 			<parents>Attivita_Corretta Tempo_Attivita Tempo_Peso</parents>
-			<probabilities>0 1 0.2 0.8 0.3 0.7 0 1 0.3 0.7 0.5 0.5 0.2 0.8 0.5 0.5 0.8 0.2 0.2 0.8000000000000002 0.5 0.5 0.7 0.3 0.3 0.7 0.6 0.4 0.9 0.09999999999999998 0.5 0.5 0.8 0.2 1 0</probabilities>
+			<probabilities>0 1 0.15 0.85 0.3 0.7 0 1 0.25 0.75 0.45 0.55 0.2 0.8000000000000002 0.5 0.5 0.7 0.3 0.2 0.8000000000000002 0.4 0.6 0.6 0.4000000000000001 0.3 0.7 0.6 0.4000000000000001 0.9 0.09999999999999998 0.5 0.5 0.8 0.2 1 0</probabilities>
 		</cpt>
 		<decision id="Avvisare">
 			<state id="Avvisare" />
@@ -72,11 +72,11 @@
 			<state id="Basso" />
 			<state id="Medio" />
 			<state id="Alto" />
-			<probabilities>0.3 0.4 0.3</probabilities>
+			<probabilities>0.2 0.45 0.35</probabilities>
 		</cpt>
 		<utility id="Utility">
-			<parents>Avvisare Ultimo_Avviso Cambiare_Dieta Cambiare_Attivita</parents>
-			<utilities>1 0 0 0 6 4 3 0 10 8 7 2 7 8 9 10 4 5 6 8 0 1 2 6</utilities>
+			<parents>Ultimo_Avviso Cambiare_Dieta Cambiare_Attivita Avvisare</parents>
+			<utilities>1 7 0 9 0 8 0 10 7 4 4 6 5 5 0 8 10 0 7 2 8 1 2 7</utilities>
 		</utility>
 	</nodes>
 	<extensions>
@@ -150,7 +150,7 @@
 				<interior color="e5f6f7" />
 				<outline color="000080" />
 				<font color="000000" name="Arial" size="8" />
-				<position>670 168 754 220</position>
+				<position>668 215 752 267</position>
 				<barchart active="true" width="160" height="94" />
 			</node>
 			<node id="Cambiare_Attivita">
