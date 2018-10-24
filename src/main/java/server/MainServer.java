@@ -18,6 +18,9 @@ public class MainServer {
 
         ControllerPesoTest cpt = new ControllerPesoTest();
 
-        cpt.startcheck(2, LocalDate.parse("2018-05-10"), 70d);
+        //cpt.startcheck(1, LocalDate.parse("2018-01-02"), 0d);
+        //cpt.startcheck(2, LocalDate.parse("2018-03-01"), 1.5d);
+        //cpt.startcheck(3, LocalDate.parse("2018-03-01"), 3d);
+        //cpt.startcheck(4, LocalDate.parse("2018-03-01"), 0d);
     }
 }

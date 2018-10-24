@@ -36,7 +36,6 @@ public class ControllerPesoTest {
             BufferedReader buffer = new BufferedReader(file);
             String line = buffer.readLine();
             while(line!=null) {
-                System.out.println(line);
                 String[] s = line.split(" ");
                 netSmile = new NetSmileNode(netSmile, s[0], getEvidenceFilter(s[1]), getRetrieveData(s[2]));
                 line = buffer.readLine();
