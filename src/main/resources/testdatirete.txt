@@ -1,0 +1,7 @@
+Peso EvidenceFilterPeso RetrieveDataPeso
+Dieta EvidenceFilterDieta RetrieveDataDieta
+Attivita EvidenceFilterAttivita RetrieveDataAttivita
+Tempo_Dieta EvidenceFilterTempo RetrieveDataWeekDieta
+Tempo_Attivita EvidenceFilterTempo RetrieveDataWeekAttivita
+Tempo_Peso EvidenceFilterTempo RetrieveDataWeekPesoOut
+Ultimo_Avviso EvidenceFilterTempo RetrieveDataWeekAvviso

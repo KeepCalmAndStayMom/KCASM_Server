@@ -2,7 +2,7 @@ package server.peso;
 
 import java.util.ArrayList;
 
-class SogliePeso {
+public class SogliePeso {
     private static final double     WEEK_INC1 = 15,
                                     WEEK_INC2 = 30,
                                     SOTT_GEM_MIN = 18,
@@ -22,7 +22,7 @@ class SogliePeso {
                                     OB_MIN = 4,
                                     OB_MAX = 7;
 
-    static final ArrayList<Double>      sott_gem_min = createList(SOTT_GEM_MIN),
+    public static final ArrayList<Double>      sott_gem_min = createList(SOTT_GEM_MIN),
                                         sott_gem_max = createList(SOTT_GEM_MAX),
                                         sott_min = createList(SOTT_MIN),
                                         sott_max = createList(SOTT_MAX),
