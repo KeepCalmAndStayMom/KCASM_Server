@@ -1,5 +1,7 @@
 package server;
 
+import server.api.ApiService;
+import server.mqtt.MQTTSubscriber;
 import server.weight_control.ControllerPesoTest;
 
 import java.time.LocalDate;
@@ -12,11 +14,11 @@ public class MainServer {
 
         cpt = new ControllerPesoTest();
 
-        /*
+
         MQTTSubscriber subscriber = new MQTTSubscriber();
         subscriber.start();
 
-        new ApiService();*/
+        new ApiService();
 
         cpt.startcheck(1, LocalDate.parse("2018-01-02"), 0d);
         //cpt.startcheck(2, LocalDate.parse("2018-03-01"), 1.5d);
