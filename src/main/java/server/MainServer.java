@@ -2,16 +2,16 @@ package server;
 
 import server.api.ApiService;
 import server.mqtt.MQTTSubscriber;
-import server.weight_control.ControllerPesoTest;
+import server.weight_control.WeightController;
 
 import java.time.LocalDate;
 
 public class MainServer {
 
-    public static ControllerPesoTest cpt;
+    public static WeightController cpt;
 
     public static void main(String[] args) {
-        cpt = new ControllerPesoTest();
+        cpt = new WeightController();
 
         MQTTSubscriber subscriber = new MQTTSubscriber();
         subscriber.start();

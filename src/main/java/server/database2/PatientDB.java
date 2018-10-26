@@ -1,7 +1,6 @@
 package server.database2;
 
 import server.MainServer;
-import server.weight_control.ControllerPesoTest;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

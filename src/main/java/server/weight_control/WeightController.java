@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-public class ControllerPesoTest {
+public class WeightController {
 
     private final String PATH_CLASS_EF = "server.evidence_filter.";
     private final String PATH_CLASS_RD = "server.retrieve_data.";
@@ -16,7 +16,7 @@ public class ControllerPesoTest {
     private static HashMap<Integer, LocalDate> avvisi;
     private static AbstractNetSmile netSmile;
 
-    public ControllerPesoTest() {
+    public WeightController() {
         avvisi = new HashMap<>();
         netSmile = new NetSmile2();
 
