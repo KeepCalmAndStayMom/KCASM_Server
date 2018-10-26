@@ -1,8 +1,6 @@
 package server.database2;
 
-import server.database.PesoDB;
-import server.peso.ControllerPeso;
-
+import server.MainServer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,7 +55,7 @@ public class WeightDB {
 
                 if (st.executeUpdate() != 0) {
                     conn.close();
-                    ControllerPeso.startcheck((Integer) map.get("Patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
+                    MainServer.cpt.startcheck((Integer) map.get("Patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
                     return true;
                 }
                 conn.close();
@@ -81,7 +79,7 @@ public class WeightDB {
             st.executeUpdate();
             conn.close();
 
-            ControllerPeso.startcheck((Integer) map.get("Patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
+            MainServer.cpt.startcheck((Integer) map.get("Patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
 
             return true;
         } catch(SQLException e) {

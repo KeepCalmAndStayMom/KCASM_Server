@@ -1,4 +1,4 @@
-package server.netsmiledecorator;
+package server.weight_control;
 
 import smile.Network;
 

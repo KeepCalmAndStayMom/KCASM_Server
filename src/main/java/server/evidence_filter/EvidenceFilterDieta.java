@@ -1,4 +1,4 @@
-package server.netsmiledecorator;
+package server.evidence_filter;
 
 public class EvidenceFilterDieta implements EvidenceFilterInterface {
     @Override
