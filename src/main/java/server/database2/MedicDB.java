@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MedicDB {
@@ -16,7 +14,7 @@ public class MedicDB {
     static public Map<String, Object> Select(int id) {
         final String sql = "SELECT * FROM Medic WHERE id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -41,7 +39,7 @@ public class MedicDB {
         final String sql = "UPDATE Medic SET name=?, surname=?, age=?, phone=?, specialization=? WHERE id=?";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("name")));
             st.setString(2, String.valueOf(map.get("surname")));
@@ -67,7 +65,7 @@ public class MedicDB {
         final String sql = "INSERT INTO Medic(id, name, surname, age, phone, specialization) VALUES (null, ?, ?, ?, ?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("name")));
             st.setString(2, String.valueOf(map.get("surname")));
@@ -87,22 +85,17 @@ public class MedicDB {
         final String sql = "DELETE from Medic WHERE id=?";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-
             st.setInt(1, (Integer) map.get("id"));
-
             if(st.executeUpdate() != 0) {
                 conn.close();
                 return true;
             }
-
             conn.close();
         } catch(SQLException e) {
             e.printStackTrace();
-
         }
-
         return false;
     }
 }

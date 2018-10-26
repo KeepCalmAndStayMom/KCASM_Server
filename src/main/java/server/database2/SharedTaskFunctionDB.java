@@ -9,11 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SharedTaskFunctionDB {
+class SharedTaskFunctionDB {
 
     static Connection conn;
 
-    static List<Map<String,Object>> getListTask(ResultSet rs) throws SQLException {
+    private static List<Map<String,Object>> getListTask(ResultSet rs) throws SQLException {
         List<Map<String, Object>> list = new ArrayList<>();
         LinkedHashMap<String, Object> map;
 
@@ -36,7 +36,7 @@ public class SharedTaskFunctionDB {
     static List<Map<String,Object>> getTaskPatientId(String sql, int patientId) {
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
 
@@ -47,10 +47,25 @@ public class SharedTaskFunctionDB {
         return null;
     }
 
+    static List<Map<String, Object>> getTaskPatientIdDate(String sql, int patientId, String date)
+    {
+        try {
+            Connection conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, patientId);
+            st.setString(2, date);
+
+            return SharedTaskFunctionDB.getListTask(st.executeQuery());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     static boolean executeUpdate(String sql, Map<String, Object> map)
     {
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("Patient_id"));
             st.setString(2, String.valueOf(map.get("date")));
@@ -76,7 +91,7 @@ public class SharedTaskFunctionDB {
     static boolean executeInsert(String sql, Map<String,Object> map)
     {
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("Patient_id"));
             st.setInt(2, (Integer) map.get("Medic_id"));
@@ -97,7 +112,7 @@ public class SharedTaskFunctionDB {
     static boolean executeDelete(String sql, int id)
     {
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
 
             st.setInt(1, id);

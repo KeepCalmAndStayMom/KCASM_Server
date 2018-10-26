@@ -39,7 +39,7 @@ public class FitbitDB {
 
         final String sql = "SELECT * FROM Fitbit WHERE Patient_id=? AND timedate LIKE ?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
             st.setString(2, date);
@@ -51,15 +51,15 @@ public class FitbitDB {
         return null;
     }
 
-    static public List<Map<String, Object>> SelectDateInterval(int patientId, String start_timedate, String end_timedate) {
+    static public List<Map<String, Object>> SelectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
         final String sql = "SELECT * FROM Fitbit WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
-            st.setString(2, start_timedate);
-            st.setString(3, end_timedate);
+            st.setString(2, startTimedate);
+            st.setString(3, endTimedate);
 
             return getListFitbit(st.executeQuery());
         } catch (SQLException e) {
@@ -72,7 +72,7 @@ public class FitbitDB {
 
         final String sql = "SELECT * FROM Fitbit WHERE Patient_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
 
@@ -89,7 +89,7 @@ public class FitbitDB {
         final String sql = "INSERT INTO Fitbit(Patient_id, timedate, avg_heartbeats, calories, elevation, floors, steps, distance, minutes_sleep, minutes_awake) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("Patient_id"));
             st.setString(2, String.valueOf(map.get("timedate")));

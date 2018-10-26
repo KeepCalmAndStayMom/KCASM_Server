@@ -1,6 +1,7 @@
 package server.evidence_filter;
 
 public class EvidenceFilterTempo implements EvidenceFilterInterface {
+
     @Override
     public String getEvidence(Object obj) {
 

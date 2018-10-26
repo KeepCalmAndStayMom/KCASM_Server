@@ -1,11 +1,12 @@
 package server.mqtt;
 
 import com.google.gson.Gson;
-import server.database.FitbitDB;
-import server.database.HueDB;
-import server.database.ZWayDB;
+import server.database2.FitbitDB;
+import server.database2.HueDB;
+import server.database2.SensorDB;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 
 class MQTTAnalize {
@@ -21,25 +22,30 @@ class MQTTAnalize {
         String homestation_id = topic.split("/")[1];
         String top = topic.split("/")[2];
         String timedate = dtf.format(LocalDateTime.now());
+        Map<String, Object> map;
 
         switch(top) {
             case "hue":
                 Map hue = gson.fromJson(messagge, Map.class);
 
-                HueDB.addHue(Integer.valueOf(homestation_id),
-                                timedate,
-                                ((Double)hue.get("cromoSoft")).intValue(),
-                                ((Double)hue.get("cromoHard")).intValue());
+                map = new HashMap<>();
+                map.put("Patient_id", Integer.valueOf(homestation_id));
+                map.put("timedate", timedate);
+                map.put("cromoterapia", String.valueOf(hue.get("cromoterapia")));
+                HueDB.Insert(map);
+
                 break;
             case "zway":
                 Map zway = gson.fromJson(messagge, Map.class);
 
-                ZWayDB.addZWay(Integer.valueOf(homestation_id),
-                                timedate,
-                                String.valueOf(zway.get("movement")),
-                                ((Double)zway.get("temperature")).intValue(),
-                                ((Double)zway.get("luminescence")).intValue(),
-                                ((Double)zway.get("humidity")).intValue());
+                map = new HashMap<>();
+                map.put("Patient_id", Integer.valueOf(homestation_id));
+                map.put("timedate", timedate);
+                map.put("temperature", zway.get("temperature"));
+                map.put("luminescence", zway.get("luminescence"));
+                map.put("humidity", zway.get("humidity"));
+                SensorDB.Insert(map);
+
                 break;
             case "fitbit":
                 Map<String, Map> type = gson.fromJson(messagge, Map.class);
@@ -54,16 +60,19 @@ class MQTTAnalize {
                 else
                    heartbeats = ((Double)heartrate.get("heartbeats")).intValue();
 
-                FitbitDB.addFitbit(Integer.valueOf(homestation_id),
-                                    timedate,
-                                    heartbeats,
-                                    ((Double)activities.get("activitiesCalories")).intValue(),
-                                    ((Double)activities.get("elevation")).floatValue(),
-                                    ((Double)activities.get("floors")).intValue(),
-                                    ((Double)activities.get("steps")).intValue(),
-                                    (Double) activities.get("distance"),
-                                    ((Double)sleep.get("minutesAsleep")).intValue(),
-                                    ((Double)sleep.get("minutesAwake")).intValue());
+                map = new HashMap<>();
+                map.put("Patient_id", Integer.valueOf(homestation_id));
+                map.put("timedate", timedate);
+                map.put("avg_heartbeats", heartbeats);
+                map.put("calories", activities.get("activitiesCalories"));
+                map.put("elevation", activities.get("elevation"));
+                map.put("floors", activities.get("floors"));
+                map.put("steps", activities.get("steps"));
+                map.put("distance", activities.get("distance"));
+                map.put("minutes_sleep", sleep.get("minutesAsleep"));
+                map.put("minutes_awake", sleep.get("minutesAwake"));
+                FitbitDB.Insert(map);
+
                 break;
         }
     }

@@ -2,17 +2,16 @@ package server.weight_control;
 
 import server.evidence_filter.EvidenceFilterInterface;
 import server.retrieve_data.RetrieveDataInterface;
-
 import java.time.LocalDate;
 
 public class NetSmileNode extends AbstractNetSmile {
 
-    protected AbstractNetSmile abstractNetSmile;
+    private AbstractNetSmile abstractNetSmile;
     private String nodeId;
     private EvidenceFilterInterface ef;
     private RetrieveDataInterface rd;
 
-    public NetSmileNode(AbstractNetSmile abstractNetSmile, String nodeId, EvidenceFilterInterface ef, RetrieveDataInterface rd)
+    NetSmileNode(AbstractNetSmile abstractNetSmile, String nodeId, EvidenceFilterInterface ef, RetrieveDataInterface rd)
     {
         net = abstractNetSmile.net;
         this.abstractNetSmile = abstractNetSmile;

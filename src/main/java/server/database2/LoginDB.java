@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LoginDB {
@@ -16,7 +14,7 @@ public class LoginDB {
     static public Map<String, Object> SelectPatient(int patientId) {
         final String sql = "SELECT * FROM Login WHERE Patient_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
             ResultSet rs = st.executeQuery();
@@ -38,7 +36,7 @@ public class LoginDB {
     static public Map<String, Object> SelectMedic(int medicId) {
         final String sql = "SELECT * FROM Login WHERE Medic_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, medicId);
             ResultSet rs = st.executeQuery();
@@ -61,7 +59,7 @@ public class LoginDB {
         final String sql = "UPDATE Login SET email=?, password=? WHERE Patient_id=?";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
@@ -83,7 +81,7 @@ public class LoginDB {
         final String sql = "UPDATE Login SET email=?, password=? WHERE Medic_id=?";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
@@ -105,7 +103,7 @@ public class LoginDB {
         final String sql = "INSERT INTO Login(email, password, Patient_id, Medic_id) VALUES (?, ?, ?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));

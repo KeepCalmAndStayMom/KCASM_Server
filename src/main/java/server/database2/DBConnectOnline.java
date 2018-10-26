@@ -4,22 +4,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DBConnect2 {
+public class DBConnectOnline {
 
     static private final String dbOnline = "jdbc:mysql://sql7.freemysqlhosting.net:3306/sql7261794";
     static private final String user = "sql7261794";
     static private final String password = "LwVkxJwtFX";
-    static private DBConnect2 instance2 = null;
+    static private DBConnectOnline instance = null;
 
-    private DBConnect2() {
-        instance2 = this;
+    private DBConnectOnline() {
+        instance = this;
     }
 
-    public static DBConnect2 getInstance() {
-        if (instance2 == null)
-            return new DBConnect2();
+    public static DBConnectOnline getInstance() {
+        if (instance == null)
+            return new DBConnectOnline();
         else {
-            return instance2;
+            return instance;
         }
     }
 
@@ -29,11 +29,7 @@ public class DBConnect2 {
             return DriverManager.getConnection(dbOnline, user, password);
         } catch (SQLException e) {
             throw new SQLException("Cannot get connection to " + dbOnline, e);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IllegalAccessException | ClassNotFoundException | InstantiationException e) {
             e.printStackTrace();
         }
         return null;

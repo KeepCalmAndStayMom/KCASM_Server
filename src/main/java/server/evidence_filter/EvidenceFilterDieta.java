@@ -1,6 +1,7 @@
 package server.evidence_filter;
 
 public class EvidenceFilterDieta implements EvidenceFilterInterface {
+
     @Override
     public String getEvidence(Object obj) {
 

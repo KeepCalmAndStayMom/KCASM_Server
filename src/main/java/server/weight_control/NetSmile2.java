@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class NetSmile2 extends AbstractNetSmile {
 
-    public NetSmile2() {
+    NetSmile2() {
         System.setProperty("jsmile.native.library", "C:\\Users\\Gabriele\\IdeaProjects\\KCASM_Server\\lib\\jsmile.dll");
 
         new smile.License(
@@ -39,7 +39,6 @@ public class NetSmile2 extends AbstractNetSmile {
 
     @Override
     public String getResultUtility(){
-
         double[] result = net.getNodeValue("Utility");
         return "Avvisare = "+result[0]+"\nNon Avvisare = "+result[1];
     }

@@ -15,7 +15,7 @@ public class MessageMedicPatientDB {
 
     static private List<Map<String, Object>> getListMessage(String sql, int id) {
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -42,38 +42,30 @@ public class MessageMedicPatientDB {
 
     static public List<Map<String, Object>> SelectPatientReceived(int Patient_id) {
         final String sql = "SELECT * FROM Message_Medic_Patient WHERE Patient_id=? AND medic_sender=1";
-
         return getListMessage(sql, Patient_id);
     }
 
     static public List<Map<String, Object>> SelectPatientSent(int Patient_id) {
-
         final String sql = "SELECT * FROM Message_Medic_Patient WHERE Patient_id=? AND medic_sender=0";
-
         return getListMessage(sql, Patient_id);
     }
 
     static public List<Map<String, Object>> SelectMedicReceived(int Medic_id) {
-
         final String sql = "SELECT * FROM Message_Medic_Patient WHERE Medic_id=? AND medic_sender=0";
-
         return getListMessage(sql, Medic_id);
     }
 
     static public List<Map<String, Object>> SelectMedicSent(int Medic_id) {
-
         final String sql = "SELECT * FROM Message_Medic_Patient WHERE Medic_id=? AND medic_sender=1";
-
         return getListMessage(sql, Medic_id);
     }
 
 
     static public boolean Insert(Map<String, Object> map) {
-
         final String sql = "INSERT INTO Message_Medic_Patient(Medic_id, Patient_id, timedate, medic_sender, message) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("Medic_id"));
             st.setInt(2, (Integer) map.get("Patient_id"));

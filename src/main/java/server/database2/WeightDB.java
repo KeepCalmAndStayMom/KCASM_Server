@@ -6,9 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class WeightDB {
@@ -19,7 +17,7 @@ public class WeightDB {
 
         final String sql = "SELECT * FROM Weight WHERE Patient_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -46,7 +44,7 @@ public class WeightDB {
 
         if(String.valueOf(map.get("date")).equals(String.valueOf(date.length-1))) {
             try {
-                conn = DBConnect2.getInstance().getConnection();
+                conn = DBConnectOnline.getInstance().getConnection();
                 PreparedStatement st = conn.prepareStatement(sql);
                 st.setDouble(1, (Double) map.get("weight"));
                 st.setInt(2, (Integer) map.get("Patient_id"));
@@ -71,7 +69,7 @@ public class WeightDB {
         final String sql = "INSERT INTO Weight(Patient_id, date, weight) VALUES (?, ?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("Patient_id"));
             st.setString(2, String.valueOf(map.get("date")));

@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +16,7 @@ public class MedicHasPatientDB {
 
         final String sql = "SELECT * FROM Medic_has_Patient WHERE Medic_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, Medic_id);
             ResultSet rs = st.executeQuery();
@@ -39,7 +38,7 @@ public class MedicHasPatientDB {
 
         final String sql = "SELECT * FROM Medic_has_Patient WHERE Patient_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, Patient_id);
             ResultSet rs = st.executeQuery();
@@ -62,7 +61,7 @@ public class MedicHasPatientDB {
         final String sql = "INSERT INTO Medic_has_Patient(Medic_id, Patient_id) VALUES (?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("Medic_id"));
             st.setInt(2, (Integer) map.get("Patient_id"));

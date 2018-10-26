@@ -32,7 +32,7 @@ public class HueDB {
 
         final String sql = "SELECT * FROM Hue WHERE Patient_id=? AND timedate LIKE ?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
             st.setString(2, date);
@@ -44,15 +44,15 @@ public class HueDB {
         return null;
     }
 
-    static public List<Map<String, Object>> SelectDateInterval(int patientId, String start_timedate, String end_timedate) {
+    static public List<Map<String, Object>> SelectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
         final String sql = "SELECT * FROM Hue WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
-            st.setString(2, start_timedate);
-            st.setString(3, end_timedate);
+            st.setString(2, startTimedate);
+            st.setString(3, endTimedate);
 
             return getListHue(st.executeQuery());
         } catch (SQLException e) {
@@ -65,7 +65,7 @@ public class HueDB {
 
         final String sql = "SELECT * FROM Hue WHERE Patient_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
 
@@ -82,7 +82,7 @@ public class HueDB {
         final String sql = "INSERT INTO Hue(Patient_id, timedate, cromoterapia) VALUES (?, ?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("Patient_id"));
             st.setString(2, String.valueOf(map.get("timedate")));

@@ -34,7 +34,7 @@ public class SensorDB {
 
         final String sql = "SELECT * FROM Sensor WHERE Patient_id=? AND timedate LIKE ?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
             st.setString(2, date);
@@ -46,15 +46,15 @@ public class SensorDB {
         return null;
     }
 
-    static public List<Map<String, Object>> SelectDateInterval(int patientId, String start_timedate, String end_timedate) {
+    static public List<Map<String, Object>> SelectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
         final String sql = "SELECT * FROM Sensor WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
-            st.setString(2, start_timedate);
-            st.setString(3, end_timedate);
+            st.setString(2, startTimedate);
+            st.setString(3, endTimedate);
 
             return getListSensor(st.executeQuery());
         } catch (SQLException e) {
@@ -67,7 +67,7 @@ public class SensorDB {
 
         final String sql = "SELECT * FROM Sensor WHERE Patient_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
 
@@ -84,7 +84,7 @@ public class SensorDB {
         final String sql = "INSERT INTO Sensor(Patient_id, timedate, temperature, luminescence, humidity) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("Patient_id"));
             st.setString(2, String.valueOf(map.get("timedate")));

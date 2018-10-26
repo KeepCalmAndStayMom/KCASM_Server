@@ -1,6 +1,7 @@
 package server.evidence_filter;
 
 public class EvidenceFilterPeso implements EvidenceFilterInterface {
+
     @Override
     public String getEvidence(Object obj) {
 

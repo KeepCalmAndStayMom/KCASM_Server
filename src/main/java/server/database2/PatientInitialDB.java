@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PatientInitialDB {
@@ -16,7 +14,7 @@ public class PatientInitialDB {
     static public Map<String, Object> Select(int id) {
         final String sql = "SELECT * FROM Patient_Initial WHERE Patient_id=?";
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -41,7 +39,7 @@ public class PatientInitialDB {
         final String sql = "UPDATE Patient_Initial SET twin=? WHERE Patient_id=?";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setBoolean(1, (Boolean) map.get("twin"));
             st.setInt(2, (Integer) map.get("Patient_id"));
@@ -63,7 +61,7 @@ public class PatientInitialDB {
         final String sql = "INSERT INTO Patient_Initial(pregnancy_start_date, weight, height, bmi, twin, Patient_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
-            conn = DBConnect2.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("pregnancy_start_date")));
             st.setDouble(2, (Double) map.get("weight"));

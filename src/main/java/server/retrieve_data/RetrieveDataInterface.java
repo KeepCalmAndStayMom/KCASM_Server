@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 public interface RetrieveDataInterface {
 
-    Object getData(int patientID, LocalDate actual_date, double actual_peso);
+    Object getData(int patientID, LocalDate actualDate, double actualPeso);
 }
