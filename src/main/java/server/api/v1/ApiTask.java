@@ -1,4 +1,4 @@
-package server.api;
+package server.api.v1;
 
 import com.google.gson.Gson;
 import server.database.TaskDB;

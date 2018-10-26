@@ -1,6 +1,6 @@
 package server;
 
-import server.api.ApiService;
+import server.api.v1.ApiService;
 import server.mqtt.MQTTSubscriber;
 import server.weight_control.WeightController;
 

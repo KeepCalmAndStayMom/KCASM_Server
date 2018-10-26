@@ -1,4 +1,4 @@
-package server.api;
+package server.api.v1;
 
 import static spark.Spark.get;
 
