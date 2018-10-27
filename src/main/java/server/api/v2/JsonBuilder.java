@@ -1,16 +1,16 @@
 package server.api.v2;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 public class JsonBuilder {
 
-    public static StringBuilder jsonBuilder(Map<String, Object> query, String links) {
+    public static StringBuilder jsonObject(Map<String, Object> query, String links) {
+        StringBuilder json = null;
 
         if(query != null) {
-            StringBuilder json = new StringBuilder();
+            json = new StringBuilder();
             json.append("{");
             mapToJson(json, query);
             //json.deleteCharAt(json.length()-1);
@@ -23,7 +23,12 @@ public class JsonBuilder {
             return json;
         }
 
-        return null;
+        if(links != null) {
+            json = new StringBuilder();
+            json.append(links);
+        }
+
+        return json;
     }
 
     public static StringBuilder jsonList(String listName, LinkedList<LinkedHashMap<String, Object>> query, String links, String type) {
@@ -36,14 +41,17 @@ public class JsonBuilder {
             json.append("[ ");
             for(Map m : query) {
                 if(type.equals("medic"))
-                    json.append(jsonBuilder(m, LinksBuilder.medicListLink((String) m.get("id"))).toString());
+                    json.append(jsonObject(m, LinksBuilder.medicListLink((String) m.get("id"))).toString());
                 else if(type.equals("patient"))
-                    json.append(jsonBuilder(m, LinksBuilder.patientListLink((String) m.get("id"))).toString());
+                    json.append(jsonObject(m, LinksBuilder.patientListLink((String) m.get("id"))).toString());
                 else
-                    json.append(jsonBuilder(m, null).toString());
+                    json.append(jsonObject(m, null).toString());
                 json.append(", ");
             }
-            json.replace(json.length()-2, json.length()-1, " ]");
+            if(json.charAt(json.length()-2) == ',')
+                json.replace(json.length()-2, json.length()-1, " ]");
+            else
+                json.append(" ]");
 
             if(links != null)
                 json.append(", " + links);

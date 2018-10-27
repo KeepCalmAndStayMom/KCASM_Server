@@ -65,4 +65,23 @@ public class LinksBuilder {
 
         return json.toString();
     }
+
+    public static String measuresLinks(String patientId) {
+        StringBuilder json = new StringBuilder();
+
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/samples", "patient/measures/samples", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/total", "patient/measures/total", "GET"));
+
+        return json.toString();
+    }
+
+    public static String measuresSubLinks(String patientId, String type) {
+        StringBuilder json = new StringBuilder();
+
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/fitbit", "patient/measures/" + type + "/fitbit", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/hue", "patient/measures/" + type + "/hue", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/sensor", "patient/measures/" + type + "/sensor", "GET"));
+
+        return json.toString();
+    }
 }

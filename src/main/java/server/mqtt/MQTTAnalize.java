@@ -32,7 +32,7 @@ class MQTTAnalize {
                 map.put("Patient_id", Integer.valueOf(homestation_id));
                 map.put("timedate", timedate);
                 map.put("cromoterapia", String.valueOf(hue.get("cromoterapia")));
-                HueDB.Insert(map);
+                HueDB.insert(map);
 
                 break;
             case "zway":
@@ -44,7 +44,7 @@ class MQTTAnalize {
                 map.put("temperature", zway.get("temperature"));
                 map.put("luminescence", zway.get("luminescence"));
                 map.put("humidity", zway.get("humidity"));
-                SensorDB.Insert(map);
+                SensorDB.insert(map);
 
                 break;
             case "fitbit":

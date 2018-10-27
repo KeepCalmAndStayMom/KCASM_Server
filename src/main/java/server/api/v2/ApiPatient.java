@@ -1,11 +1,8 @@
 package server.api.v2;
 
 import com.google.gson.Gson;
-import server.database2.FitbitDB;
-import server.database2.MedicDB;
-import server.database2.PatientDB;
+import server.database2.*;
 
-import java.util.Map;
 import static spark.Spark.*;
 
 public class ApiPatient {
@@ -30,7 +27,7 @@ public class ApiPatient {
                     //get dati paziente
                     int patientId = Integer.parseInt(request.params("patient_id"));
 
-                    String r = JsonBuilder.jsonBuilder(PatientDB.select(patientId), LinksBuilder.patientLinks(patientId)).toString();
+                    String r = JsonBuilder.jsonObject(PatientDB.select(patientId), LinksBuilder.patientLinks(patientId)).toString();
 
                     if(r != null) {
                         response.status(200);
@@ -52,7 +49,7 @@ public class ApiPatient {
                 });
                 get("/medics", (request, response) -> {
                     String patientId = request.params("patient_id");
-                    String r = JsonBuilder.jsonList(null, MedicDB.selectMedicsOfPatient(patientId),null, "medics").toString();
+                    String r = JsonBuilder.jsonList(null, MedicDB.selectMedicsOfPatient(patientId),null, "medic").toString();
 
                     if(r != null) {
                         response.status(200);
@@ -88,11 +85,10 @@ public class ApiPatient {
     }
 
     private void patientMeasures() {
-        path("/measures/samples", () -> {
-            get("/fitbit", (request, response) -> {
-                //get fitbit
+        path("/measures", () -> {
+            get("", (request, response) -> {
                 String patientId = request.params("patient_id");
-                String r = "{ " + JsonBuilder.jsonList("measures", FitbitDB.select(patientId), LinksBuilder.fitbitLinks(patientId, "samples"), "test").toString() + " }";
+                String r = "[ " + JsonBuilder.jsonObject(null, LinksBuilder.measuresLinks(patientId)).toString() + " ]";
 
                 if(r != null) {
                     response.status(200);
@@ -104,28 +100,95 @@ public class ApiPatient {
                 response.status(404);
                 return "404";
             });
-            get("/hue", (request, response) -> {
-                //get hue
-                return "";
-            });
-            get("/sensor", (request, response) -> {
-                //get sensor
-                return "";
-            });
-        });
-        path("/measures/total", () -> {
-            get("/fitbit", (request, response) -> {
-                //get fitbit
+            path("/samples", () -> {
+                get("", (request, response) -> {
+                    String patientId = request.params("patient_id");
+                    String r = "[ " + JsonBuilder.jsonObject(null, LinksBuilder.measuresSubLinks(patientId, "samples")).toString() + " ]";
 
-                return "";
+                    if(r != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return r;
+                    }
+
+                    response.status(404);
+                    return "404";
+                });
+                get("/fitbit", (request, response) -> {
+                    //get fitbit
+                    String patientId = request.params("patient_id");
+                    String r = "{ " + JsonBuilder.jsonList("fitbit-samples", FitbitDB.select(patientId), LinksBuilder.fitbitLinks(patientId, "samples"), "test").toString() + " }";
+
+                    if(r != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return r;
+                    }
+
+                    response.status(404);
+                    return "404";
+                });
+                get("/hue", (request, response) -> {
+                    //get hue
+                    String patientId = request.params("patient_id");
+                    String r = "{ " + JsonBuilder.jsonList("hue-samples", HueDB.select(patientId), LinksBuilder.hueLinks(patientId, "samples"), "test").toString() + " }";
+
+                    if(r != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return r;
+                    }
+
+                    response.status(404);
+                    return "404";
+                });
+                get("/sensor", (request, response) -> {
+                    //get sensor
+                    String patientId = request.params("patient_id");
+                    String r = "{ " + JsonBuilder.jsonList("sensor-samples", SensorDB.select(patientId), LinksBuilder.fitbitLinks(patientId, "samples"), "test").toString() + " }";
+
+                    if(r != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return r;
+                    }
+
+                    response.status(404);
+                    return "404";
+                });
             });
-            get("/hue", (request, response) -> {
-                //get hue
-                return "";
-            });
-            get("/sensor", (request, response) -> {
-                //get sensor
-                return "";
+            path("/measures/total", () -> {
+                get("", (request, response) -> {
+                    String patientId = request.params("patient_id");
+                    String r = "[ " + JsonBuilder.jsonObject(null, LinksBuilder.measuresSubLinks(patientId, "total")).toString() + " ]";
+
+                    if(r != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return r;
+                    }
+
+                    response.status(404);
+                    return "404";
+                });
+                get("/fitbit", (request, response) -> {
+                    //get fitbit
+
+                    return "";
+                });
+                get("/hue", (request, response) -> {
+                    //get hue
+                    return "";
+                });
+                get("/sensor", (request, response) -> {
+                    //get sensor
+                    return "";
+                });
             });
         });
     }
