@@ -1,10 +1,18 @@
 package server.api.v2;
 
+import server.database2.MedicDB;
+import server.database2.PatientDB;
+
+import java.util.Map;
 import static spark.Spark.*;
 
 public class ApiPatient {
 
     private String baseURL = "/api/v2";
+
+    public ApiPatient() {
+        apiPatient();
+    }
 
     private void apiPatient() {
 
@@ -17,7 +25,19 @@ public class ApiPatient {
             path("/:patient_id", () -> {
                 get("", (request, response) -> {
                     //get dati paziente
-                    return "";
+                    int patientId = Integer.parseInt(request.params("patient_id"));
+
+                    String r = JsonBuilder.jsonBuilder(PatientDB.select(patientId), LinksBuilder.patientLinks(patientId));
+
+                    if(r != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return r;
+                    }
+
+                    response.status(404);
+                    return "404";
                 });
                 put("", (request, response) -> {
                     //modifica dati paziente
@@ -28,7 +48,7 @@ public class ApiPatient {
                     return "";
                 });
                 get("/medics", (request, response) -> {
-                   //get medici della paziente
+
                    return "";
                 });
 
@@ -55,7 +75,21 @@ public class ApiPatient {
     }
 
     private void patientMeasures() {
-        path("/measures", () -> {
+        path("/measures/samples", () -> {
+            get("/fitbit", (request, response) -> {
+                //get fitbit
+                return "";
+            });
+            get("/hue", (request, response) -> {
+                //get hue
+                return "";
+            });
+            get("/sensor", (request, response) -> {
+                //get sensor
+                return "";
+            });
+        });
+        path("/measures/total", () -> {
             get("/fitbit", (request, response) -> {
                 //get fitbit
                 return "";

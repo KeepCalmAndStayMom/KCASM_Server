@@ -5,13 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class MedicDB {
 
     static Connection conn;
 
-    static public Map<String, Object> Select(int id) {
+    static public Map<String, Object> select(int id) {
         final String sql = "SELECT * FROM Medic WHERE id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -35,7 +36,7 @@ public class MedicDB {
         return null;
     }
 
-    static public boolean Update(Map<String, Object> map) {
+    static public boolean update(Map<String, Object> map) {
         final String sql = "UPDATE Medic SET name=?, surname=?, age=?, phone=?, specialization=? WHERE id=?";
 
         try {
@@ -61,7 +62,7 @@ public class MedicDB {
         return false;
     }
 
-    static public boolean Insert(Map<String, Object> map) {
+    static public boolean insert(Map<String, Object> map) {
         final String sql = "INSERT INTO Medic(id, name, surname, age, phone, specialization) VALUES (null, ?, ?, ?, ?, ?)";
 
         try {
@@ -81,7 +82,7 @@ public class MedicDB {
         return false;
     }
 
-    static public boolean Delete(Map<String, Object> map) {
+    static public boolean delete(Map<String, Object> map) {
         final String sql = "DELETE from Medic WHERE id=?";
 
         try {
@@ -97,5 +98,26 @@ public class MedicDB {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static Map<String, Object> selectMedicsOfPatient(int id) {
+        final String sql = "SELECT Medic.id, Medic.name, Medic.surname FROM Medic JOIN Medic_has_Patient ON Medic.id=Medic_id WHERE Patient_id=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            LinkedList<Map<String, Object>> list = new LinkedList<>();
+
+            while(rs.next()) {
+
+            }
+
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
