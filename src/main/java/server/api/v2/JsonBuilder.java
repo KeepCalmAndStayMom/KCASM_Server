@@ -17,6 +17,7 @@ public class JsonBuilder {
 
             if(links != null)
                 json.append(", " + links);
+
             json.append(" }");
 
             return json;
@@ -25,20 +26,28 @@ public class JsonBuilder {
         return null;
     }
 
-    public static StringBuilder jsonList(LinkedList<LinkedHashMap<String, Object>> query, String type) {
+    public static StringBuilder jsonList(String listName, LinkedList<LinkedHashMap<String, Object>> query, String links, String type) {
         if(query != null) {
             StringBuilder json = new StringBuilder();
+
+            if(listName != null)
+                json.append("\"" + listName + "\": ");
+
             json.append("[ ");
             for(Map m : query) {
                 if(type.equals("medic"))
                     json.append(jsonBuilder(m, LinksBuilder.medicListLink((String) m.get("id"))).toString());
                 else if(type.equals("patient"))
                     json.append(jsonBuilder(m, LinksBuilder.patientListLink((String) m.get("id"))).toString());
+                else
+                    json.append(jsonBuilder(m, null).toString());
                 json.append(", ");
             }
             json.replace(json.length()-2, json.length()-1, " ]");
 
-            System.out.println(json.toString());
+            if(links != null)
+                json.append(", " + links);
+
             return json;
         }
 

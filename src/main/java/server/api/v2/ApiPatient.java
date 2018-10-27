@@ -1,5 +1,7 @@
 package server.api.v2;
 
+import com.google.gson.Gson;
+import server.database2.FitbitDB;
 import server.database2.MedicDB;
 import server.database2.PatientDB;
 
@@ -9,6 +11,7 @@ import static spark.Spark.*;
 public class ApiPatient {
 
     private String baseURL = "/api/v2";
+    Gson gson = new Gson();
 
     public ApiPatient() {
         apiPatient();
@@ -36,7 +39,7 @@ public class ApiPatient {
                         return r;
                     }
 
-                    response.status(404);
+                    response.status(200);
                     return "404";
                 });
                 put("", (request, response) -> {
@@ -49,7 +52,7 @@ public class ApiPatient {
                 });
                 get("/medics", (request, response) -> {
                     String patientId = request.params("patient_id");
-                    String r = JsonBuilder.jsonList(MedicDB.selectMedicsOfPatient(patientId),"medic").toString();
+                    String r = JsonBuilder.jsonList(null, MedicDB.selectMedicsOfPatient(patientId),null, "medics").toString();
 
                     if(r != null) {
                         response.status(200);
@@ -88,7 +91,18 @@ public class ApiPatient {
         path("/measures/samples", () -> {
             get("/fitbit", (request, response) -> {
                 //get fitbit
-                return "";
+                String patientId = request.params("patient_id");
+                String r = "{ " + JsonBuilder.jsonList("measures", FitbitDB.select(patientId), LinksBuilder.fitbitLinks(patientId, "samples"), "test").toString() + " }";
+
+                if(r != null) {
+                    response.status(200);
+                    response.type("application/json");
+
+                    return r;
+                }
+
+                response.status(404);
+                return "404";
             });
             get("/hue", (request, response) -> {
                 //get hue
@@ -102,6 +116,7 @@ public class ApiPatient {
         path("/measures/total", () -> {
             get("/fitbit", (request, response) -> {
                 //get fitbit
+
                 return "";
             });
             get("/hue", (request, response) -> {

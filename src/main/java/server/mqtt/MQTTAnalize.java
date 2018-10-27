@@ -71,7 +71,7 @@ class MQTTAnalize {
                 map.put("distance", activities.get("distance"));
                 map.put("minutes_sleep", sleep.get("minutesAsleep"));
                 map.put("minutes_awake", sleep.get("minutesAwake"));
-                FitbitDB.Insert(map);
+                FitbitDB.insert(map);
 
                 break;
         }

@@ -4,17 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FitbitDB {
 
     static Connection conn;
 
-    static private List<Map<String, Object>> getListFitbit(ResultSet rs) throws SQLException {
-        List<Map<String, Object>> list = new ArrayList<>();
+    static private LinkedList<LinkedHashMap<String, Object>> getListFitbit(ResultSet rs) throws SQLException {
+        LinkedList<LinkedHashMap<String, Object>> list = new LinkedList<>();
         LinkedHashMap<String, Object> map;
 
         while(rs.next()) {
@@ -35,7 +32,7 @@ public class FitbitDB {
         return list;
     }
 
-    static public List<Map<String, Object>> SelectDate(int patientId, String date) {
+    static public LinkedList<LinkedHashMap<String, Object>> selectDate(int patientId, String date) {
 
         final String sql = "SELECT * FROM Fitbit WHERE Patient_id=? AND timedate LIKE ?";
         try {
@@ -51,7 +48,7 @@ public class FitbitDB {
         return null;
     }
 
-    static public List<Map<String, Object>> SelectDateInterval(int patientId, String startTimedate, String endTimedate) {
+    static public LinkedList<LinkedHashMap<String, Object>> selectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
         final String sql = "SELECT * FROM Fitbit WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
         try {
@@ -68,13 +65,13 @@ public class FitbitDB {
         return null;
     }
 
-    static public List<Map<String, Object>> Select(int patientId) {
+    static public LinkedList<LinkedHashMap<String, Object>> select(String patientId) {
 
         final String sql = "SELECT * FROM Fitbit WHERE Patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, patientId);
+            st.setString(1, patientId);
 
             return getListFitbit(st.executeQuery());
         } catch (SQLException e) {
@@ -84,7 +81,7 @@ public class FitbitDB {
     }
 
 
-    static public boolean Insert(Map<String, Object> map) {
+    static public boolean insert(Map<String, Object> map) {
 
         final String sql = "INSERT INTO Fitbit(Patient_id, timedate, avg_heartbeats, calories, elevation, floors, steps, distance, minutes_sleep, minutes_awake) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
