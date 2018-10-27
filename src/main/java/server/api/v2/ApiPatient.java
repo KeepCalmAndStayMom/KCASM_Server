@@ -27,7 +27,7 @@ public class ApiPatient {
                     //get dati paziente
                     int patientId = Integer.parseInt(request.params("patient_id"));
 
-                    String r = JsonBuilder.jsonBuilder(PatientDB.select(patientId), LinksBuilder.patientLinks(patientId));
+                    String r = JsonBuilder.jsonBuilder(PatientDB.select(patientId), LinksBuilder.patientLinks(patientId)).toString();
 
                     if(r != null) {
                         response.status(200);
@@ -48,8 +48,18 @@ public class ApiPatient {
                     return "";
                 });
                 get("/medics", (request, response) -> {
+                    String patientId = request.params("patient_id");
+                    String r = JsonBuilder.jsonList(MedicDB.selectMedicsOfPatient(patientId),"medic").toString();
 
-                   return "";
+                    if(r != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return r;
+                    }
+
+                    response.status(404);
+                    return "404";
                 });
 
                 //API DISPOSITIVI

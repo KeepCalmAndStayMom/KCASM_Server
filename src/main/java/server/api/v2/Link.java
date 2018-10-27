@@ -9,7 +9,7 @@ public class Link {
         json.append("\"href\": ").append("\"" + href + "\", ");
         json.append("\"rel\": ").append("\"" + rel + "\", ");
         json.append("\"type\": ").append("\"" + type + "\"");
-        json.append("}");
+        json.append(" }");
 
         return json.toString();
     }

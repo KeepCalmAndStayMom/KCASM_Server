@@ -17,4 +17,22 @@ public class LinksBuilder {
 
         return json.toString();
     }
+
+    public static String medicListLink(String medicId) {
+        StringBuilder json = new StringBuilder();
+
+        json.append("\"link\": ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId, "medic", "GET"));
+
+        return json.toString();
+    }
+
+    public static String patientListLink(String patientId) {
+        StringBuilder json = new StringBuilder();
+
+        json.append("\"link\": ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "patient", "GET"));
+
+        return json.toString();
+    }
 }

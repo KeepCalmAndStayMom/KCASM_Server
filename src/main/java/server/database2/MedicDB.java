@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class MedicDB {
 
@@ -100,24 +98,32 @@ public class MedicDB {
         return false;
     }
 
-    public static Map<String, Object> selectMedicsOfPatient(int id) {
+    public static LinkedList<LinkedHashMap<String, Object>> selectMedicsOfPatient(String id) {
         final String sql = "SELECT Medic.id, Medic.name, Medic.surname FROM Medic JOIN Medic_has_Patient ON Medic.id=Medic_id WHERE Patient_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, id);
+            st.setString(1, id);
             ResultSet rs = st.executeQuery();
 
-            LinkedList<Map<String, Object>> list = new LinkedList<>();
+            LinkedList<LinkedHashMap<String, Object>> list = new LinkedList<>();
 
             while(rs.next()) {
+                LinkedHashMap<String, Object> medic = new LinkedHashMap<>();
+                medic.put("id", rs.getString("id"));
+                medic.put("name", rs.getString("name"));
+                medic.put("surname", rs.getString("surname"));
 
+                list.add(medic);
             }
 
+            return list;
 
         } catch(SQLException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 }
