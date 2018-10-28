@@ -57,7 +57,24 @@ public class WeightController {
         netSmile.clearNet();
         netSmile.setEvidence(patientId, actualDate, actualPeso);
         netSmile.runNet();
-        System.out.println(netSmile.getResultUtility());
+        if(netSmile.getResultUtility())
+            sendNotification(patientId);
+
+    }
+
+    private void sendNotification(int patientId)
+    {
+        System.out.println("Invio notifiche");
+
+        //migliorare messaggio con più informazioni -> da cambiare la getResultUtility della rete
+        String msg = "Il paziente " + patientId + " ha un peso fuori norma, controlla i suoi dati";
+
+        //controlli boolean database da implementare
+        EmailNotificator.sendEmail(msg, patientId);
+        SMSNotificator.sendSMS(msg, patientId);
+
+        //notifica obbligatoria tramite messaggi database
+        //da implementare
     }
 
 }

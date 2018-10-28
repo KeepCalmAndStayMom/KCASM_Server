@@ -27,7 +27,7 @@ public class NetSmileNode extends AbstractNetSmile {
     }
 
     @Override
-    public String getResultUtility() {
+    public boolean getResultUtility() {
         return abstractNetSmile.getResultUtility();
     }
 }

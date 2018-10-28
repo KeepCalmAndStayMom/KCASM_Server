@@ -38,8 +38,10 @@ public class NetSmile2 extends AbstractNetSmile {
     }
 
     @Override
-    public String getResultUtility(){
+    public boolean getResultUtility(){
         double[] result = net.getNodeValue("Utility");
-        return "Avvisare = "+result[0]+"\nNon Avvisare = "+result[1];
+        if(result[0]>result[1])
+            return true;
+        return false;
     }
 }
