@@ -2,6 +2,7 @@ package server.api.v2;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class JsonBuilder {
@@ -31,7 +32,9 @@ public class JsonBuilder {
         return json;
     }
 
-    public static StringBuilder jsonList(String listName, LinkedList<LinkedHashMap<String, Object>> query, String links, String type) {
+    public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String type) {
+
+        System.out.println(query.toString());
         if(query != null) {
             StringBuilder json = new StringBuilder();
 
@@ -41,9 +44,9 @@ public class JsonBuilder {
             json.append("[ ");
             for(Map m : query) {
                 if(type.equals("medic"))
-                    json.append(jsonObject(m, LinksBuilder.medicListLink((String) m.get("id"))).toString());
+                    json.append(jsonObject(m, LinksBuilder.medicListLink((int) m.get("id"))).toString());
                 else if(type.equals("patient"))
-                    json.append(jsonObject(m, LinksBuilder.patientListLink((String) m.get("id"))).toString());
+                    json.append(jsonObject(m, LinksBuilder.patientListLink((int) m.get("id"))).toString());
                 else
                     json.append(jsonObject(m, null).toString());
                 json.append(", ");

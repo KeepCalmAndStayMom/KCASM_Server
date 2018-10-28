@@ -11,7 +11,7 @@ public class PatientInitialDB {
 
     static Connection conn;
 
-    static public Map<String, Object> Select(int id) {
+    static public Map<String, Object> select(int id) {
         final String sql = "SELECT * FROM Patient_Initial WHERE Patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -35,7 +35,7 @@ public class PatientInitialDB {
         return null;
     }
 
-    static public boolean Update(Map<String, Object> map) {
+    static public boolean update(Map<String, Object> map) {
         final String sql = "UPDATE Patient_Initial SET twin=? WHERE Patient_id=?";
 
         try {
@@ -56,7 +56,7 @@ public class PatientInitialDB {
         return false;
     }
 
-    static public boolean Insert(Map<String, Object> map) {
+    static public boolean insert(Map<String, Object> map) {
 
         final String sql = "INSERT INTO Patient_Initial(pregnancy_start_date, weight, height, bmi, twin, Patient_id) VALUES (?, ?, ?, ?, ?, ?)";
 

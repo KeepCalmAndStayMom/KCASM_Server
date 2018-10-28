@@ -14,7 +14,7 @@ public class RetrieveDataPeso implements RetrieveDataInterface{
     @Override
     public Object getData(int patientId, LocalDate actualDate, double actualPeso) {
 
-        Map<String, Object> initial = PatientInitialDB.Select(patientId);
+        Map<String, Object> initial = PatientInitialDB.select(patientId);
         LocalDate startDate = LocalDate.parse(String.valueOf(initial.get("pregnancy_start_date")));
         double startPeso = (Double) initial.get("weight");
         boolean gemelli = (Boolean) initial.get("twin");

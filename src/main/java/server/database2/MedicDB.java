@@ -98,16 +98,16 @@ public class MedicDB {
         return false;
     }
 
-    public static LinkedList<LinkedHashMap<String, Object>> selectMedicsOfPatient(String id) {
+    public static List<Map<String, Object>> selectMedicsOfPatient(int id) {
         final String sql = "SELECT Medic.id, Medic.name, Medic.surname FROM Medic JOIN Medic_has_Patient ON Medic.id=Medic_id WHERE Patient_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, id);
+            st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
-            LinkedList<LinkedHashMap<String, Object>> list = new LinkedList<>();
+            List<Map<String, Object>> list = new ArrayList<>();
 
             while(rs.next()) {
                 LinkedHashMap<String, Object> medic = new LinkedHashMap<>();

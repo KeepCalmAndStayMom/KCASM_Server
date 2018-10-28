@@ -3,6 +3,9 @@ package server.api.v2;
 import com.google.gson.Gson;
 import server.database2.*;
 
+import java.util.List;
+import java.util.Map;
+
 import static spark.Spark.*;
 
 public class ApiPatient {
@@ -26,18 +29,17 @@ public class ApiPatient {
                 get("", (request, response) -> {
                     //get dati paziente
                     int patientId = Integer.parseInt(request.params("patient_id"));
+                    Map<String, Object> query = PatientDB.select(patientId);
 
-                    String r = JsonBuilder.jsonObject(PatientDB.select(patientId), LinksBuilder.patientLinks(patientId)).toString();
-
-                    if(r != null) {
+                    if(query != null) {
                         response.status(200);
                         response.type("application/json");
 
-                        return r;
+                        return JsonBuilder.jsonObject(query, LinksBuilder.patientLinks(patientId)).toString();
                     }
 
-                    response.status(200);
-                    return "404";
+                    response.status(404);
+                    return "";
                 });
                 put("", (request, response) -> {
                     //modifica dati paziente
@@ -48,18 +50,17 @@ public class ApiPatient {
                     return "";
                 });
                 get("/medics", (request, response) -> {
-                    String patientId = request.params("patient_id");
-                    String r = JsonBuilder.jsonList(null, MedicDB.selectMedicsOfPatient(patientId),null, "medic").toString();
+                    int patientId = Integer.parseInt(request.params("patient_id"));
+                    List<Map<String, Object>> query = MedicDB.selectMedicsOfPatient(patientId);
 
-                    if(r != null) {
+                    if(query.size() != 0) {
                         response.status(200);
                         response.type("application/json");
-
-                        return r;
+                        return JsonBuilder.jsonList(null, query,null, "medic").toString();
                     }
 
                     response.status(404);
-                    return "404";
+                    return "";
                 });
 
                 //API DISPOSITIVI
@@ -87,7 +88,7 @@ public class ApiPatient {
     private void patientMeasures() {
         path("/measures", () -> {
             get("", (request, response) -> {
-                String patientId = request.params("patient_id");
+                int patientId = Integer.parseInt(request.params("patient_id"));
                 String r = "[ " + JsonBuilder.jsonObject(null, LinksBuilder.measuresLinks(patientId)).toString() + " ]";
 
                 if(r != null) {
@@ -98,11 +99,11 @@ public class ApiPatient {
                 }
 
                 response.status(404);
-                return "404";
+                return "";
             });
             path("/samples", () -> {
                 get("", (request, response) -> {
-                    String patientId = request.params("patient_id");
+                    int patientId = Integer.parseInt(request.params("patient_id"));
                     String r = "[ " + JsonBuilder.jsonObject(null, LinksBuilder.measuresSubLinks(patientId, "samples")).toString() + " ]";
 
                     if(r != null) {
@@ -113,57 +114,57 @@ public class ApiPatient {
                     }
 
                     response.status(404);
-                    return "404";
+                    return "";
                 });
                 get("/fitbit", (request, response) -> {
                     //get fitbit
-                    String patientId = request.params("patient_id");
-                    String r = "{ " + JsonBuilder.jsonList("fitbit-samples", FitbitDB.select(patientId), LinksBuilder.fitbitLinks(patientId, "samples"), "test").toString() + " }";
+                    int patientId = Integer.parseInt(request.params("patient_id"));
+                    List<Map<String, Object>> query = FitbitDB.select(patientId);
 
-                    if(r != null) {
+                    if(query.size() != 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return r;
+                        return "{ " + JsonBuilder.jsonList("fitbit-samples", query, LinksBuilder.fitbitLinks(patientId, "samples"), "test").toString() + " }";
                     }
 
                     response.status(404);
-                    return "404";
+                    return "";
                 });
                 get("/hue", (request, response) -> {
                     //get hue
-                    String patientId = request.params("patient_id");
-                    String r = "{ " + JsonBuilder.jsonList("hue-samples", HueDB.select(patientId), LinksBuilder.hueLinks(patientId, "samples"), "test").toString() + " }";
+                    int patientId = Integer.parseInt(request.params("patient_id"));
+                    List<Map<String, Object>> query = HueDB.select(patientId);
 
-                    if(r != null) {
+                    if(query.size() != 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return r;
+                        return "{ " + JsonBuilder.jsonList("hue-samples", query, LinksBuilder.hueLinks(patientId, "samples"), "test").toString() + " }";
                     }
 
                     response.status(404);
-                    return "404";
+                    return "";
                 });
                 get("/sensor", (request, response) -> {
                     //get sensor
-                    String patientId = request.params("patient_id");
-                    String r = "{ " + JsonBuilder.jsonList("sensor-samples", SensorDB.select(patientId), LinksBuilder.fitbitLinks(patientId, "samples"), "test").toString() + " }";
+                    int patientId = Integer.parseInt(request.params("patient_id"));
+                    List<Map<String, Object>> query = SensorDB.select(patientId);
 
-                    if(r != null) {
+                    if(query.size() != 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return r;
+                        return "{ " + JsonBuilder.jsonList("sensor-samples", query, LinksBuilder.sensorLinks(patientId, "samples"), "test").toString() + " }";
                     }
 
                     response.status(404);
-                    return "404";
+                    return "";
                 });
             });
-            path("/measures/total", () -> {
+            path("/total", () -> {
                 get("", (request, response) -> {
-                    String patientId = request.params("patient_id");
+                    int patientId = Integer.parseInt(request.params("patient_id"));
                     String r = "[ " + JsonBuilder.jsonObject(null, LinksBuilder.measuresSubLinks(patientId, "total")).toString() + " ]";
 
                     if(r != null) {
@@ -174,7 +175,7 @@ public class ApiPatient {
                     }
 
                     response.status(404);
-                    return "404";
+                    return "";
                 });
                 get("/fitbit", (request, response) -> {
                     //get fitbit
@@ -214,6 +215,17 @@ public class ApiPatient {
         path("/login_data", () -> {
             get("", (request, response) -> {
                 //get dati login paziente
+                int patientId = Integer.parseInt(request.params("patient_id"));
+                Map<String, Object> query = LoginDB.selectPatient(patientId);
+
+                if(query != null) {
+                    response.status(200);
+                    response.type("application/json");
+
+                    return JsonBuilder.jsonObject(query, LinksBuilder.loginData(patientId, "patients")).toString();
+                }
+
+                response.status(404);
                 return "";
             });
             post("", (request, response) -> {
@@ -231,6 +243,17 @@ public class ApiPatient {
         path("/initial_data", () -> {
             get("", (request, response) -> {
                 //get dei dati iniziali della paziente
+                int patientId = Integer.parseInt(request.params("patient_id"));
+                Map<String, Object> query = PatientInitialDB.select(patientId);
+
+                if(query != null) {
+                    response.status(200);
+                    response.type("application/json");
+
+                    return JsonBuilder.jsonObject(query, LinksBuilder.initialData(patientId)).toString();
+                }
+
+                response.status(404);
                 return "";
             });
             post("", (request, response) -> {

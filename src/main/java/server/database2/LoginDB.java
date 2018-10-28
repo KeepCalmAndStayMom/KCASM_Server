@@ -11,7 +11,7 @@ public class LoginDB {
 
     static Connection conn;
 
-    static public Map<String, Object> SelectPatient(int patientId) {
+    static public Map<String, Object> selectPatient(int patientId) {
         final String sql = "SELECT * FROM Login WHERE Patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -33,7 +33,7 @@ public class LoginDB {
         return null;
     }
 
-    static public Map<String, Object> SelectMedic(int medicId) {
+    static public Map<String, Object> selectMedic(int medicId) {
         final String sql = "SELECT * FROM Login WHERE Medic_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -55,7 +55,7 @@ public class LoginDB {
         return null;
     }
 
-    static public boolean UpdatePatient(Map<String, Object> map) {
+    static public boolean updatePatient(Map<String, Object> map) {
         final String sql = "UPDATE Login SET email=?, password=? WHERE Patient_id=?";
 
         try {
@@ -77,7 +77,7 @@ public class LoginDB {
         return false;
     }
 
-    static public boolean UpdateMedic(Map<String, Object> map) {
+    static public boolean updateMedic(Map<String, Object> map) {
         final String sql = "UPDATE Login SET email=?, password=? WHERE Medic_id=?";
 
         try {
@@ -99,7 +99,7 @@ public class LoginDB {
         return false;
     }
 
-    static public boolean Insert(Map<String, Object> map) {
+    static public boolean insert(Map<String, Object> map) {
         final String sql = "INSERT INTO Login(email, password, Patient_id, Medic_id) VALUES (?, ?, ?, ?)";
 
         try {

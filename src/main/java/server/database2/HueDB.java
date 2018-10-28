@@ -12,8 +12,8 @@ public class HueDB {
 
     static Connection conn;
 
-    static private LinkedList<LinkedHashMap<String, Object>> getListHue(ResultSet rs) throws SQLException {
-        LinkedList<LinkedHashMap<String, Object>> list = new LinkedList<>();
+    static private List<Map<String, Object>> getListHue(ResultSet rs) throws SQLException {
+        List<Map<String, Object>> list = new ArrayList<>();
         LinkedHashMap<String, Object> map;
 
         while(rs.next()) {
@@ -27,7 +27,7 @@ public class HueDB {
         return list;
     }
 
-    static public LinkedList<LinkedHashMap<String, Object>> selectDate(int patientId, String date) {
+    static public List<Map<String, Object>> selectDate(int patientId, String date) {
 
         final String sql = "SELECT * FROM Hue WHERE Patient_id=? AND timedate LIKE ?";
         try {
@@ -43,7 +43,7 @@ public class HueDB {
         return null;
     }
 
-    static public LinkedList<LinkedHashMap<String, Object>> selectDateInterval(int patientId, String startTimedate, String endTimedate) {
+    static public List<Map<String, Object>> selectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
         final String sql = "SELECT * FROM Hue WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
         try {
@@ -60,13 +60,13 @@ public class HueDB {
         return null;
     }
 
-    static public LinkedList<LinkedHashMap<String, Object>> select(String patientId) {
+    static public List<Map<String, Object>> select(int patientId) {
 
         final String sql = "SELECT * FROM Hue WHERE Patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, patientId);
+            st.setInt(1, patientId);
 
             return getListHue(st.executeQuery());
         } catch (SQLException e) {
