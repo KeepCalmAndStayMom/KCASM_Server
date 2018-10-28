@@ -94,11 +94,11 @@ public class WeightController {
 
 
                 if((Boolean) map.get("email_notify")) {
-                    map = LoginDB.SelectMedic(medicId);
+                    map = LoginDB.selectMedic(medicId);
                     EmailNotificator.sendEmail(msg, String.valueOf(map.get("email")));
                 }
                 if((Boolean) map.get("sms_notify")) {
-                    map = MedicDB.Select(medicId);
+                    map = MedicDB.select(medicId);
                     SMSNotificator.sendSMS(msg, String.valueOf(map.get("phone")));
                 }
             }

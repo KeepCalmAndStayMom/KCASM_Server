@@ -12,7 +12,7 @@ public class JsonBuilder {
 
         if(query != null) {
             json = new StringBuilder();
-            json.append("{");
+            json.append("{ ");
             mapToJson(json, query);
             //json.deleteCharAt(json.length()-1);
 
@@ -34,7 +34,6 @@ public class JsonBuilder {
 
     public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String type) {
 
-        System.out.println(query.toString());
         if(query != null) {
             StringBuilder json = new StringBuilder();
 
@@ -43,16 +42,11 @@ public class JsonBuilder {
 
             json.append("[ ");
             for(Map m : query) {
-                if(type.equals("medic"))
-                    json.append(jsonObject(m, LinksBuilder.medicListLink((int) m.get("id"))).toString());
-                else if(type.equals("patient"))
-                    json.append(jsonObject(m, LinksBuilder.patientListLink((int) m.get("id"))).toString());
-                else
-                    json.append(jsonObject(m, null).toString());
+                innerListJsonObject(type, json, m);
                 json.append(", ");
             }
             if(json.charAt(json.length()-2) == ',')
-                json.replace(json.length()-2, json.length()-1, " ]");
+                json.replace(json.length()-2, json.length(), " ]");
             else
                 json.append(" ]");
 
@@ -63,6 +57,17 @@ public class JsonBuilder {
         }
 
         return null;
+    }
+
+    private static void innerListJsonObject(String type, StringBuilder json, Map m) {
+        if(type.equals("medic"))
+            json.append(jsonObject(m, LinksBuilder.medicListLink((int) m.get("id"))).toString());
+        else if(type.equals("patient"))
+            json.append(jsonObject(m, LinksBuilder.patientListLink((int) m.get("id"))).toString());
+        else if(type.equals("weight"))
+            json.append(jsonObject(m, LinksBuilder.singleWeightLink((int) m.get("patient_id"), (String) m.get("date"))).toString());
+        else
+            json.append(jsonObject(m, null).toString());
     }
 
     private static StringBuilder mapToJson(StringBuilder json, Map m) {

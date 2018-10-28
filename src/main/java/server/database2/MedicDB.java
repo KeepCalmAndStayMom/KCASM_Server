@@ -111,7 +111,7 @@ public class MedicDB {
 
             while(rs.next()) {
                 LinkedHashMap<String, Object> medic = new LinkedHashMap<>();
-                medic.put("id", rs.getString("id"));
+                medic.put("id", rs.getInt("id"));
                 medic.put("name", rs.getString("name"));
                 medic.put("surname", rs.getString("surname"));
 

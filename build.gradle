@@ -29,5 +29,6 @@ dependencies {
     compile 'com.nexmo:client:3.1.0'
     compile files('lib/jsmile-1.2.1.jar')
     compile files('lib/mysql-connector-java.jar')
+    compile files('lib/activator.jar')
     compile files('lib/mail.jar')
     }

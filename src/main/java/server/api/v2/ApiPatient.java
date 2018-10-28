@@ -311,6 +311,31 @@ public class ApiPatient {
         path("/weight", () -> {
             get("", (request, response) -> {
                 //get pesi della paziente
+                int patientId = Integer.parseInt(request.params("patient_id"));
+                String date = request.queryParams("date");
+                String links = new String();
+
+                if(date == null) {
+                    List<Map<String, Object>> query = WeightDB.selectList(patientId);
+
+                    if(query.size() != 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ "+ JsonBuilder.jsonList("weights", query, LinksBuilder.weightsLinks(patientId), "weight").toString() + " }";
+                    }
+                }
+                else {
+                    Map<String, Object> query = WeightDB.selectSingleWeight(patientId, date);
+                    if(query != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return JsonBuilder.jsonObject(query, null).toString();
+                    }
+                }
+
+                response.status(404);
                 return "";
             });
             post("", (request, response) -> {

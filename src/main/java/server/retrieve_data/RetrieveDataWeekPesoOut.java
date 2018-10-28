@@ -25,7 +25,7 @@ public class RetrieveDataWeekPesoOut implements RetrieveDataInterface{
 
         int count = 1;
 
-        Map<String, Double> pesi = WeightDB.Select(patientID);
+        Map<String, Double> pesi = WeightDB.select(patientID);
         assert pesi != null;
         Object[] date = pesi.keySet().toArray();
         int lastDateIndex = date.length-1;

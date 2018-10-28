@@ -104,4 +104,24 @@ public class LinksBuilder {
 
         return json.toString();
     }
+
+    public static String singleWeightLink(int patientId, String date) {
+        StringBuilder json = new StringBuilder();
+
+        json.append("\"link\": ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weight?date=" + date, "self", "GET"));
+
+        return json.toString();
+    }
+
+    public static String weightsLinks(int patientId) {
+        StringBuilder json = new StringBuilder();
+
+        json.append("\"links\": [");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "patient", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weight", "self", "PUT")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weight", "self", "POST")).append(" ]");
+
+        return json.toString();
+    }
 }
