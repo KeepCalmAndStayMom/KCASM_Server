@@ -38,10 +38,23 @@ public class NetSmile2 extends AbstractNetSmile {
     }
 
     @Override
-    public boolean getResultUtility(){
+    public String getResultUtility(){
         double[] result = net.getNodeValue("Utility");
+        double[] cD = net.getNodeValue("Cambiare_Dieta");
+        double[] cA = net.getNodeValue("Cambiare_Attivita");
+
         if(result[0]>result[1])
-            return true;
-        return false;
+        {
+            String s = "Si consiglia di controllare i dati della paziente data la situazione fuori norma verificata.";
+
+            if(cD[0]>cD[1])
+                s += " Si consiglia di cambiare il programma di dieta attuale.";
+
+            if(cA[0]>cA[1])
+                s += " Si consiglia di cambiare il programma di attivita' attuale.";
+
+            return s;
+        }
+        return null;
     }
 }

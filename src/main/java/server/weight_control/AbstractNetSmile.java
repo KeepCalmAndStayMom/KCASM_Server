@@ -15,5 +15,5 @@ public abstract class AbstractNetSmile {
 
     public abstract void setEvidence(int patientId, LocalDate actual_date, double actual_peso);
 
-    public abstract boolean getResultUtility();
+    public abstract String getResultUtility();
 }

@@ -1,12 +1,19 @@
 package server.weight_control;
 
+import server.database2.LoginDB;
+import server.database2.MedicDB;
+import server.database2.MedicHasPatientDB;
+import server.database2.MessageMedicPatientDB;
 import server.evidence_filter.EvidenceFilterInterface;
 import server.retrieve_data.RetrieveDataInterface;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WeightController {
 
@@ -57,24 +64,45 @@ public class WeightController {
         netSmile.clearNet();
         netSmile.setEvidence(patientId, actualDate, actualPeso);
         netSmile.runNet();
-        if(netSmile.getResultUtility())
-            sendNotification(patientId);
+
+        String result = netSmile.getResultUtility();
+
+        //if(result!=null)
+            //sendNotification(patientId, result);
 
     }
 
-    private void sendNotification(int patientId)
+    private void sendNotification(int patientId, String msg)
     {
         System.out.println("Invio notifiche");
 
-        //migliorare messaggio con più informazioni -> da cambiare la getResultUtility della rete
-        String msg = "Il paziente " + patientId + " ha un peso fuori norma, controlla i suoi dati";
+        msg = "Paziente " + patientId + ": " + msg;
 
-        //controlli boolean database da implementare
-        EmailNotificator.sendEmail(msg, patientId);
-        SMSNotificator.sendSMS(msg, patientId);
+        List<Integer> medics = MedicHasPatientDB.SelectMedics(patientId);
 
-        //notifica obbligatoria tramite messaggi database
-        //da implementare
+        if(medics!=null && !medics.isEmpty()) {
+            for(Integer medicId: medics) {
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("Medic_id", medicId);
+                map.put("Patient_id", 0);
+                map.put("timedate", LocalDateTime.now());
+                map.put("medic_sender", false);
+                map.put("message", msg);
+                MessageMedicPatientDB.Insert(map);
+
+
+
+                if((Boolean) map.get("email_notify")) {
+                    map = LoginDB.SelectMedic(medicId);
+                    EmailNotificator.sendEmail(msg, String.valueOf(map.get("email")));
+                }
+                if((Boolean) map.get("sms_notify")) {
+                    map = MedicDB.Select(medicId);
+                    SMSNotificator.sendSMS(msg, String.valueOf(map.get("phone")));
+                }
+            }
+        }
     }
 
 }

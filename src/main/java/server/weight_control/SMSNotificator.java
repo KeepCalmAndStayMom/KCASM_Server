@@ -26,11 +26,10 @@ class SMSNotificator {
     private static AuthMethod auth = new TokenAuthMethod(NEXMO_API_KEY, NEXMO_API_SECRET);
     private static NexmoClient client = new NexmoClient(auth);
 
-    static void sendSMS(String msg, int patientId) {
+    static void sendSMS(String msg, String patientPhone) {
 
-        String patientPhone = String.valueOf(PatientDB.Select(patientId).get("phone"));
-        if(patientPhone==null)
-            patientPhone = PHONE_NUMBER_USER_TEST;
+        //testing
+        patientPhone = PHONE_NUMBER_USER_TEST;
 
         try {
             client.getSmsClient().submitMessage(new TextMessage(NEXMO_PHONE_NUMBER, patientPhone, msg));

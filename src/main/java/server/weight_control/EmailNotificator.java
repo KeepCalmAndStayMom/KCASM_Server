@@ -12,9 +12,8 @@ public class EmailNotificator {
     private final static String PASSWORD_KCASM = "KCASM_96";
     private final static String SUBJECT = "KCASM - Controllo Peso";
 
-    static void sendEmail(String msg, int patientId) {
+    static void sendEmail(String msg, String reciverEmail) {
 
-        String reciverEmail = String.valueOf(LoginDB.SelectPatient(patientId).get("email"));
         if(reciverEmail!=null)
         {
 
