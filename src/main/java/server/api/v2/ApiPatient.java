@@ -258,6 +258,44 @@ public class ApiPatient {
             });
             get("/received", (request, response) -> {
                 //get dei messaggi ricevuti paziente
+                int patientId = Integer.parseInt(request.params("patient_id"));
+                String medic_id = request.queryParams("medic_id");
+                String date = request.queryParams("date");
+                String startdate = request.queryParams("startdate");
+                String enddate = request.queryParams("enddate");
+                String timedate = request.queryParams("timedate");
+
+                if(timedate != null) {
+                    Map<String, Object> map = MessageMedicPatientDB.selectSingleMessage(patientId, Integer.parseInt(medic_id), timedate.replace("T", " "));
+
+                    if(map != null) {
+                        response.status(200);
+                        response.type("application/json");
+                        return JsonBuilder.jsonObject(map, null).toString();
+                    }
+                }
+                else if(date != null) {
+                    List<Map<String, Object>> list = MessageMedicPatientDB.selectPatientReceived(patientId, medic_id, date, null);
+
+                    if(list.size() != 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ " + JsonBuilder.jsonList("messages-received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, date, null), "message", new String[]{"patient", "received"}).toString() + " }";
+                    }
+                }
+                else {
+                    List<Map<String, Object>> list = MessageMedicPatientDB.selectPatientReceived(patientId, medic_id, startdate, enddate);
+
+                    if(list.size() != 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ " + JsonBuilder.jsonList("messages-received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, startdate, enddate), "message", new String[]{"patient", "received"}).toString() + " }";
+                    }
+                }
+
+                response.status(404);
                 return "";
             });
         });

@@ -31,7 +31,7 @@ public class MessageMedicPatientDB {
                 map.put("patient_id", rs.getInt("Patient_id"));
                 map.put("timedate", rs.getString("timedate"));
                 map.put("medic_sender", rs.getBoolean("medic_sender"));
-                map.put("message", rs.getString("message"));
+                map.put("text", rs.getString("message"));
                 list.add(map);
             }
 
@@ -42,9 +42,21 @@ public class MessageMedicPatientDB {
         return null;
     }
 
-    static public List<Map<String, Object>> selectPatientReceived(int Patient_id) {
-        final String sql = "SELECT * FROM Message_Medic_Patient WHERE Patient_id=? AND medic_sender=1";
-        return getListMessage(sql, Patient_id);
+    static public List<Map<String, Object>> selectPatientReceived(int Patient_id, String medic_id, String startdate, String enddate) {
+        final String base = "SELECT * FROM Message_Medic_Patient WHERE Patient_id=? AND medic_sender=1";
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(base);
+
+        if(medic_id != null)
+            sql.append(" AND Medic_id=" + medic_id);
+
+        if(startdate != null && enddate == null)
+            sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + startdate +" 23:59:59\'");
+        else if(startdate != null && enddate != null)
+            sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + enddate + "23:59:59\'");
+
+        return getListMessage(sql.toString(), Patient_id);
     }
 
     static public List<Map<String, Object>> selectPatientSent(int Patient_id, String medic_id, String startdate, String enddate) {
@@ -59,8 +71,6 @@ public class MessageMedicPatientDB {
             sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + startdate +" 23:59:59\'");
         else if(startdate != null && enddate != null)
             sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + enddate + "23:59:59\'");
-
-        System.out.println(sql.toString());
 
         return getListMessage(sql.toString(), Patient_id);
     }
