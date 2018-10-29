@@ -89,7 +89,7 @@ public class WeightController {
                 map.put("timedate", LocalDateTime.now());
                 map.put("medic_sender", false);
                 map.put("message", msg);
-                MessageMedicPatientDB.Insert(map);
+                MessageMedicPatientDB.insert(map);
 
 
 

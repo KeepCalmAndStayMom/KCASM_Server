@@ -99,7 +99,7 @@ public class MedicDB {
     }
 
     public static List<Map<String, Object>> selectMedicsOfPatient(int id) {
-        final String sql = "SELECT Medic.id, Medic.name, Medic.surname FROM Medic JOIN Medic_has_Patient ON Medic.id=Medic_id WHERE Patient_id=?";
+        final String sql = "SELECT Medic.id, Medic.name, Medic.surname, Medic.specialization FROM Medic JOIN Medic_has_Patient ON Medic.id=Medic_id WHERE Patient_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -110,10 +110,11 @@ public class MedicDB {
             List<Map<String, Object>> list = new ArrayList<>();
 
             while(rs.next()) {
-                LinkedHashMap<String, Object> medic = new LinkedHashMap<>();
+                Map<String, Object> medic = new LinkedHashMap<>();
                 medic.put("id", rs.getInt("id"));
                 medic.put("name", rs.getString("name"));
                 medic.put("surname", rs.getString("surname"));
+                medic.put("specialization", rs.getString("specialization"));
 
                 list.add(medic);
             }

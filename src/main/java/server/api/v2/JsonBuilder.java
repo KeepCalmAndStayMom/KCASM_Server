@@ -1,7 +1,5 @@
 package server.api.v2;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +30,7 @@ public class JsonBuilder {
         return json;
     }
 
-    public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String type) {
+    public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String type, String[] args) {
 
         if(query != null) {
             StringBuilder json = new StringBuilder();
@@ -42,7 +40,7 @@ public class JsonBuilder {
 
             json.append("[ ");
             for(Map m : query) {
-                innerListJsonObject(type, json, m);
+                innerListJsonObject(type, args, json, m);
                 json.append(", ");
             }
             if(json.charAt(json.length()-2) == ',')
@@ -56,16 +54,27 @@ public class JsonBuilder {
             return json;
         }
 
+        if(links != null) {
+            StringBuilder json = new StringBuilder();
+            return json.append("[ ").append(jsonObject(null, links).toString()).append(" ]");
+        }
+
         return null;
     }
 
-    private static void innerListJsonObject(String type, StringBuilder json, Map m) {
+    private static void innerListJsonObject(String type, String[] args, StringBuilder json, Map m) {
         if(type.equals("medic"))
             json.append(jsonObject(m, LinksBuilder.medicListLink((int) m.get("id"))).toString());
         else if(type.equals("patient"))
             json.append(jsonObject(m, LinksBuilder.patientListLink((int) m.get("id"))).toString());
         else if(type.equals("weight"))
             json.append(jsonObject(m, LinksBuilder.singleWeightLink((int) m.get("patient_id"), (String) m.get("date"))).toString());
+        else if(type.equals("message")) {
+            if (args[0].equals("patient"))
+                json.append(jsonObject(m, LinksBuilder.singleMessageLink((int) m.get("patient_id"), args[0], args[1], (int) m.get("medic_id"), (String) m.get("timedate"))).toString());
+            else
+                json.append(jsonObject(m, LinksBuilder.singleMessageLink((int) m.get("medic_id"), args[0], args[1], (int) m.get("patient_id"), (String) m.get("timedate"))).toString());
+        }
         else
             json.append(jsonObject(m, null).toString());
     }
