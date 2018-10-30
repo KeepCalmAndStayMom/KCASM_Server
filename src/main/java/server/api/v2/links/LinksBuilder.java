@@ -1,4 +1,4 @@
-package server.api.v2;
+package server.api.v2.links;
 
 public class LinksBuilder {
 
@@ -32,55 +32,6 @@ public class LinksBuilder {
 
         json.append("\"link\": ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "patient", "GET"));
-
-        return json.toString();
-    }
-
-    public static String fitbitLinks(int patientId, String type) {
-        StringBuilder json = new StringBuilder();
-
-        json.append("\"links\": [ ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/hue", "patient/measures/" + type + "/hue", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/sensor", "patient/measures/" + type + "/sensor", "GET")).append(" ]");
-
-        return json.toString();
-    }
-
-    public static String sensorLinks(int patientId, String type) {
-        StringBuilder json = new StringBuilder();
-
-        json.append("\"links\": [ ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/hue", "patient/measures/" + type + "/hue", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/fitbit", "patient/measures/" + type + "/fitbit", "GET")).append(" ]");
-
-        return json.toString();
-    }
-
-    public static String hueLinks(int patientId, String type) {
-        StringBuilder json = new StringBuilder();
-
-        json.append("\"links\": [ ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/fitbit", "patient/measures/" + type + "/fitbit", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/sensor", "patient/measures/" + type + "/sensor", "GET")).append(" ]");
-
-        return json.toString();
-    }
-
-    public static String measuresLinks(int patientId) {
-        StringBuilder json = new StringBuilder();
-
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/samples", "patient/measures/samples", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/total", "patient/measures/total", "GET"));
-
-        return json.toString();
-    }
-
-    public static String measuresSubLinks(int patientId, String type) {
-        StringBuilder json = new StringBuilder();
-
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/fitbit", "patient/measures/" + type + "/fitbit", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/hue", "patient/measures/" + type + "/hue", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/sensor", "patient/measures/" + type + "/sensor", "GET"));
 
         return json.toString();
     }

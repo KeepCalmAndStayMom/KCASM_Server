@@ -1,4 +1,4 @@
-package server.api.v2;
+package server.api.v2.links;
 
 public class Link {
 

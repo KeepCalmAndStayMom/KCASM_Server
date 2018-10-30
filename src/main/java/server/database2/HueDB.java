@@ -1,7 +1,5 @@
 package server.database2;
 
-import server.api.v2.Link;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

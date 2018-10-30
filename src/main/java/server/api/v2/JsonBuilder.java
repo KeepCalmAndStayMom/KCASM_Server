@@ -1,5 +1,7 @@
 package server.api.v2;
 
+import server.api.v2.links.LinksBuilder;
+
 import java.util.List;
 import java.util.Map;
 

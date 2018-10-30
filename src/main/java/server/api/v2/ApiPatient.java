@@ -1,6 +1,8 @@
 package server.api.v2;
 
 import com.google.gson.Gson;
+import server.api.v2.links.LinksBuilder;
+import server.api.v2.links.MeasuresLinks;
 import server.database2.*;
 
 import java.util.List;
@@ -89,7 +91,7 @@ public class ApiPatient {
         path("/measures", () -> {
             get("", (request, response) -> {
                 int patientId = Integer.parseInt(request.params("patient_id"));
-                String r = JsonBuilder.jsonList(null, null, LinksBuilder.measuresLinks(patientId), null, null).toString();;
+                String r = JsonBuilder.jsonList(null, null, MeasuresLinks.measuresLinks(patientId), null, null).toString();;
 
                 if(r != null) {
                     response.status(200);
@@ -104,7 +106,7 @@ public class ApiPatient {
             path("/samples", () -> {
                 get("", (request, response) -> {
                     int patientId = Integer.parseInt(request.params("patient_id"));
-                    String r = JsonBuilder.jsonList(null, null, LinksBuilder.messagesCategoryLinks(patientId, "samples"), null, null).toString();
+                    String r = JsonBuilder.jsonList(null, null, MeasuresLinks.measuresSubLinks(patientId, "samples"), null, null).toString();
 
                     if(r != null) {
                         response.status(200);
@@ -119,13 +121,31 @@ public class ApiPatient {
                 get("/fitbit", (request, response) -> {
                     //get fitbit
                     int patientId = Integer.parseInt(request.params("patient_id"));
-                    List<Map<String, Object>> query = FitbitDB.select(patientId);
 
-                    if(query.size() != 0) {
+                    List<Map<String, Object>> query;
+                    String links = new String();
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
+
+                    if(date != null) {
+                        query = FitbitDB.selectDate(patientId, date);
+                        links = MeasuresLinks.fitbitLinks(patientId, "samples", date);
+                    }
+                    else if(startdate != null && enddate != null) {
+                        query = FitbitDB.selectDateInterval(patientId, startdate, enddate);
+                        links = MeasuresLinks.fitbitLinks(patientId, "samples", startdate, enddate);
+                    }
+                    else {
+                        query = FitbitDB.select(patientId);
+                        links = MeasuresLinks.fitbitLinks(patientId, "samples");
+                    }
+
+                    if(query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("fitbit-samples", query, LinksBuilder.fitbitLinks(patientId, "samples"), "test", null).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("fitbit-samples", query, links, "test", null).toString() + " }";
                     }
 
                     response.status(404);
@@ -140,7 +160,7 @@ public class ApiPatient {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("hue-samples", query, LinksBuilder.hueLinks(patientId, "samples"), "test", null).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("hue-samples", query, MeasuresLinks.hueLinks(patientId, "samples"), "test", null).toString() + " }";
                     }
 
                     response.status(404);
@@ -155,7 +175,7 @@ public class ApiPatient {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("sensor-samples", query, LinksBuilder.sensorLinks(patientId, "samples"), "test", null).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("sensor-samples", query, MeasuresLinks.sensorLinks(patientId, "samples"), "test", null).toString() + " }";
                     }
 
                     response.status(404);
@@ -165,7 +185,7 @@ public class ApiPatient {
             path("/total", () -> {
                 get("", (request, response) -> {
                     int patientId = Integer.parseInt(request.params("patient_id"));
-                    String r = JsonBuilder.jsonList(null, null, LinksBuilder.measuresSubLinks(patientId, "total"), null, null).toString();
+                    String r = JsonBuilder.jsonList(null, null, MeasuresLinks.measuresSubLinks(patientId, "total"), null, null).toString();
 
                     if(r != null) {
                         response.status(200);
