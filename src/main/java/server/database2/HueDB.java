@@ -32,7 +32,7 @@ public class HueDB {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
-            st.setString(2, date);
+            st.setString(2, date + "%");
 
             return getListHue(st.executeQuery());
         } catch (SQLException e) {
@@ -44,12 +44,18 @@ public class HueDB {
     static public List<Map<String, Object>> selectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
         final String sql = "SELECT * FROM Hue WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
+
+        if(startTimedate.length()==10)
+            startTimedate += "T00:00:00";
+        if(endTimedate.length()==10)
+            endTimedate += "T23:59:59";
+
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
-            st.setString(2, startTimedate);
-            st.setString(3, endTimedate);
+            st.setString(2, startTimedate.replace("T", " "));
+            st.setString(3, endTimedate.replace("T", " "));
 
             return getListHue(st.executeQuery());
         } catch (SQLException e) {

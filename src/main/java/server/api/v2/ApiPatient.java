@@ -14,6 +14,8 @@ public class ApiPatient {
 
     private String baseURL = "/api/v2";
     Gson gson = new Gson();
+    private final static String DATE_REGEX = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$";
+    private final static String TIMEDATE_REGEX = "^(19|20)\\d\\d-(0[1-9]|1[012])-([012]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$";
 
     public ApiPatient() {
         apiPatient();
@@ -128,11 +130,11 @@ public class ApiPatient {
                     String startdate = request.queryParams("startdate");
                     String enddate = request.queryParams("enddate");
 
-                    if(date != null) {
+                    if(date != null && date.matches(DATE_REGEX)) {
                         query = FitbitDB.selectDate(patientId, date);
                         links = MeasuresLinks.fitbitLinks(patientId, "samples", date);
                     }
-                    else if(startdate != null && enddate != null) {
+                    else if(startdate != null && enddate != null && (startdate.matches(DATE_REGEX) || startdate.matches(TIMEDATE_REGEX)) && (enddate.matches(DATE_REGEX) || enddate.matches(TIMEDATE_REGEX))) {
                         query = FitbitDB.selectDateInterval(patientId, startdate, enddate);
                         links = MeasuresLinks.fitbitLinks(patientId, "samples", startdate, enddate);
                     }
@@ -154,13 +156,30 @@ public class ApiPatient {
                 get("/hue", (request, response) -> {
                     //get hue
                     int patientId = Integer.parseInt(request.params("patient_id"));
-                    List<Map<String, Object>> query = HueDB.select(patientId);
+                    List<Map<String, Object>> query;
+                    String links = new String();
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
 
-                    if(query.size() != 0) {
+                    if(date != null && date.matches(DATE_REGEX)) {
+                        query = HueDB.selectDate(patientId, date);
+                        links = MeasuresLinks.hueLinks(patientId, "samples", date);
+                    }
+                    else if(startdate != null && enddate != null && (startdate.matches(DATE_REGEX) || startdate.matches(TIMEDATE_REGEX)) && (enddate.matches(DATE_REGEX) || enddate.matches(TIMEDATE_REGEX))) {
+                        query = HueDB.selectDateInterval(patientId, startdate, enddate);
+                        links = MeasuresLinks.hueLinks(patientId, "samples", startdate, enddate);
+                    }
+                    else {
+                        query = HueDB.select(patientId);
+                        links = MeasuresLinks.hueLinks(patientId, "samples");
+                    }
+
+                    if(query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("hue-samples", query, MeasuresLinks.hueLinks(patientId, "samples"), "test", null).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("hue-samples", query, links, "test", null).toString() + " }";
                     }
 
                     response.status(404);
@@ -169,13 +188,30 @@ public class ApiPatient {
                 get("/sensor", (request, response) -> {
                     //get sensor
                     int patientId = Integer.parseInt(request.params("patient_id"));
-                    List<Map<String, Object>> query = SensorDB.select(patientId);
+                    List<Map<String, Object>> query;
+                    String links = new String();
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
 
-                    if(query.size() != 0) {
+                    if(date != null && date.matches(DATE_REGEX)) {
+                        query = SensorDB.selectDate(patientId, date);
+                        links = MeasuresLinks.sensorLinks(patientId, "samples", date);
+                    }
+                    else if(startdate != null && enddate != null && (startdate.matches(DATE_REGEX) || startdate.matches(TIMEDATE_REGEX)) && (enddate.matches(DATE_REGEX) || enddate.matches(TIMEDATE_REGEX))) {
+                        query = SensorDB.selectDateInterval(patientId, startdate, enddate);
+                        links = MeasuresLinks.sensorLinks(patientId, "samples", startdate, enddate);
+                    }
+                    else {
+                        query = SensorDB.select(patientId);
+                        links = MeasuresLinks.sensorLinks(patientId, "samples");
+                    }
+
+                    if(query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("sensor-samples", query, MeasuresLinks.sensorLinks(patientId, "samples"), "test", null).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("sensor-samples", query, links, "test", null).toString() + " }";
                     }
 
                     response.status(404);

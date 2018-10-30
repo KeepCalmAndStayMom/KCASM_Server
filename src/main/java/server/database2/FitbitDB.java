@@ -51,6 +51,7 @@ public class FitbitDB {
     static public List<Map<String, Object>> selectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
         String sql = "SELECT * FROM Fitbit WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
+
         if(startTimedate.length()==10)
             startTimedate += "T00:00:00";
         if(endTimedate.length()==10)
