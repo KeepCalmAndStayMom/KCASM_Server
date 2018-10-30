@@ -3,6 +3,7 @@ package server.api.v2;
 import com.google.gson.Gson;
 import server.api.v2.links.LinksBuilder;
 import server.api.v2.links.MeasuresLinks;
+import server.api.v2.links.TaskLinks;
 import server.database2.*;
 
 import java.util.List;
@@ -22,7 +23,6 @@ public class ApiPatient {
     }
 
     private void apiPatient() {
-
         path(baseURL + "/patients", () -> {
             post("", (request, response) -> {
                 //aggiunta paziente
@@ -125,7 +125,7 @@ public class ApiPatient {
                     int patientId = Integer.parseInt(request.params("patient_id"));
 
                     List<Map<String, Object>> query;
-                    String links = new String();
+                    String links;
                     String date = request.queryParams("date");
                     String startdate = request.queryParams("startdate");
                     String enddate = request.queryParams("enddate");
@@ -157,7 +157,7 @@ public class ApiPatient {
                     //get hue
                     int patientId = Integer.parseInt(request.params("patient_id"));
                     List<Map<String, Object>> query;
-                    String links = new String();
+                    String links;
                     String date = request.queryParams("date");
                     String startdate = request.queryParams("startdate");
                     String enddate = request.queryParams("enddate");
@@ -189,7 +189,7 @@ public class ApiPatient {
                     //get sensor
                     int patientId = Integer.parseInt(request.params("patient_id"));
                     List<Map<String, Object>> query;
-                    String links = new String();
+                    String links;
                     String date = request.queryParams("date");
                     String startdate = request.queryParams("startdate");
                     String enddate = request.queryParams("enddate");
@@ -415,9 +415,53 @@ public class ApiPatient {
 
     private void patientTasks() {
         path("/tasks", () -> {
+            get("", (request, response) -> {
+               int patientId = Integer.parseInt(request.params("patient_id"));
+
+               response.status(200);
+               response.type("application/json");
+
+               return JsonBuilder.jsonList(null, null, TaskLinks.tasksMenu(patientId, "patient"), null, null);
+            });
+
             path("/general", () -> {
                 get("", (request, response) -> {
                     //get task generali della paziente
+                    int patientId = Integer.parseInt(request.params("patient_id"));
+                    String medicId = request.queryParams("medic_id");
+                    String executed = request.queryParams("executed");
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
+                    String starting_program = request.queryParams("starting_program");
+                    List<Map<String, Object>> query;
+                    String links;
+
+                    if(starting_program != null && starting_program.equals("1")) {
+                        query = TaskGeneralDB.selectProgram(patientId);
+                        links = TaskLinks.patientGeneralLinks(patientId, medicId, executed, starting_program);
+                    }
+                    else if(date!=null && date.matches(DATE_REGEX)) {
+                        query = TaskGeneralDB.selectDate(patientId, medicId, date, executed);
+                        links = TaskLinks.patientGeneralLinks(patientId, medicId, executed, starting_program, date);
+                    }
+                    else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
+                        query = TaskGeneralDB.selectDateInterval(patientId, medicId, startdate, enddate, executed);
+                        links = TaskLinks.patientGeneralLinks(patientId, medicId, executed, starting_program, startdate, enddate);
+                    }
+                    else {
+                        query = TaskGeneralDB.select(patientId, medicId, executed);
+                        links = TaskLinks.patientGeneralLinks(patientId, medicId, executed, starting_program);
+                    }
+
+                    if(query.size() > 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ " + JsonBuilder.jsonList("general", query, links, "task", "general") + " }";
+                    }
+
+                    response.status(404);
                     return "";
                 });
 
@@ -426,6 +470,41 @@ public class ApiPatient {
             path("/activities", () -> {
                 get("", (request, response) -> {
                     //get attività della paziente
+                    int patientId = Integer.parseInt(request.params("patient_id"));
+                    String medicId = request.queryParams("medic_id");
+                    String executed = request.queryParams("executed");
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
+                    String starting_program = request.queryParams("starting_program");
+                    List<Map<String, Object>> query;
+                    String links;
+
+                    if(starting_program != null && starting_program.equals("1")) {
+                        query = TaskActivityDB.selectProgram(patientId);
+                        links = TaskLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program);
+                    }
+                    else if(date!=null && date.matches(DATE_REGEX)) {
+                        query = TaskActivityDB.selectDate(patientId, medicId, date, executed);
+                        links = TaskLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program, date);
+                    }
+                    else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
+                        query = TaskActivityDB.selectDateInterval(patientId, medicId, startdate, enddate, executed);
+                        links = TaskLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program, startdate, enddate);
+                    }
+                    else {
+                        query = TaskActivityDB.select(patientId, medicId, executed);
+                        links = TaskLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program);
+                    }
+
+                    if(query.size() > 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ " + JsonBuilder.jsonList("activities", query, links, "task", "activities") + " }";
+                    }
+
+                    response.status(404);
                     return "";
                 });
 
@@ -434,6 +513,41 @@ public class ApiPatient {
             path("/diets", () -> {
                 get("", (request, response) -> {
                     //get task generali della paziente
+                    int patientId = Integer.parseInt(request.params("patient_id"));
+                    String medicId = request.queryParams("medic_id");
+                    String executed = request.queryParams("executed");
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
+                    String starting_program = request.queryParams("starting_program");
+                    List<Map<String, Object>> query;
+                    String links;
+
+                    if(starting_program != null && starting_program.equals("1")) {
+                        query = TaskDietDB.selectProgram(patientId);
+                        links = TaskLinks.patientDietsLinks(patientId, medicId, executed, starting_program);
+                    }
+                    else if(date!=null && date.matches(DATE_REGEX)) {
+                        query = TaskDietDB.selectDate(patientId, medicId, date, executed);
+                        links = TaskLinks.patientDietsLinks(patientId, medicId, executed, starting_program, date);
+                    }
+                    else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
+                        query = TaskDietDB.selectDateInterval(patientId, medicId, startdate, enddate, executed);
+                        links = TaskLinks.patientDietsLinks(patientId, medicId, executed, starting_program, startdate, enddate);
+                    }
+                    else {
+                        query = TaskDietDB.select(patientId, medicId, executed);
+                        links = TaskLinks.patientDietsLinks(patientId, medicId, executed, starting_program);
+                    }
+
+                    if(query.size() > 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ " + JsonBuilder.jsonList("diets", query, links, "task", "diets") + " }";
+                    }
+
+                    response.status(404);
                     return "";
                 });
 
@@ -459,7 +573,6 @@ public class ApiPatient {
                 //get pesi della paziente
                 int patientId = Integer.parseInt(request.params("patient_id"));
                 String date = request.queryParams("date");
-                String links = new String();
 
                 if(date == null) {
                     List<Map<String, Object>> query = WeightDB.selectList(patientId);

@@ -1,6 +1,7 @@
 package server.api.v2;
 
 import server.api.v2.links.LinksBuilder;
+import server.api.v2.links.TaskLinks;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class JsonBuilder {
         return json;
     }
 
-    public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String type, String[] args) {
+    public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String type, String ... args) {
 
         if(query != null) {
             StringBuilder json = new StringBuilder();
@@ -64,19 +65,21 @@ public class JsonBuilder {
         return null;
     }
 
-    private static void innerListJsonObject(String type, String[] args, StringBuilder json, Map m) {
-        if(type.equals("medic"))
+    private static void innerListJsonObject(String typeObject, String[] args, StringBuilder json, Map m) {
+        if(typeObject.equals("medic"))
             json.append(jsonObject(m, LinksBuilder.medicListLink((int) m.get("id"))).toString());
-        else if(type.equals("patient"))
+        else if(typeObject.equals("patient"))
             json.append(jsonObject(m, LinksBuilder.patientListLink((int) m.get("id"))).toString());
-        else if(type.equals("weight"))
+        else if(typeObject.equals("weight"))
             json.append(jsonObject(m, LinksBuilder.singleWeightLink((int) m.get("patient_id"), (String) m.get("date"))).toString());
-        else if(type.equals("message")) {
+        else if(typeObject.equals("message")) {
             if (args[0].equals("patient"))
                 json.append(jsonObject(m, LinksBuilder.singleMessageLink((int) m.get("patient_id"), args[0], args[1], (int) m.get("medic_id"), (String) m.get("timedate"))).toString());
             else
                 json.append(jsonObject(m, LinksBuilder.singleMessageLink((int) m.get("medic_id"), args[0], args[1], (int) m.get("patient_id"), (String) m.get("timedate"))).toString());
         }
+        else if(typeObject.equals("task"))
+            json.append(jsonObject(m, TaskLinks.patientInnerListTaskLink((int) m.get("patient_id"), (int) m.get("id"), args[0])).toString());
         else
             json.append(jsonObject(m, null).toString());
     }

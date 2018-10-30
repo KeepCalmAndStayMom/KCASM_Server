@@ -9,7 +9,7 @@ public class RetrieveDataDieta implements RetrieveDataInterface {
 
     @Override
     public Object getData(int patientID, LocalDate actualDate, double actualPeso) {
-        List<Map<String, Object>> listDieta = TaskDietDB.SelectProgram(patientID);
+        List<Map<String, Object>> listDieta = TaskDietDB.selectProgram(patientID);
         assert listDieta != null;
         if(listDieta.size()==0)
             return "Nessuna";

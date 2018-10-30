@@ -9,7 +9,7 @@ import java.util.Map;
 public class RetrieveDataWeekAttivita implements RetrieveDataInterface {
     @Override
     public Object getData(int patientID, LocalDate actualDate, double actualPeso) {
-        List<Map<String, Object>> listAttivita = TaskActivityDB.SelectProgram(patientID);
+        List<Map<String, Object>> listAttivita = TaskActivityDB.selectProgram(patientID);
         assert listAttivita != null;
         if(listAttivita.size()==0)
             return 0;
