@@ -40,7 +40,7 @@ public class TaskLinks {
         return json.toString();
     }
 
-    public static String patientActivitiesLinks(int patientId, String medic_id, String executed, String ... date) {
+    public static String patientActivitiesLinks(int patientId, String medic_id, String executed, String startingProgram, String ... date) {
         StringBuilder json = new StringBuilder();
         StringBuilder params = new StringBuilder("?");
 
@@ -48,6 +48,8 @@ public class TaskLinks {
             params.append("medic_id=" + medic_id + "&");
         if(executed != null)
             params.append("executed=" + executed + "&");
+        if(startingProgram != null)
+            params.append("starting_program=" + startingProgram + "&");
 
         if(date.length==1)
             params.append("date=" + date[0] + "&");
@@ -64,7 +66,7 @@ public class TaskLinks {
         return json.toString();
     }
 
-    public static String patientDietsLinks(int patientId, String medic_id, String executed, String ... date) {
+    public static String patientDietsLinks(int patientId, String medic_id, String executed, String startingProgram, String ... date) {
         StringBuilder json = new StringBuilder();
         StringBuilder params = new StringBuilder("?");
 
@@ -72,6 +74,8 @@ public class TaskLinks {
             params.append("medic_id=" + medic_id + "&");
         if(executed != null)
             params.append("executed=" + executed + "&");
+        if(startingProgram != null)
+            params.append("starting_program=" + startingProgram + "&");
 
         if(date.length==1)
             params.append("date=" + date[0] + "&");
@@ -97,8 +101,15 @@ public class TaskLinks {
         return json.toString();
     }
 
-    public static String patientSingleTask(int patientId, int taskId) {
+    public static String patientSingleTaskLinks(int patientId, int taskId, int medicId, String taskCategory) {
         StringBuilder json = new StringBuilder();
+        String href = BASE_URL + "patients/" + patientId + "/tasks/" + taskCategory + "/" + taskId;
+
+        json.append("\"links\": [ ");
+        json.append(Link.jsonLink(BASE_URL + "patients/" + patientId + "/tasks/" + taskCategory + "/" + taskId, "self", "PUT")).append(", ");
+        json.append(Link.jsonLink(BASE_URL + "patients/" + patientId + "/tasks/" + taskCategory, "patient/tasks/" + taskCategory, "GET")).append(", ");
+        json.append(Link.jsonLink(BASE_URL + "patients/" + patientId, "patient", "GET")).append(", ");
+        json.append(Link.jsonLink(BASE_URL + "medics/" + medicId, "medic", "GET")).append(" ]");
 
         return json.toString();
     }

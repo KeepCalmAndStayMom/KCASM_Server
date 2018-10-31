@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-class SharedTaskFunctionDB {
+public class SharedTaskFunctionDB {
 
     static Connection conn;
 
@@ -135,7 +135,7 @@ class SharedTaskFunctionDB {
     public static List<Map<String, Object>> getTaskPatientIdDateInterval(String sql, int patientId, String startdate, String enddate) {
 
         try {
-            Connection conn = DBConnectOnline.getInstance().getConnection();
+            conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
             st.setString(2, startdate);
@@ -146,5 +146,75 @@ class SharedTaskFunctionDB {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Map<String, Object> selectSingleTaskGeneral(int patientId, int taskId) {
+        final String sql = "SELECT * FROM Task_General WHERE Patient_id=? AND id=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, patientId);
+            st.setInt(2, taskId);
+
+            return singleTaskMap(st.executeQuery());
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static Map<String, Object> selectSingleTaskActivities(int patientId, int taskId) {
+        final String sql = "SELECT * FROM Task_Activity WHERE Patient_id=? AND id=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, patientId);
+            st.setInt(2, taskId);
+
+            return singleTaskMap(st.executeQuery());
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static Map<String, Object> selectSingleTaskDiets(int patientId, int taskId) {
+        final String sql = "SELECT * FROM Task_Diet WHERE Patient_id=? AND id=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, patientId);
+            st.setInt(2, taskId);
+
+            return singleTaskMap(st.executeQuery());
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private static Map<String, Object> singleTaskMap(ResultSet rs) throws SQLException {
+        Map<String, Object> map = new LinkedHashMap<>();
+
+        rs.next();
+        map.put("id", rs.getInt("id"));
+        map.put("patient_id", rs.getInt("Patient_id"));
+        map.put("medic_id", rs.getInt("Medic_id"));
+        map.put("date", rs.getString("date"));
+        map.put("category", rs.getString("category"));
+        map.put("description", rs.getString("description"));
+        map.put("starting_program", rs.getBoolean("starting_program"));
+        map.put("executed", rs.getBoolean("executed"));
+
+        return map;
     }
 }

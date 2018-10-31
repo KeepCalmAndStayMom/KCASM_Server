@@ -6,6 +6,7 @@ import server.api.v2.links.MeasuresLinks;
 import server.api.v2.links.TaskLinks;
 import server.database2.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -465,7 +466,7 @@ public class ApiPatient {
                     return "";
                 });
 
-                patientTask();
+                patientTask("general");
             });
             path("/activities", () -> {
                 get("", (request, response) -> {
@@ -508,7 +509,7 @@ public class ApiPatient {
                     return "";
                 });
 
-                patientTask();
+                patientTask("activities");
             });
             path("/diets", () -> {
                 get("", (request, response) -> {
@@ -551,14 +552,32 @@ public class ApiPatient {
                     return "";
                 });
 
-                patientTask();
+                patientTask("diets");
             });
         });
     }
 
-    private void patientTask() {
+    private void patientTask(String taskCategory) {
         get("/:task_id", (request, response) -> {
             //get singolo task
+            int patientId = Integer.parseInt(request.params("patient_id"));
+            int taskId = Integer.parseInt(request.params("task_id"));
+            Map<String, Object> query = new LinkedHashMap<>();
+
+            if(taskCategory.equals("general"))
+                query = SharedTaskFunctionDB.selectSingleTaskGeneral(patientId, taskId);
+            else if(taskCategory.equals("activities"))
+                query = SharedTaskFunctionDB.selectSingleTaskActivities(patientId, taskId);
+            else if(taskCategory.equals("diets"))
+                query = SharedTaskFunctionDB.selectSingleTaskDiets(patientId, taskId);
+
+            if(query != null) {
+                response.status(200);
+                response.type("application/json");
+                return JsonBuilder.jsonObject(query, TaskLinks.patientSingleTaskLinks(patientId, taskId, (int) query.get("medic_id"), taskCategory));
+            }
+
+            response.status(404);
             return "";
         });
         put("/:task_id", (request, response) -> {
