@@ -54,7 +54,7 @@ public class MessageMedicPatientDB {
         if(startdate != null && enddate == null)
             sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + startdate +" 23:59:59\'");
         else if(startdate != null && enddate != null)
-            sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + enddate + "23:59:59\'");
+            sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + enddate + " 23:59:59\'");
 
         return getListMessage(sql.toString(), Patient_id);
     }
@@ -75,14 +75,30 @@ public class MessageMedicPatientDB {
         return getListMessage(sql.toString(), Patient_id);
     }
 
-    static public List<Map<String, Object>> selectMedicReceived(int Medic_id) {
-        final String sql = "SELECT * FROM Message_Medic_Patient WHERE Medic_id=? AND medic_sender=0";
-        return getListMessage(sql, Medic_id);
+    static public List<Map<String, Object>> selectMedicReceived(int medicId, String patientId, String ... date) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM Message_Medic_Patient WHERE Medic_id=? AND medic_sender=0");
+
+        if(patientId != null)
+            sql.append(" AND Patient_id=" + patientId);
+        else if(date.length == 1)
+            sql.append(" AND timedate LIKE \'" + date[0] + "%\'");
+        else if(date.length == 2)
+            sql.append(" AND timedate BETWEEN \'" + date[0] + " 00:00:00\' AND \'" + date[1] + " 23:59:59\'");
+
+        return getListMessage(sql.toString(), medicId);
     }
 
-    static public List<Map<String, Object>> selectMedicSent(int Medic_id) {
-        final String sql = "SELECT * FROM Message_Medic_Patient WHERE Medic_id=? AND medic_sender=1";
-        return getListMessage(sql, Medic_id);
+    static public List<Map<String, Object>> selectMedicSent(int medicId, String patientId, String ... date) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM Message_Medic_Patient WHERE Medic_id=? AND medic_sender=1");
+
+        if(patientId != null)
+            sql.append(" AND Patient_id=" + patientId);
+        else if(date.length == 1)
+            sql.append(" AND timedate LIKE \'" + date[0] + "%\'");
+        else if(date.length == 2)
+            sql.append(" AND timedate BETWEEN \'" + date[0] + " 00:00:00\' AND \'" + date[1] + " 23:59:59\'");
+
+        return getListMessage(sql.toString(), medicId);
     }
 
 

@@ -296,7 +296,7 @@ public class ApiPatient {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("messages-sent", list, LinksBuilder.messagesLinks(patientId, "patient", "sent", medic_id, date, null), "message", new String[]{"patient", "sent"}).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("messages-sent", list, LinksBuilder.messagesLinks(patientId, "patient", "sent", medic_id, date, null), "message","patient", "sent").toString() + " }";
                     }
                 }
                 else {
@@ -306,7 +306,7 @@ public class ApiPatient {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("messages-sent", list, LinksBuilder.messagesLinks(patientId, "patient", "sent", medic_id, startdate, enddate), "message", new String[]{"patient", "sent"}).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("messages-sent", list, LinksBuilder.messagesLinks(patientId, "patient", "sent", medic_id, startdate, enddate), "message","patient", "sent").toString() + " }";
                     }
                 }
 

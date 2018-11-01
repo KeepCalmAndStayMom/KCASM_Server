@@ -33,7 +33,7 @@ public class JsonBuilder {
         return json;
     }
 
-    public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String type, String ... args) {
+    public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String innerObjectType, String ... args) {
 
         if(query != null) {
             StringBuilder json = new StringBuilder();
@@ -43,7 +43,7 @@ public class JsonBuilder {
 
             json.append("[ ");
             for(Map m : query) {
-                innerListJsonObject(type, args, json, m);
+                innerListJsonObject(innerObjectType, args, json, m);
                 json.append(", ");
             }
             if(json.charAt(json.length()-2) == ',')
