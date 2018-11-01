@@ -56,7 +56,7 @@ public class ApiPatient {
                 });
                 get("/medics", (request, response) -> {
                     int patientId = Integer.parseInt(request.params("patient_id"));
-                    List<Map<String, Object>> query = MedicDB.selectMedicsOfPatient(patientId);
+                    List<Map<String, Object>> query = PatientDB.selectMedicsOfPatient(patientId);
 
                     if(query.size() != 0) {
                         response.status(200);

@@ -1,6 +1,7 @@
 package server;
 
 import server.api.v1.ApiService;
+import server.api.v2.ApiMedic;
 import server.api.v2.ApiPatient;
 import server.mqtt.MQTTSubscriber;
 import server.weight_control.WeightController;
@@ -19,6 +20,7 @@ public class MainServer {
 
         //new ApiService();
         new ApiPatient();
+        new ApiMedic();
 
         //cpt.startcheck(1, LocalDate.parse("2018-01-02"), 0d);
         //cpt.startcheck(2, LocalDate.parse("2018-03-01"), 1.5d);

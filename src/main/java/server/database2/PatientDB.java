@@ -104,4 +104,34 @@ public class PatientDB {
         }
         return false;
     }
+
+    public static List<Map<String, Object>> selectMedicsOfPatient(int id) {
+        final String sql = "SELECT Medic.id, Medic.name, Medic.surname, Medic.specialization FROM Medic JOIN Medic_has_Patient ON Medic.id=Medic_id WHERE Patient_id=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            List<Map<String, Object>> list = new ArrayList<>();
+
+            while(rs.next()) {
+                Map<String, Object> medic = new LinkedHashMap<>();
+                medic.put("id", rs.getInt("id"));
+                medic.put("name", rs.getString("name"));
+                medic.put("surname", rs.getString("surname"));
+                medic.put("specialization", rs.getString("specialization"));
+
+                list.add(medic);
+            }
+
+            return list;
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

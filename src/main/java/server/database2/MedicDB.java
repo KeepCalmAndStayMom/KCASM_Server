@@ -98,8 +98,8 @@ public class MedicDB {
         return false;
     }
 
-    public static List<Map<String, Object>> selectMedicsOfPatient(int id) {
-        final String sql = "SELECT Medic.id, Medic.name, Medic.surname, Medic.specialization FROM Medic JOIN Medic_has_Patient ON Medic.id=Medic_id WHERE Patient_id=?";
+    public static List<Map<String, Object>> selectPatientsOfMedic(int id) {
+        final String sql = "SELECT Patient.id, Patient.name, Patient.surname FROM Patient JOIN Medic_has_Patient ON Patient.id=Patient_id WHERE Medic_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -110,13 +110,12 @@ public class MedicDB {
             List<Map<String, Object>> list = new ArrayList<>();
 
             while(rs.next()) {
-                Map<String, Object> medic = new LinkedHashMap<>();
-                medic.put("id", rs.getInt("id"));
-                medic.put("name", rs.getString("name"));
-                medic.put("surname", rs.getString("surname"));
-                medic.put("specialization", rs.getString("specialization"));
+                Map<String, Object> patient = new LinkedHashMap<>();
+                patient.put("id", rs.getInt("id"));
+                patient.put("name", rs.getString("name"));
+                patient.put("surname", rs.getString("surname"));
 
-                list.add(medic);
+                list.add(patient);
             }
 
             return list;

@@ -1,9 +1,17 @@
 package server.api.v2;
 
+import server.api.v2.links.LinksBuilder;
+import server.database2.MedicDB;
+
+import java.util.List;
+import java.util.Map;
+
 import static spark.Spark.*;
 
 public class ApiMedic {
     private String baseURL = "/api/v2";
+
+    public ApiMedic() { apiMedic(); }
 
     private void apiMedic() {
         path(baseURL + "/medics", () -> {
@@ -14,8 +22,18 @@ public class ApiMedic {
 
             path("/:medic_id", () -> {
                 get("", (request, response) -> {
-                   //get dati medico
-                   return "";
+                    int medicId = Integer.parseInt(request.params("medic_id"));
+                    Map<String, Object> query = MedicDB.select(medicId);
+
+                    if(query != null) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return JsonBuilder.jsonObject(query, LinksBuilder.medicLinks(medicId)).toString();
+                    }
+
+                    response.status(404);
+                    return "";
                 });
                 put("", (request, response) -> {
                    //modifica dati medico
@@ -27,6 +45,17 @@ public class ApiMedic {
                 });
                 get("/patients", (request, response) -> {
                     //get dei pazienti del medico
+                    int medicId = Integer.parseInt(request.params("medic_id"));
+                    List<Map<String, Object>> query = MedicDB.selectPatientsOfMedic(medicId);
+
+                    if(query != null && query.size() > 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return JsonBuilder.jsonList(null, query, null, "patient").toString();
+                    }
+
+                    response.status(404);
                     return "";
                 });
 

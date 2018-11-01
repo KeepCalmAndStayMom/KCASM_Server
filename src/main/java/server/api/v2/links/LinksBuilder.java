@@ -18,11 +18,23 @@ public class LinksBuilder {
         return json.toString();
     }
 
+    public static String medicLinks(int medicId) {
+        StringBuilder json = new StringBuilder();
+
+        json.append("\"links\": [ ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/patients", "medic/patients", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/tasks", "medic/tasks", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/messages", "medic/messages", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId, "self", "PUT")).append(" ]");
+
+        return json.toString();
+    }
+
     public static String medicListLink(int medicId) {
         StringBuilder json = new StringBuilder();
 
         json.append("\"link\": ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId, "medic", "GET"));
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId, "self", "GET"));
 
         return json.toString();
     }
@@ -31,7 +43,7 @@ public class LinksBuilder {
         StringBuilder json = new StringBuilder();
 
         json.append("\"link\": ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "patient", "GET"));
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "self", "GET"));
 
         return json.toString();
     }
