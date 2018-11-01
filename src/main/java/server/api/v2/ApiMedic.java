@@ -1,6 +1,7 @@
 package server.api.v2;
 
 import server.api.v2.links.LinksBuilder;
+import server.database2.LoginDB;
 import server.database2.MedicDB;
 
 import java.util.List;
@@ -72,6 +73,17 @@ public class ApiMedic {
         path("/login_data", () -> {
             get("", (request, response) -> {
                 //get dati login paziente
+                int medicId = Integer.parseInt(request.params("medic_id"));
+                Map<String, Object> query = LoginDB.selectMedic(medicId);
+
+                if(query != null) {
+                    response.status(200);
+                    response.type("application/json");
+
+                    return JsonBuilder.jsonObject(query, LinksBuilder.loginData(medicId, "medic")).toString();
+                }
+
+                response.status(404);
                 return "";
             });
             post("", (request, response) -> {

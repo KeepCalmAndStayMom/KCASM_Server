@@ -369,7 +369,7 @@ public class ApiPatient {
                     response.status(200);
                     response.type("application/json");
 
-                    return JsonBuilder.jsonObject(query, LinksBuilder.loginData(patientId, "patients")).toString();
+                    return JsonBuilder.jsonObject(query, LinksBuilder.loginData(patientId, "patient")).toString();
                 }
 
                 response.status(404);

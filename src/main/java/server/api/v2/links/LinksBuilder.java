@@ -25,6 +25,7 @@ public class LinksBuilder {
         json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/patients", "medic/patients", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/tasks", "medic/tasks", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/messages", "medic/messages", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/login_data", "medic/login_data", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId, "self", "PUT")).append(" ]");
 
         return json.toString();
@@ -52,8 +53,8 @@ public class LinksBuilder {
         StringBuilder json = new StringBuilder();
 
         json.append("\"links\": [");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "/" + id, type, "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "/" + id + "/login_data", "self", "PUT")).append(" ]");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id, type, "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/login_data", "self", "PUT")).append(" ]");
 
         return json.toString();
     }
