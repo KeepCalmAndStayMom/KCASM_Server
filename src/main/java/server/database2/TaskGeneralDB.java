@@ -41,7 +41,7 @@ public class TaskGeneralDB {
         String sql = "SELECT * FROM Task_General WHERE starting_program=1";
 
         if(userType.equals("patient"))
-            sql+=" AND Patient=id=" + patientId;
+            sql+=" AND Patient_id=" + patientId;
         else
             sql+=" AND Medic_id=" + patientId;
 
