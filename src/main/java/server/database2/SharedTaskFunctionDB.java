@@ -38,8 +38,6 @@ public class SharedTaskFunctionDB {
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, patientId);
-
 
             return getListTask(st.executeQuery());
         } catch (SQLException e) {
@@ -53,8 +51,8 @@ public class SharedTaskFunctionDB {
         try {
             Connection conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, patientId);
-            st.setString(2, date);
+            //st.setInt(1, patientId);
+            st.setString(1, date);
 
             return SharedTaskFunctionDB.getListTask(st.executeQuery());
         } catch (SQLException e) {
@@ -137,9 +135,9 @@ public class SharedTaskFunctionDB {
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, patientId);
-            st.setString(2, startdate);
-            st.setString(3, enddate);
+            //st.setInt(1, patientId);
+            st.setString(1, startdate);
+            st.setString(2, enddate);
 
             return SharedTaskFunctionDB.getListTask(st.executeQuery());
         } catch (SQLException e) {
@@ -148,14 +146,18 @@ public class SharedTaskFunctionDB {
         return null;
     }
 
-    public static Map<String, Object> selectSingleTaskGeneral(int patientId, int taskId) {
-        final String sql = "SELECT * FROM Task_General WHERE Patient_id=? AND id=?";
+    public static Map<String, Object> selectSingleTaskGeneral(int id, int taskId, String typeUser) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM Task_General WHERE id=" + taskId);
+
+        if(typeUser.equals("patient"))
+            sql.append(" AND Patient_id=" + id);
+        else
+            sql.append(" AND Medic_id=" + id);
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, patientId);
-            st.setInt(2, taskId);
+            PreparedStatement st = conn.prepareStatement(sql.toString());
+            //st.setInt(1, taskId);
 
             return singleTaskMap(st.executeQuery());
         }
@@ -166,14 +168,18 @@ public class SharedTaskFunctionDB {
         return null;
     }
 
-    public static Map<String, Object> selectSingleTaskActivities(int patientId, int taskId) {
-        final String sql = "SELECT * FROM Task_Activity WHERE Patient_id=? AND id=?";
+    public static Map<String, Object> selectSingleTaskActivities(int id, int taskId, String typeUser) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM Task_Activity WHERE id=" + taskId);
+
+        if(typeUser.equals("patient"))
+            sql.append(" AND Patient_id=" + id);
+        else
+            sql.append(" AND Medic_id=" + id);
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, patientId);
-            st.setInt(2, taskId);
+            PreparedStatement st = conn.prepareStatement(sql.toString());
+            //st.setInt(1, taskId);
 
             return singleTaskMap(st.executeQuery());
         }
@@ -184,14 +190,18 @@ public class SharedTaskFunctionDB {
         return null;
     }
 
-    public static Map<String, Object> selectSingleTaskDiets(int patientId, int taskId) {
-        final String sql = "SELECT * FROM Task_Diet WHERE Patient_id=? AND id=?";
+    public static Map<String, Object> selectSingleTaskDiets(int id, int taskId, String typeUser) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM Task_Diet WHERE id=" +  taskId);
+
+        if(typeUser.equals("patient"))
+            sql.append(" AND Patient_id=" + id);
+        else
+            sql.append(" AND Medic_id=" + id);
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, patientId);
-            st.setInt(2, taskId);
+            PreparedStatement st = conn.prepareStatement(sql.toString());
+            //st.setInt(1, taskId);
 
             return singleTaskMap(st.executeQuery());
         }

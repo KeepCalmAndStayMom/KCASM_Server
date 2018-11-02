@@ -1,7 +1,8 @@
 package server.api.v2;
 
 import server.api.v2.links.LinksBuilder;
-import server.api.v2.links.TaskLinks;
+import server.api.v2.links.MedicTasksLinks;
+import server.api.v2.links.PatientTasksLinks;
 
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,10 @@ public class JsonBuilder {
                 json.append(jsonObject(m, LinksBuilder.singleMessageLink((int) m.get("medic_id"), args[0], args[1], (int) m.get("patient_id"), (String) m.get("timedate"))).toString());
         }
         else if(typeObject.equals("task"))
-            json.append(jsonObject(m, TaskLinks.patientInnerListTaskLink((int) m.get("patient_id"), (int) m.get("id"), args[0])).toString());
+            if(args[1].equals("patient"))
+                json.append(jsonObject(m, PatientTasksLinks.patientInnerListTaskLink((int) m.get("patient_id"), (int) m.get("id"), args[0])).toString());
+            else
+                json.append(jsonObject(m, MedicTasksLinks.medicInnerListTaskLink((int) m.get("medic_id"), (int) m.get("id"), args[0])).toString());
         else
             json.append(jsonObject(m, null).toString());
     }

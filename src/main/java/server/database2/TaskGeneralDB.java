@@ -5,28 +5,46 @@ import java.util.Map;
 
 public class TaskGeneralDB {
 
-    static public List<Map<String, Object>> selectDate(int patientId, String medic_id, String date, String executed) {
-        String sql = "SELECT * FROM Task_General WHERE Patient_id=? AND date=?";
+    static public List<Map<String, Object>> selectDate(Integer patientId, String medic_id, String date, String executed, String userType) {
+        String sql = "SELECT * FROM Task_General WHERE date=?";
+
+        if(patientId != null)
+            sql+=" AND Patient_id=" + patientId;
         if(medic_id != null)
-            sql+=" AND medic_id=" + medic_id;
+            sql+=" AND Medic_id=" + medic_id;
         if(executed != null)
             sql+=" AND executed=" + executed;
 
-        return SharedTaskFunctionDB.getTaskPatientIdDate(sql, patientId, date);
+        if(userType.equals("patient"))
+            return SharedTaskFunctionDB.getTaskPatientIdDate(sql, patientId, date);
+        else
+            return SharedTaskFunctionDB.getTaskPatientIdDate(sql, Integer.parseInt(medic_id), date);
     }
 
-    public static List<Map<String, Object>> selectDateInterval(int patientId, String medic_id, String startdate, String enddate, String executed) {
-        String sql = "SELECT * FROM Task_General WHERE Patient=? AND date BETWEEN ? AND ?";
+    public static List<Map<String, Object>> selectDateInterval(Integer patientId, String medic_id, String startdate, String enddate, String executed, String userType) {
+        String sql = "SELECT * FROM Task_General WHERE date BETWEEN ? AND ?";
+
+        if(patientId != null)
+            sql+=" AND Patient_id=" + patientId;
         if(medic_id != null)
-            sql+=" AND medic_id=" + medic_id;
+            sql+=" AND Medic_id=" + medic_id;
         if(executed != null)
             sql+=" AND executed=" + executed;
 
-        return SharedTaskFunctionDB.getTaskPatientIdDateInterval(sql, patientId, startdate, enddate);
+        if(userType.equals("patient"))
+            return SharedTaskFunctionDB.getTaskPatientIdDateInterval(sql, patientId, startdate, enddate);
+        else
+            return SharedTaskFunctionDB.getTaskPatientIdDateInterval(sql, Integer.parseInt(medic_id), startdate, enddate);
     }
 
-    static public List<Map<String, Object>> selectProgram(int patientId) {
-        final String sql = "SELECT * FROM Task_General WHERE Patient_id=? AND starting_program=1";
+    static public List<Map<String, Object>> selectProgram(Integer patientId, String userType) {
+        String sql = "SELECT * FROM Task_General WHERE starting_program=1";
+
+        if(userType.equals("patient"))
+            sql+=" AND Patient=id=" + patientId;
+        else
+            sql+=" AND Medic_id=" + patientId;
+
         return SharedTaskFunctionDB.getTaskPatientId(sql, patientId);
     }
 
@@ -35,14 +53,22 @@ public class TaskGeneralDB {
         return SharedTaskFunctionDB.getTaskPatientId(sql, patientId);
     }
 
-    static public List<Map<String, Object>> select(int patientId, String medic_id, String executed) {
-        String sql = "SELECT * FROM Task_General WHERE Patient_id=?";
-        if(medic_id != null)
-            sql+=" AND medic_id=" + medic_id;
+    static public List<Map<String, Object>> select(Integer patientId, String medic_id, String executed, String userType) {
+        String sql = "SELECT * FROM Task_General WHERE";
+
+        if(patientId != null)
+            sql+=" Patient_id=" + patientId;
+        if(medic_id != null && patientId == null)
+            sql+=" Medic_id=" + medic_id;
+        else if(medic_id !=null && patientId !=null)
+            sql+=" AND Medic_id=" + medic_id;
         if(executed != null)
             sql+=" AND executed=" + executed;
 
-        return SharedTaskFunctionDB.getTaskPatientId(sql, patientId);
+        if(userType.equals("patient"))
+            return SharedTaskFunctionDB.getTaskPatientId(sql, patientId);
+
+        return SharedTaskFunctionDB.getTaskPatientId(sql, Integer.parseInt(medic_id));
     }
 
     static public boolean update(Map<String, Object> map) {

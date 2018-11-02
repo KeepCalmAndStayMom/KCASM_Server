@@ -3,7 +3,7 @@ package server.api.v2;
 import com.google.gson.Gson;
 import server.api.v2.links.LinksBuilder;
 import server.api.v2.links.MeasuresLinks;
-import server.api.v2.links.TaskLinks;
+import server.api.v2.links.PatientTasksLinks;
 import server.database2.*;
 
 import java.util.LinkedHashMap;
@@ -422,7 +422,7 @@ public class ApiPatient {
                response.status(200);
                response.type("application/json");
 
-               return JsonBuilder.jsonList(null, null, TaskLinks.tasksMenu(patientId, "patient"), null, null);
+               return JsonBuilder.jsonList(null, null, PatientTasksLinks.tasksMenu(patientId, "patient"), null, null);
             });
 
             path("/general", () -> {
@@ -439,27 +439,27 @@ public class ApiPatient {
                     String links;
 
                     if(starting_program != null && starting_program.equals("1")) {
-                        query = TaskGeneralDB.selectProgram(patientId);
-                        links = TaskLinks.patientGeneralLinks(patientId, medicId, executed, starting_program);
+                        query = TaskGeneralDB.selectProgram(patientId, "patient");
+                        links = PatientTasksLinks.patientGeneralLinks(patientId, medicId, executed, starting_program);
                     }
                     else if(date!=null && date.matches(DATE_REGEX)) {
-                        query = TaskGeneralDB.selectDate(patientId, medicId, date, executed);
-                        links = TaskLinks.patientGeneralLinks(patientId, medicId, executed, starting_program, date);
+                        query = TaskGeneralDB.selectDate(patientId, medicId, date, executed, "patient");
+                        links = PatientTasksLinks.patientGeneralLinks(patientId, medicId, executed, starting_program, date);
                     }
                     else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
-                        query = TaskGeneralDB.selectDateInterval(patientId, medicId, startdate, enddate, executed);
-                        links = TaskLinks.patientGeneralLinks(patientId, medicId, executed, starting_program, startdate, enddate);
+                        query = TaskGeneralDB.selectDateInterval(patientId, medicId, startdate, enddate, executed, "patient");
+                        links = PatientTasksLinks.patientGeneralLinks(patientId, medicId, executed, starting_program, startdate, enddate);
                     }
                     else {
-                        query = TaskGeneralDB.select(patientId, medicId, executed);
-                        links = TaskLinks.patientGeneralLinks(patientId, medicId, executed, starting_program);
+                        query = TaskGeneralDB.select(patientId, medicId, executed, "patient");
+                        links = PatientTasksLinks.patientGeneralLinks(patientId, medicId, executed, starting_program);
                     }
 
                     if(query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("general", query, links, "task", "general") + " }";
+                        return "{ " + JsonBuilder.jsonList("general", query, links, "task", "general", "patient") + " }";
                     }
 
                     response.status(404);
@@ -482,27 +482,27 @@ public class ApiPatient {
                     String links;
 
                     if(starting_program != null && starting_program.equals("1")) {
-                        query = TaskActivityDB.selectProgram(patientId);
-                        links = TaskLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program);
+                        query = TaskActivityDB.selectProgram(patientId, "patient");
+                        links = PatientTasksLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program);
                     }
                     else if(date!=null && date.matches(DATE_REGEX)) {
-                        query = TaskActivityDB.selectDate(patientId, medicId, date, executed);
-                        links = TaskLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program, date);
+                        query = TaskActivityDB.selectDate(patientId, medicId, date, executed, "patient");
+                        links = PatientTasksLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program, date);
                     }
                     else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
-                        query = TaskActivityDB.selectDateInterval(patientId, medicId, startdate, enddate, executed);
-                        links = TaskLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program, startdate, enddate);
+                        query = TaskActivityDB.selectDateInterval(patientId, medicId, startdate, enddate, executed, "patient");
+                        links = PatientTasksLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program, startdate, enddate);
                     }
                     else {
-                        query = TaskActivityDB.select(patientId, medicId, executed);
-                        links = TaskLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program);
+                        query = TaskActivityDB.select(patientId, medicId, executed, "patient");
+                        links = PatientTasksLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program);
                     }
 
                     if(query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("activities", query, links, "task", "activities") + " }";
+                        return "{ " + JsonBuilder.jsonList("activities", query, links, "task", "activities", "patient") + " }";
                     }
 
                     response.status(404);
@@ -525,27 +525,27 @@ public class ApiPatient {
                     String links;
 
                     if(starting_program != null && starting_program.equals("1")) {
-                        query = TaskDietDB.selectProgram(patientId);
-                        links = TaskLinks.patientDietsLinks(patientId, medicId, executed, starting_program);
+                        query = TaskDietDB.selectProgram(patientId, "patient");
+                        links = PatientTasksLinks.patientDietsLinks(patientId, medicId, executed, starting_program);
                     }
                     else if(date!=null && date.matches(DATE_REGEX)) {
-                        query = TaskDietDB.selectDate(patientId, medicId, date, executed);
-                        links = TaskLinks.patientDietsLinks(patientId, medicId, executed, starting_program, date);
+                        query = TaskDietDB.selectDate(patientId, medicId, date, executed, "patient");
+                        links = PatientTasksLinks.patientDietsLinks(patientId, medicId, executed, starting_program, date);
                     }
                     else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
-                        query = TaskDietDB.selectDateInterval(patientId, medicId, startdate, enddate, executed);
-                        links = TaskLinks.patientDietsLinks(patientId, medicId, executed, starting_program, startdate, enddate);
+                        query = TaskDietDB.selectDateInterval(patientId, medicId, startdate, enddate, executed, "patient");
+                        links = PatientTasksLinks.patientDietsLinks(patientId, medicId, executed, starting_program, startdate, enddate);
                     }
                     else {
-                        query = TaskDietDB.select(patientId, medicId, executed);
-                        links = TaskLinks.patientDietsLinks(patientId, medicId, executed, starting_program);
+                        query = TaskDietDB.select(patientId, medicId, executed, "patient");
+                        links = PatientTasksLinks.patientDietsLinks(patientId, medicId, executed, starting_program);
                     }
 
                     if(query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("diets", query, links, "task", "diets") + " }";
+                        return "{ " + JsonBuilder.jsonList("diets", query, links, "task", "diets", "patient") + " }";
                     }
 
                     response.status(404);
@@ -565,16 +565,16 @@ public class ApiPatient {
             Map<String, Object> query = new LinkedHashMap<>();
 
             if(taskCategory.equals("general"))
-                query = SharedTaskFunctionDB.selectSingleTaskGeneral(patientId, taskId);
+                query = SharedTaskFunctionDB.selectSingleTaskGeneral(patientId, taskId, "patient");
             else if(taskCategory.equals("activities"))
-                query = SharedTaskFunctionDB.selectSingleTaskActivities(patientId, taskId);
+                query = SharedTaskFunctionDB.selectSingleTaskActivities(patientId, taskId, "patient");
             else if(taskCategory.equals("diets"))
-                query = SharedTaskFunctionDB.selectSingleTaskDiets(patientId, taskId);
+                query = SharedTaskFunctionDB.selectSingleTaskDiets(patientId, taskId, "patient");
 
             if(query != null) {
                 response.status(200);
                 response.type("application/json");
-                return JsonBuilder.jsonObject(query, TaskLinks.patientSingleTaskLinks(patientId, taskId, (int) query.get("medic_id"), taskCategory));
+                return JsonBuilder.jsonObject(query, PatientTasksLinks.patientSingleTaskLinks(patientId, taskId, (int) query.get("medic_id"), taskCategory));
             }
 
             response.status(404);

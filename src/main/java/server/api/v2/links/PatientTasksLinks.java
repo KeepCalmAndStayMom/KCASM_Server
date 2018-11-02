@@ -1,6 +1,6 @@
 package server.api.v2.links;
 
-public class TaskLinks {
+public class PatientTasksLinks {
     private static final String BASE_URL = "http://localhost:4567/api/v2/";
 
     public static String tasksMenu(int id, String userType) {

@@ -1,12 +1,10 @@
 package server.api.v2;
 
-import server.api.v2.links.Link;
 import server.api.v2.links.LinksBuilder;
-import server.database2.LoginDB;
-import server.database2.MedicDB;
-import server.database2.MessageMedicPatientDB;
+import server.api.v2.links.MedicTasksLinks;
+import server.database2.*;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -216,6 +214,15 @@ public class ApiMedic {
 
     private void medicTasks() {
         path("/tasks", () -> {
+            get("", (request, response) -> {
+                int medicId = Integer.parseInt(request.params("medic_id"));
+
+                response.status(200);
+                response.type("application/json");
+
+                return JsonBuilder.jsonList(null, null, MedicTasksLinks.tasksMenu(medicId, "medic"), null, null);
+            });
+
             path("/general", () -> {
                 post("", (request, response) -> {
                     //aggiunta task generale
@@ -223,10 +230,57 @@ public class ApiMedic {
                 });
                 get("", (request, response) -> {
                     //get task generali medico
+                    int medicId = Integer.parseInt(request.params("medic_id"));
+                    String patientId = request.queryParams("patient_id");
+                    String executed = request.queryParams("executed");
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
+                    String starting_program = request.queryParams("starting_program");
+                    List<Map<String, Object>> query;
+                    String links;
+
+                    if(starting_program != null && starting_program.equals("1")) {
+                        query = TaskGeneralDB.selectProgram(medicId, "medic");
+                        links = MedicTasksLinks.medicGeneralLinks(medicId, patientId, executed, starting_program);
+                    }
+                    else if(date!=null && date.matches(DATE_REGEX)) {
+                        if(patientId != null)
+                            query = TaskGeneralDB.selectDate(Integer.parseInt(patientId), String.valueOf(medicId), date, executed, "medic");
+                        else
+                            query = TaskGeneralDB.selectDate(null, String.valueOf(medicId), date, executed, "medic");
+
+                        links = MedicTasksLinks.medicGeneralLinks(medicId, patientId, executed, starting_program, date);
+                    }
+                    else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
+                        if(patientId != null)
+                            query = TaskGeneralDB.selectDateInterval(Integer.parseInt(patientId), String.valueOf(medicId), startdate, enddate, executed, "medic");
+                        else
+                            query = TaskGeneralDB.selectDateInterval(null, String.valueOf(medicId), startdate, enddate, executed, "medic");
+
+                        links = MedicTasksLinks.medicGeneralLinks(medicId, patientId, executed, starting_program, startdate, enddate);
+                    }
+                    else {
+                        if(patientId != null)
+                            query = TaskGeneralDB.select(Integer.parseInt(patientId), String.valueOf(medicId), executed, "medic");
+                        else
+                            query = TaskGeneralDB.select(null, String.valueOf(medicId), executed, "medic");
+
+                        links = MedicTasksLinks.medicGeneralLinks(medicId, patientId, executed, starting_program);
+                    }
+
+                    if(query != null && query.size() > 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ " + JsonBuilder.jsonList("general", query, links, "task", "general", "medic") + " }";
+                    }
+
+                    response.status(404);
                     return "";
                 });
 
-                medicTask();
+                medicTask("general");
             });
             path("/activities", () -> {
                 post("", (request, response) -> {
@@ -235,10 +289,54 @@ public class ApiMedic {
                 });
                 get("", (request, response) -> {
                     //get attività medico
+                    int medicId = Integer.parseInt(request.params("medic_id"));
+                    String patientId = request.queryParams("patient_id");
+                    String executed = request.queryParams("executed");
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
+                    String starting_program = request.queryParams("starting_program");
+                    List<Map<String, Object>> query;
+                    String links;
+
+                    if(starting_program != null && starting_program.equals("1")) {
+                        query = TaskActivityDB.selectProgram(medicId, "medic");
+                        links = MedicTasksLinks.medicActivitiesLinks(medicId, patientId, executed, starting_program);
+                    }
+                    else if(date!=null && date.matches(DATE_REGEX)) {
+                        if(patientId !=null)
+                            query = TaskActivityDB.selectDate(Integer.parseInt(patientId), String.valueOf(medicId), date, executed,"medic");
+                        else
+                            query = TaskActivityDB.selectDate(null, String.valueOf(medicId), date, executed,"medic");
+                        links = MedicTasksLinks.medicActivitiesLinks(medicId, patientId, executed, starting_program, date);
+                    }
+                    else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
+                        if(patientId != null)
+                            query = TaskActivityDB.selectDateInterval(Integer.parseInt(patientId), String.valueOf(medicId), startdate, enddate, executed, "patient");
+                        else
+                            query = TaskActivityDB.selectDateInterval(null, String.valueOf(medicId), startdate, enddate, executed,"medic");
+                        links = MedicTasksLinks.medicActivitiesLinks(medicId, patientId, executed, starting_program, startdate, enddate);
+                    }
+                    else {
+                        if(patientId != null)
+                            query = TaskActivityDB.select(Integer.parseInt(patientId), String.valueOf(medicId), executed,"medic");
+                        else
+                            query = TaskActivityDB.select(null, String.valueOf(medicId), executed,"medic");
+                        links = MedicTasksLinks.medicActivitiesLinks(medicId, patientId, executed, starting_program);
+                    }
+
+                    if(query.size() > 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ " + JsonBuilder.jsonList("actvities", query, links, "task", "activities", "medic") + " }";
+                    }
+
+                    response.status(404);
                     return "";
                 });
 
-                medicTask();
+                medicTask("activities");
             });
             path("/diets", () -> {
                 post("", (request, response) -> {
@@ -247,17 +345,82 @@ public class ApiMedic {
                 });
                 get("", (request, response) -> {
                     //get diete medico
+                    int medicId = Integer.parseInt(request.params("medic_id"));
+                    String patientId = request.queryParams("patient_id");
+                    String executed = request.queryParams("executed");
+                    String date = request.queryParams("date");
+                    String startdate = request.queryParams("startdate");
+                    String enddate = request.queryParams("enddate");
+                    String starting_program = request.queryParams("starting_program");
+                    List<Map<String, Object>> query;
+                    String links;
+
+                    if(starting_program != null && starting_program.equals("1")) {
+                        query = TaskDietDB.selectProgram(medicId, "medic");
+                        links = MedicTasksLinks.medicDietsLinks(medicId, patientId, executed, starting_program);
+                    }
+                    else if(date!=null && date.matches(DATE_REGEX)) {
+                        if(patientId != null)
+                            query = TaskDietDB.selectDate(Integer.parseInt(patientId), String.valueOf(medicId), date, executed,"medic");
+                        else
+                            query = TaskDietDB.selectDate(null, String.valueOf(medicId), date, executed,"medic");
+
+                        links = MedicTasksLinks.medicDietsLinks(medicId, patientId, executed, starting_program, date);
+                    }
+                    else if(startdate != null && enddate != null && startdate.matches(DATE_REGEX) && enddate.matches(DATE_REGEX)) {
+                        if(patientId!=null)
+                            query = TaskDietDB.selectDateInterval(Integer.parseInt(patientId), String.valueOf(medicId), startdate, enddate, executed,"medic");
+                        else
+                            query = TaskDietDB.selectDateInterval(null, String.valueOf(medicId), startdate, enddate, executed,"medic");
+
+                        links = MedicTasksLinks.medicDietsLinks(medicId, patientId, executed, starting_program, startdate, enddate);
+                    }
+                    else {
+                        if(patientId != null)
+                            query = TaskDietDB.select(Integer.parseInt(patientId), String.valueOf(medicId), executed,"medic");
+                        else
+                            query = TaskDietDB.select(null, String.valueOf(medicId), executed,"medic");
+
+                        links = MedicTasksLinks.medicDietsLinks(medicId, patientId, executed, starting_program);
+                    }
+
+                    if(query != null && query.size() > 0) {
+                        response.status(200);
+                        response.type("application/json");
+
+                        return "{ " + JsonBuilder.jsonList("diets", query, links, "task", "diets", "medic") + " }";
+                    }
+
+                    response.status(404);
                     return "";
                 });
 
-                medicTask();
+                medicTask("diets");
             });
         });
     }
 
-    private void medicTask() {
+    private void medicTask(String taskCategory) {
         get("/:task_id", (request, response) -> {
             //get singolo task
+            int medicId = Integer.parseInt(request.params("medic_id"));
+            int taskId = Integer.parseInt(request.params("task_id"));
+            Map<String, Object> query = new LinkedHashMap<>();
+
+            if(taskCategory.equals("general"))
+                query = SharedTaskFunctionDB.selectSingleTaskGeneral(medicId, taskId, "medic");
+            else if(taskCategory.equals("activities"))
+                query = SharedTaskFunctionDB.selectSingleTaskActivities(medicId, taskId, "medic");
+            else if(taskCategory.equals("diets"))
+                query = SharedTaskFunctionDB.selectSingleTaskDiets(medicId, taskId, "medic");
+
+            if(query != null) {
+                response.status(200);
+                response.type("application/json");
+                return JsonBuilder.jsonObject(query, MedicTasksLinks.medicSingleTaskLinks(medicId, taskId, (int) query.get("patient_id"), taskCategory));
+            }
+
+            response.status(404);
             return "";
         });
         put("/:task_id", (request, response) -> {
