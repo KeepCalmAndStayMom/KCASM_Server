@@ -27,7 +27,15 @@ public class ApiPatient {
         path(baseURL + "/patients", () -> {
             post("", (request, response) -> {
                 //aggiunta paziente
-                return "";
+                Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+                if(request.contentType().contains("json") && Checker.patientMapValidation(map)) {
+                    PatientDB.insert(map);
+                    response.status(200);
+                    return "OK";
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
 
             path("/:patient_id", () -> {
@@ -54,18 +62,23 @@ public class ApiPatient {
                     //cancellazione utente solo admin
                     return "";
                 });
-                get("/medics", (request, response) -> {
-                    int patientId = Integer.parseInt(request.params("patient_id"));
-                    List<Map<String, Object>> query = PatientDB.selectMedicsOfPatient(patientId);
+                path("/medics", () -> {
+                    get("", (request, response) -> {
+                        int patientId = Integer.parseInt(request.params("patient_id"));
+                        List<Map<String, Object>> query = PatientDB.selectMedicsOfPatient(patientId);
 
-                    if(query.size() != 0) {
-                        response.status(200);
-                        response.type("application/json");
-                        return JsonBuilder.jsonList(null, query,null, "medic", null).toString();
-                    }
+                        if(query.size() != 0) {
+                            response.status(200);
+                            response.type("application/json");
+                            return JsonBuilder.jsonList(null, query,null, "medic", null).toString();
+                        }
 
-                    response.status(404);
-                    return "";
+                        response.status(404);
+                        return "";
+                    });
+                    post("", (request, response) -> {
+                        return "";
+                    });
                 });
 
                 //API DISPOSITIVI
