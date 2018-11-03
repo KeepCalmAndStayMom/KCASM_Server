@@ -6,6 +6,7 @@ import server.api.v2.links.MeasuresLinks;
 import server.api.v2.links.PatientTasksLinks;
 import server.database2.*;
 
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -282,7 +283,18 @@ public class ApiPatient {
             });
             post("", (request, response) -> {
                 //aggiunta un nuovo messaggio
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(Checker.messageMapValidation(map)) {
+                        MessageMedicPatientDB.insert(map);
+                        response.status(201);
+                        return "ACCEPTED";
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
             get("/sent", (request, response) -> {
                 //get dei messaggi inviati paziente
@@ -299,7 +311,7 @@ public class ApiPatient {
                     if(map != null) {
                         response.status(200);
                         response.type("application/json");
-                        return JsonBuilder.jsonObject(map, null).toString();
+                        return JsonBuilder.jsonObject(map, LinksBuilder.singleMessage(patientId, "patient", "sent", Integer.parseInt(medic_id), timedate)).toString();
                     }
                 }
                 else if(date != null) {
@@ -341,7 +353,7 @@ public class ApiPatient {
                     if(map != null) {
                         response.status(200);
                         response.type("application/json");
-                        return JsonBuilder.jsonObject(map, null).toString();
+                        return JsonBuilder.jsonObject(map, LinksBuilder.singleMessage(patientId, "patient", "received", Integer.parseInt(medic_id), timedate)).toString();
                     }
                 }
                 else if(date != null) {

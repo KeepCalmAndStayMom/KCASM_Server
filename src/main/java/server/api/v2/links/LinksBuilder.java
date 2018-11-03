@@ -139,7 +139,7 @@ public class LinksBuilder {
         return json.toString();
     }
 
-    public static String singleMessageLink(int id, String type, String category, int id2 , String timedate) {
+    public static String innerListMessage(int id, String type, String category, int id2 , String timedate) {
         StringBuilder json = new StringBuilder();
 
         json.append("\"link\": ");
@@ -147,6 +147,18 @@ public class LinksBuilder {
             json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?medic_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "GET"));
         else
             json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?patient_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "GET"));
+
+        return json.toString();
+    }
+
+    public static String singleMessage(int id, String type, String category, int id2 , String timedate) {
+        StringBuilder json = new StringBuilder();
+
+        json.append("\"link\": ");
+        if(type.equals("patient"))
+            json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?medic_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "PUT"));
+        else
+            json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?patient_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "PUT"));
 
         return json.toString();
     }

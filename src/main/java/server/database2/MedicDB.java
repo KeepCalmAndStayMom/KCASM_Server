@@ -61,7 +61,7 @@ public class MedicDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Medic(id, name, surname, age, phone, specialization) VALUES (null, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Medic(name, surname, age, phone, specialization) VALUES (?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();

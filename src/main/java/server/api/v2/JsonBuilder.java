@@ -75,9 +75,9 @@ public class JsonBuilder {
             json.append(jsonObject(m, LinksBuilder.singleWeightLink((int) m.get("patient_id"), (String) m.get("date"))).toString());
         else if(typeObject.equals("message")) {
             if (args[0].equals("patient"))
-                json.append(jsonObject(m, LinksBuilder.singleMessageLink((int) m.get("patient_id"), args[0], args[1], (int) m.get("medic_id"), (String) m.get("timedate"))).toString());
+                json.append(jsonObject(m, LinksBuilder.innerListMessage((int) m.get("patient_id"), args[0], args[1], (int) m.get("medic_id"), (String) m.get("timedate"))).toString());
             else
-                json.append(jsonObject(m, LinksBuilder.singleMessageLink((int) m.get("medic_id"), args[0], args[1], (int) m.get("patient_id"), (String) m.get("timedate"))).toString());
+                json.append(jsonObject(m, LinksBuilder.innerListMessage((int) m.get("medic_id"), args[0], args[1], (int) m.get("patient_id"), (String) m.get("timedate"))).toString());
         }
         else if(typeObject.equals("task"))
             if(args[1].equals("patient"))

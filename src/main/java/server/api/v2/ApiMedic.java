@@ -1,5 +1,6 @@
 package server.api.v2;
 
+import com.google.gson.Gson;
 import server.api.v2.links.LinksBuilder;
 import server.api.v2.links.MedicTasksLinks;
 import server.database2.*;
@@ -14,6 +15,7 @@ public class ApiMedic {
     private String baseURL = "/api/v2";
     private final static String DATE_REGEX = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$";
     private final static String TIMEDATE_REGEX = "^(19|20)\\d\\d-(0[1-9]|1[012])-([012]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$";
+    private Gson gson = new Gson();
 
     public ApiMedic() { apiMedic(); }
 
@@ -118,7 +120,18 @@ public class ApiMedic {
             });
             post("", (request, response) -> {
                 //aggiunta un nuovo messaggio
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(Checker.messageMapValidation(map)) {
+                        MessageMedicPatientDB.insert(map);
+                        response.status(201);
+                        return "ACCEPTED";
+                    }
+                }
+
+                response.status(400);
+                return "ERROR";
             });
             get("/sent", (request, response) -> {
                 //get dei messaggi inviati medico
@@ -138,7 +151,7 @@ public class ApiMedic {
                         response.status(200);
                         response.type("application/json");
 
-                        return JsonBuilder.jsonObject(message, LinksBuilder.singleMessageLink(medicId, "medic", "sent", Integer.parseInt(patientId), timedate)).toString();
+                        return JsonBuilder.jsonObject(message, LinksBuilder.singleMessage(medicId, "medic", "sent", Integer.parseInt(patientId), timedate)).toString();
                     }
                 }
                 else if(date != null && date.matches(DATE_REGEX)) {
@@ -182,7 +195,7 @@ public class ApiMedic {
                         response.status(200);
                         response.type("application/json");
 
-                        return JsonBuilder.jsonObject(message, LinksBuilder.singleMessageLink(medicId, "medic", "received", Integer.parseInt(patientId), timedate)).toString();
+                        return JsonBuilder.jsonObject(message, LinksBuilder.singleMessage(medicId, "medic", "received", Integer.parseInt(patientId), timedate)).toString();
                     }
                 }
                 else if(date != null && date.matches(DATE_REGEX)) {
