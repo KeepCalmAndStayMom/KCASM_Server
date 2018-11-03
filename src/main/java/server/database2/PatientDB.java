@@ -65,7 +65,7 @@ public class PatientDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Patient(id, name, surname, age, phone, address_home, address_hospital) VALUES (null, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Patient(name, surname, age, phone, address_home, address_hospital) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -106,7 +106,7 @@ public class PatientDB {
     }
 
     public static List<Map<String, Object>> selectMedicsOfPatient(int id) {
-        final String sql = "SELECT Medic.id, Medic.name, Medic.surname, Medic.specialization FROM Medic JOIN Medic_has_Patient ON Medic.id=Medic_id WHERE Patient_id=?";
+        final String sql = "SELECT Medic.id, Medic.name, Medic.surname, Medic.specialization FROM Medic JOIN Medic_has_Patient ON Medic.id=medic_id WHERE patient_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();

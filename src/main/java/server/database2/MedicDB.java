@@ -99,7 +99,7 @@ public class MedicDB {
     }
 
     public static List<Map<String, Object>> selectPatientsOfMedic(int id) {
-        final String sql = "SELECT Patient.id, Patient.name, Patient.surname FROM Patient JOIN Medic_has_Patient ON Patient.id=Patient_id WHERE Medic_id=?";
+        final String sql = "SELECT Patient.id, Patient.name, Patient.surname FROM Patient JOIN Medic_has_Patient ON Patient.id=patient_id WHERE medic_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();

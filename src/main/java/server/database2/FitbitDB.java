@@ -24,7 +24,7 @@ public class FitbitDB {
             map.put("floors", rs.getInt("floors"));
             map.put("steps", rs.getInt("steps"));
             map.put("distance", rs.getDouble("distance"));
-            map.put("minutes_sleep", rs.getInt("minutes_sleep"));
+            map.put("minutes_sleep", rs.getInt("minutes_asleep"));
             map.put("minutes_awake", rs.getInt("minutes_awake"));
             list.add(map);
         }

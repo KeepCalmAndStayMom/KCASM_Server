@@ -20,8 +20,8 @@ public class SharedTaskFunctionDB {
         while(rs.next()) {
             map = new LinkedHashMap<>();
             map.put("id", rs.getInt("id"));
-            map.put("patient_id", rs.getInt("Patient_id"));
-            map.put("medic_id", rs.getInt("Medic_id"));
+            map.put("patient_id", rs.getInt("patient_id"));
+            map.put("medic_id", rs.getInt("medic_id"));
             map.put("date", rs.getString("date"));
             map.put("category", rs.getString("category"));
             map.put("description", rs.getString("description"));
@@ -66,7 +66,7 @@ public class SharedTaskFunctionDB {
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("Patient_id"));
+            st.setInt(1, (Integer) map.get("patient_id"));
             st.setString(2, String.valueOf(map.get("date")));
             st.setString(3, String.valueOf(map.get("category")));
             st.setString(4, String.valueOf(map.get("description")));
@@ -92,8 +92,8 @@ public class SharedTaskFunctionDB {
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("Patient_id"));
-            st.setInt(2, (Integer) map.get("Medic_id"));
+            st.setInt(1, (Integer) map.get("patient_id"));
+            st.setInt(2, (Integer) map.get("medic_id"));
             st.setString(3, String.valueOf(map.get("date")));
             st.setString(4, String.valueOf(map.get("category")));
             st.setString(5, String.valueOf(map.get("description")));
@@ -150,9 +150,9 @@ public class SharedTaskFunctionDB {
         StringBuilder sql = new StringBuilder("SELECT * FROM Task_General WHERE id=" + taskId);
 
         if(typeUser.equals("patient"))
-            sql.append(" AND Patient_id=" + id);
+            sql.append(" AND patient_id=" + id);
         else
-            sql.append(" AND Medic_id=" + id);
+            sql.append(" AND medic_id=" + id);
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -172,9 +172,9 @@ public class SharedTaskFunctionDB {
         StringBuilder sql = new StringBuilder("SELECT * FROM Task_Activity WHERE id=" + taskId);
 
         if(typeUser.equals("patient"))
-            sql.append(" AND Patient_id=" + id);
+            sql.append(" AND patient_id=" + id);
         else
-            sql.append(" AND Medic_id=" + id);
+            sql.append(" AND medic_id=" + id);
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -194,9 +194,9 @@ public class SharedTaskFunctionDB {
         StringBuilder sql = new StringBuilder("SELECT * FROM Task_Diet WHERE id=" +  taskId);
 
         if(typeUser.equals("patient"))
-            sql.append(" AND Patient_id=" + id);
+            sql.append(" AND patient_id=" + id);
         else
-            sql.append(" AND Medic_id=" + id);
+            sql.append(" AND medic_id=" + id);
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -217,8 +217,8 @@ public class SharedTaskFunctionDB {
 
         rs.next();
         map.put("id", rs.getInt("id"));
-        map.put("patient_id", rs.getInt("Patient_id"));
-        map.put("medic_id", rs.getInt("Medic_id"));
+        map.put("patient_id", rs.getInt("patient_id"));
+        map.put("medic_id", rs.getInt("medic_id"));
         map.put("date", rs.getString("date"));
         map.put("category", rs.getString("category"));
         map.put("description", rs.getString("description"));

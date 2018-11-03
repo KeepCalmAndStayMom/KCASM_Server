@@ -12,7 +12,7 @@ import java.util.Map;
 import static spark.Spark.*;
 
 public class ApiMedic {
-    private String baseURL = "/api/v2";
+    private final static String baseURL = "/api/v2";
     private final static String DATE_REGEX = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$";
     private final static String TIMEDATE_REGEX = "^(19|20)\\d\\d-(0[1-9]|1[012])-([012]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$";
     private Gson gson = new Gson();
@@ -233,7 +233,7 @@ public class ApiMedic {
                 response.status(200);
                 response.type("application/json");
 
-                return JsonBuilder.jsonList(null, null, MedicTasksLinks.tasksMenu(medicId, "medic"), null, null);
+                return JsonBuilder.jsonList(null, null, MedicTasksLinks.tasksMenu(medicId, "medic"), null);
             });
 
             path("/general", () -> {
@@ -420,12 +420,20 @@ public class ApiMedic {
             int taskId = Integer.parseInt(request.params("task_id"));
             Map<String, Object> query = new LinkedHashMap<>();
 
-            if(taskCategory.equals("general"))
-                query = SharedTaskFunctionDB.selectSingleTaskGeneral(medicId, taskId, "medic");
-            else if(taskCategory.equals("activities"))
-                query = SharedTaskFunctionDB.selectSingleTaskActivities(medicId, taskId, "medic");
-            else if(taskCategory.equals("diets"))
-                query = SharedTaskFunctionDB.selectSingleTaskDiets(medicId, taskId, "medic");
+            switch (taskCategory) {
+                case "general":
+                    query = SharedTaskFunctionDB.selectSingleTaskGeneral(medicId, taskId, "medic");
+
+                    break;
+                case "activities":
+                    query = SharedTaskFunctionDB.selectSingleTaskActivities(medicId, taskId, "medic");
+
+                    break;
+                case "diets":
+                    query = SharedTaskFunctionDB.selectSingleTaskDiets(medicId, taskId, "medic");
+
+                    break;
+            }
 
             if(query != null) {
                 response.status(200);

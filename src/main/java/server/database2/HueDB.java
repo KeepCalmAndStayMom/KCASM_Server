@@ -16,9 +16,9 @@ public class HueDB {
 
         while(rs.next()) {
             map = new LinkedHashMap<>();
-            map.put("Patient_id", rs.getInt("Patient_id"));
+            map.put("patient_id", rs.getInt("patient_id"));
             map.put("timedate", rs.getString("timedate"));
-            map.put("cromoterapia", rs.getString("cromoterapia"));
+            map.put("chromotherapy", rs.getString("chromotherapy"));
             list.add(map);
         }
 
@@ -27,7 +27,7 @@ public class HueDB {
 
     static public List<Map<String, Object>> selectDate(int patientId, String date) {
 
-        final String sql = "SELECT * FROM Hue WHERE Patient_id=? AND timedate LIKE ?";
+        final String sql = "SELECT * FROM Hue WHERE patient_id=? AND timedate LIKE ?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -43,7 +43,7 @@ public class HueDB {
 
     static public List<Map<String, Object>> selectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
-        final String sql = "SELECT * FROM Hue WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
+        final String sql = "SELECT * FROM Hue WHERE patient_id=? AND timedate BETWEEN ? AND ?";
 
         if(startTimedate.length()==10)
             startTimedate += "T00:00:00";
@@ -66,7 +66,7 @@ public class HueDB {
 
     static public List<Map<String, Object>> select(int patientId) {
 
-        final String sql = "SELECT * FROM Hue WHERE Patient_id=?";
+        final String sql = "SELECT * FROM Hue WHERE patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -82,14 +82,14 @@ public class HueDB {
 
     static public boolean insert(Map<String, Object> map) {
 
-        final String sql = "INSERT INTO Hue(Patient_id, timedate, cromoterapia) VALUES (?, ?, ?)";
+        final String sql = "INSERT INTO Hue(patient_id, timedate, chromotherapy) VALUES (?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("Patient_id"));
+            st.setInt(1, (Integer) map.get("patient_id"));
             st.setString(2, String.valueOf(map.get("timedate")));
-            st.setString(3,  String.valueOf(map.get("cromoterapia")));
+            st.setString(3,  String.valueOf(map.get("chromotherapy")));
             st.executeUpdate();
             conn.close();
             return true;

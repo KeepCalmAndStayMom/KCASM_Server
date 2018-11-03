@@ -9,9 +9,9 @@ public class TaskActivityDB {
         String sql = "SELECT * FROM Task_Activity WHERE date=?";
 
         if(patientId != null)
-            sql+=" AND Patient_id=" + patientId;
+            sql+=" AND patient_id=" + patientId;
         if(medic_id != null)
-            sql+=" AND Medic_id=" + medic_id;
+            sql+=" AND medic_id=" + medic_id;
         if(executed != null)
             sql+=" AND executed=" + executed;
 
@@ -25,9 +25,9 @@ public class TaskActivityDB {
         String sql = "SELECT * FROM Task_Activity WHERE starting_program=1";
 
         if(userType.equals("patient"))
-            sql+=" AND Patient_id=" + patientId;
+            sql+=" AND patient_id=" + patientId;
         else
-            sql+=" AND Medic_id=" + patientId;
+            sql+=" AND medic_id=" + patientId;
 
         return SharedTaskFunctionDB.getTaskPatientId(sql, patientId);
     }
@@ -36,11 +36,11 @@ public class TaskActivityDB {
         String sql = "SELECT * FROM Task_Activity WHERE";
 
         if(patientId != null)
-            sql+=" Patient_id=" + patientId;
+            sql+=" patient_id=" + patientId;
         if(medic_id != null && patientId == null)
-            sql+=" Medic_id=" + medic_id;
+            sql+=" medic_id=" + medic_id;
         else if(medic_id !=null && patientId !=null)
-            sql+=" AND Medic_id=" + medic_id;
+            sql+=" AND medic_id=" + medic_id;
         if(executed != null)
             sql+=" AND executed=" + executed;
 
@@ -51,12 +51,12 @@ public class TaskActivityDB {
     }
 
     static public boolean update(Map<String, Object> map) {
-        final String sql = "UPDATE Task_Activity SET Patient_id=?, date=?, category=?, description=?, starting_program=?, executed=? WHERE id=?";
+        final String sql = "UPDATE Task_Activity SET patient_id=?, date=?, category=?, description=?, starting_program=?, executed=? WHERE id=?";
         return SharedTaskFunctionDB.executeUpdate(sql, map);
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Task_Activity(id, Patient_id, Medic_id, date, category, description, starting_program, executed) VALUES (null, ?, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Task_Activity(patient_id, Medic_id, date, category, description, starting_program, executed) VALUES (?, ?, ?, ?, ?, ?, ?)";
         return SharedTaskFunctionDB.executeInsert(sql, map);
     }
 
@@ -69,9 +69,9 @@ public class TaskActivityDB {
         String sql = "SELECT * FROM Task_Activity WHERE date BETWEEN ? AND ?";
 
         if(patientId != null)
-            sql+=" AND Patient_id=" + patientId;
+            sql+=" AND patient_id=" + patientId;
         if(medic_id != null)
-            sql+=" AND Medic_id=" + medic_id;
+            sql+=" AND medic_id=" + medic_id;
         if(executed != null)
             sql+=" AND executed=" + executed;
 

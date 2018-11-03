@@ -12,7 +12,7 @@ public class LoginDB {
     static Connection conn;
 
     static public Map<String, Object> selectPatient(int patientId) {
-        final String sql = "SELECT * FROM Login WHERE Patient_id=?";
+        final String sql = "SELECT * FROM Login WHERE patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -22,7 +22,7 @@ public class LoginDB {
             LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
             rs.next();
-            map.put("Patient_id", rs.getInt("Patient_id"));
+            map.put("patient_id", rs.getInt("patient_id"));
             map.put("email", rs.getString("email"));
             map.put("password", rs.getString("password"));
             map.put("email_notify", rs.getBoolean("email_notify"));
@@ -36,7 +36,7 @@ public class LoginDB {
     }
 
     static public Map<String, Object> selectMedic(int medicId) {
-        final String sql = "SELECT * FROM Login WHERE Medic_id=?";
+        final String sql = "SELECT * FROM Login WHERE medic_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -46,7 +46,7 @@ public class LoginDB {
             LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
             rs.next();
-            map.put("Medic_id", rs.getInt("Medic_id"));
+            map.put("medic_id", rs.getInt("medic_id"));
             map.put("email", rs.getString("email"));
             map.put("password", rs.getString("password"));
             map.put("email_notify", rs.getBoolean("email_notify"));
@@ -60,14 +60,14 @@ public class LoginDB {
     }
 
     static public boolean updatePatient(Map<String, Object> map) {
-        final String sql = "UPDATE Login SET email=?, password=?, email_notify=?, sms_notify=? WHERE Patient_id=?";
+        final String sql = "UPDATE Login SET email=?, password=?, email_notify=?, sms_notify=? WHERE patient_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
-            st.setInt(3, (Integer) map.get("Patient_id"));
+            st.setInt(3, (Integer) map.get("patient_id"));
             st.setBoolean(4, (Boolean) map.get("email_notify"));
             st.setBoolean(4, (Boolean) map.get("sms_notify"));
 
@@ -84,14 +84,14 @@ public class LoginDB {
     }
 
     static public boolean updateMedic(Map<String, Object> map) {
-        final String sql = "UPDATE Login SET email=?, password=?, email_notify=?, sms_notify=? WHERE Medic_id=?";
+        final String sql = "UPDATE Login SET email=?, password=?, email_notify=?, sms_notify=? WHERE medic_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
-            st.setInt(3, (Integer) map.get("Medic_id"));
+            st.setInt(3, (Integer) map.get("medic_id"));
             st.setBoolean(4, (Boolean) map.get("email_notify"));
             st.setBoolean(4, (Boolean) map.get("sms_notify"));
 
@@ -108,15 +108,15 @@ public class LoginDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Login(email, password, Patient_id, Medic_id, email_notify, sms_notify) VALUES (?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Login(email, password, patient_id, Medic_id, email_notify, sms_notify) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
-            st.setInt(3, (Integer) map.get("Patient_id"));
-            st.setInt(4, (Integer) map.get("Medic_id"));
+            st.setInt(3, (Integer) map.get("patient_id"));
+            st.setInt(4, (Integer) map.get("medic_id"));
             st.setBoolean(5, (Boolean) map.get("email_notify"));
             st.setBoolean(6, (Boolean) map.get("sms_notify"));
             st.executeUpdate();

@@ -5,8 +5,6 @@ import server.api.v2.links.LinksBuilder;
 import server.api.v2.links.MeasuresLinks;
 import server.api.v2.links.PatientTasksLinks;
 import server.database2.*;
-
-import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +13,8 @@ import static spark.Spark.*;
 
 public class ApiPatient {
 
-    private String baseURL = "/api/v2";
-    Gson gson = new Gson();
+    private final static String baseURL = "/api/v2";
+    private Gson gson = new Gson();
     private final static String DATE_REGEX = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$";
     private final static String TIMEDATE_REGEX = "^(19|20)\\d\\d-(0[1-9]|1[012])-([012]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$";
 
@@ -28,11 +26,14 @@ public class ApiPatient {
         path(baseURL + "/patients", () -> {
             post("", (request, response) -> {
                 //aggiunta paziente
-                Map<String, Object> map = gson.fromJson(request.body(), Map.class);
-                if(request.contentType().contains("json") && Checker.patientMapValidation(map)) {
-                    PatientDB.insert(map);
-                    response.status(200);
-                    return "OK";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(Checker.patientMapValidation(map)) {
+                        PatientDB.insert(map);
+                        response.status(200);
+                        return "OK";
+                    }
                 }
 
                 response.status(400);
@@ -68,16 +69,13 @@ public class ApiPatient {
                         int patientId = Integer.parseInt(request.params("patient_id"));
                         List<Map<String, Object>> query = PatientDB.selectMedicsOfPatient(patientId);
 
-                        if(query.size() != 0) {
+                        if(query != null && query.size() != 0) {
                             response.status(200);
                             response.type("application/json");
                             return JsonBuilder.jsonList(null, query,null, "medic", null).toString();
                         }
 
                         response.status(404);
-                        return "";
-                    });
-                    post("", (request, response) -> {
                         return "";
                     });
                 });
@@ -158,11 +156,11 @@ public class ApiPatient {
                         links = MeasuresLinks.fitbitLinks(patientId, "samples");
                     }
 
-                    if(query.size() > 0) {
+                    if(query != null && query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("fitbit-samples", query, links, "test", null).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("fitbit-samples", query, links, "test").toString() + " }";
                     }
 
                     response.status(404);
@@ -190,11 +188,11 @@ public class ApiPatient {
                         links = MeasuresLinks.hueLinks(patientId, "samples");
                     }
 
-                    if(query.size() > 0) {
+                    if(query != null && query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("hue-samples", query, links, "test", null).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("hue-samples", query, links, "test").toString() + " }";
                     }
 
                     response.status(404);
@@ -222,11 +220,11 @@ public class ApiPatient {
                         links = MeasuresLinks.sensorLinks(patientId, "samples");
                     }
 
-                    if(query.size() > 0) {
+                    if(query != null && query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("sensor-samples", query, links, "test", null).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("sensor-samples", query, links, "test").toString() + " }";
                     }
 
                     response.status(404);
@@ -271,7 +269,7 @@ public class ApiPatient {
                 int patientId = Integer.parseInt(request.params("patient_id"));
                 String r = JsonBuilder.jsonList(null, null, LinksBuilder.messagesCategoryLinks(patientId, "patient"), null, null).toString();
 
-                if(r != null) {
+                if(r != "") {
                     response.status(200);
                     response.type("application/json");
 
@@ -286,7 +284,7 @@ public class ApiPatient {
                 if(request.contentType().contains("json")) {
                     Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
-                    if(Checker.messageMapValidation(map)) {
+                    if(map != null && Checker.messageMapValidation(map)) {
                         MessageMedicPatientDB.insert(map);
                         response.status(201);
                         return "ACCEPTED";
@@ -317,7 +315,7 @@ public class ApiPatient {
                 else if(date != null) {
                     List<Map<String, Object>> list = MessageMedicPatientDB.selectPatientSent(patientId, medic_id, date, null);
 
-                    if(list.size() != 0) {
+                    if(list != null && list.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
@@ -327,7 +325,7 @@ public class ApiPatient {
                 else {
                     List<Map<String, Object>> list = MessageMedicPatientDB.selectPatientSent(patientId, medic_id, startdate, enddate);
 
-                    if(list.size() != 0) {
+                    if(list != null && list.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
@@ -359,21 +357,21 @@ public class ApiPatient {
                 else if(date != null) {
                     List<Map<String, Object>> list = MessageMedicPatientDB.selectPatientReceived(patientId, medic_id, date, null);
 
-                    if(list.size() != 0) {
+                    if(list != null && list.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("messages-received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, date, null), "message", new String[]{"patient", "received"}).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("messages-received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, date, null), "message","patient", "received").toString() + " }";
                     }
                 }
                 else {
                     List<Map<String, Object>> list = MessageMedicPatientDB.selectPatientReceived(patientId, medic_id, startdate, enddate);
 
-                    if(list.size() != 0) {
+                    if(list != null && list.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ " + JsonBuilder.jsonList("messages-received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, startdate, enddate), "message", new String[]{"patient", "received"}).toString() + " }";
+                        return "{ " + JsonBuilder.jsonList("messages-received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, startdate, enddate), "message","patient", "received").toString() + " }";
                     }
                 }
 
@@ -447,7 +445,7 @@ public class ApiPatient {
                response.status(200);
                response.type("application/json");
 
-               return JsonBuilder.jsonList(null, null, PatientTasksLinks.tasksMenu(patientId, "patient"), null, null);
+               return JsonBuilder.jsonList(null, null, PatientTasksLinks.tasksMenu(patientId, "patient"), null);
             });
 
             path("/general", () -> {
@@ -480,7 +478,7 @@ public class ApiPatient {
                         links = PatientTasksLinks.patientGeneralLinks(patientId, medicId, executed, starting_program);
                     }
 
-                    if(query.size() > 0) {
+                    if(query != null && query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
@@ -523,7 +521,7 @@ public class ApiPatient {
                         links = PatientTasksLinks.patientActivitiesLinks(patientId, medicId, executed, starting_program);
                     }
 
-                    if(query.size() > 0) {
+                    if(query != null && query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
@@ -566,7 +564,7 @@ public class ApiPatient {
                         links = PatientTasksLinks.patientDietsLinks(patientId, medicId, executed, starting_program);
                     }
 
-                    if(query.size() > 0) {
+                    if(query != null && query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
@@ -589,12 +587,17 @@ public class ApiPatient {
             int taskId = Integer.parseInt(request.params("task_id"));
             Map<String, Object> query = new LinkedHashMap<>();
 
-            if(taskCategory.equals("general"))
-                query = SharedTaskFunctionDB.selectSingleTaskGeneral(patientId, taskId, "patient");
-            else if(taskCategory.equals("activities"))
-                query = SharedTaskFunctionDB.selectSingleTaskActivities(patientId, taskId, "patient");
-            else if(taskCategory.equals("diets"))
-                query = SharedTaskFunctionDB.selectSingleTaskDiets(patientId, taskId, "patient");
+            switch (taskCategory) {
+                case "general":
+                    query = SharedTaskFunctionDB.selectSingleTaskGeneral(patientId, taskId, "patient");
+                    break;
+                case "activities":
+                    query = SharedTaskFunctionDB.selectSingleTaskActivities(patientId, taskId, "patient");
+                    break;
+                case "diets":
+                    query = SharedTaskFunctionDB.selectSingleTaskDiets(patientId, taskId, "patient");
+                    break;
+            }
 
             if(query != null) {
                 response.status(200);
@@ -621,11 +624,11 @@ public class ApiPatient {
                 if(date == null) {
                     List<Map<String, Object>> query = WeightDB.selectList(patientId);
 
-                    if(query.size() != 0) {
+                    if(query != null && query.size() > 0) {
                         response.status(200);
                         response.type("application/json");
 
-                        return "{ "+ JsonBuilder.jsonList("weights", query, LinksBuilder.weightsLinks(patientId), "weight", null).toString() + " }";
+                        return "{ "+ JsonBuilder.jsonList("weights", query, LinksBuilder.weightsLinks(patientId), "weight").toString() + " }";
                     }
                 }
                 else {
