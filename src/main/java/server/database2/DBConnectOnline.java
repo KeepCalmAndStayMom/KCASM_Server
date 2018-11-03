@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DBConnectOnline {
 
-    static private final String dbOnline = "jdbc:mysql://sql7.freemysqlhosting.net:3306/sql7261794";
-    static private final String user = "sql7261794";
-    static private final String password = "LwVkxJwtFX";
+    static private final String dbOnline = "jdbc:mysql://185.156.175.59:23306/KCASM_Database";
+    static private final String user = "kcasm";
+    static private final String password = "tulliocinghiale";
     static private DBConnectOnline instance = null;
 
     private DBConnectOnline() {
