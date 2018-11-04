@@ -31,7 +31,7 @@ public class ApiPatient {
 
                     if(Checker.patientMapValidation(map)) {
                         PatientDB.insert(map);
-                        response.status(200);
+                        response.status(201);
                         return "OK";
                     }
                 }
@@ -384,7 +384,6 @@ public class ApiPatient {
     private void patientLoginData() {
         path("/login_data", () -> {
             get("", (request, response) -> {
-                //get dati login paziente
                 int patientId = Integer.parseInt(request.params("patient_id"));
                 Map<String, Object> query = LoginDB.selectPatient(patientId);
 
@@ -399,8 +398,19 @@ public class ApiPatient {
                 return "";
             });
             post("", (request, response) -> {
-               //aggiunta dato di login solo admin
-               return "";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.patientLoginDataMapValidation(map)) {
+                        LoginDB.insert(map);
+                        response.status(201);
+                        response.type("application/json");
+                        return "OK";
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
             put("", (request, response) -> {
                //modifica dati login paziente

@@ -7,7 +7,8 @@ import java.util.*;
 public class Checker {
     private final static Set PATIENT_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address_home", "address_hospital");
     private final static Set MEDIC_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "specialization");
-    private final static Set LOGIN_KEYSET = ImmutableSet.of("email", "password", "patient_id", "medic_id", "email_notify", "sms_notify");
+    private final static Set PATIENT_LOGIN_KEYSET = ImmutableSet.of("email", "password", "patient_id", "email_notify", "sms_notify");
+    private final static Set MEDIC_LOGIN_KEYSET = ImmutableSet.of("email", "password", "medic_id", "email_notify", "sms_notify");
     private final static Set WEIGHT_KEYSET = ImmutableSet.of("date", "weight");
     private final static Set TASK_KEYSET = ImmutableSet.of("patient_id", "medic_id", "date", "category", "description", "starting_program", "executed");
     private final static Set INITIAL_DATA_KEYSET = ImmutableSet.of("patient_id", "pregnancy_start", "weight", "height", "bmi", "twin");
@@ -31,10 +32,19 @@ public class Checker {
         return true;
     }
 
-    public static boolean loginDataMapValidation(Map<String, ?> map) {
+    public static boolean patientLoginDataMapValidation(Map<String, ?> map) {
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(LOGIN_KEYSET))
+        if(!keys.containsAll(PATIENT_LOGIN_KEYSET) || keys.contains("medic_id") || !((String) map.get("email")).matches(Regex.EMAIL_REGEX))
+            return false;
+
+        return true;
+    }
+
+    public static boolean medicLoginDataMapValidation(Map<String, ?> map) {
+        Set<String> keys = map.keySet();
+
+        if(!keys.containsAll(MEDIC_LOGIN_KEYSET) || keys.contains("patient_id") || !((String) map.get("email")).matches(Regex.EMAIL_REGEX))
             return false;
 
         return true;

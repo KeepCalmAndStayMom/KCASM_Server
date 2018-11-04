@@ -93,7 +93,19 @@ public class ApiMedic {
             });
             post("", (request, response) -> {
                 //aggiunta dato di login solo admin
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.medicLoginDataMapValidation(map)) {
+                        LoginDB.insert(map);
+                        response.status(201);
+                        response.type("application/json");
+                        return "OK";
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
             put("", (request, response) -> {
                 //modifica dati login paziente

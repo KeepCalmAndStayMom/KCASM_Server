@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.sql.Types;
 
 public class LoginDB {
 
@@ -108,15 +109,24 @@ public class LoginDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Login(email, password, patient_id, Medic_id, email_notify, sms_notify) VALUES (?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Login(email, password, patient_id, medic_id, email_notify, sms_notify) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
-            st.setInt(3, (Integer) map.get("patient_id"));
-            st.setInt(4, (Integer) map.get("medic_id"));
+
+            if(map.get("patient_id") != null)
+                st.setInt(3, ((Double) map.get("patient_id")).intValue());
+            else
+                st.setNull(3, Types.INTEGER);
+
+            if(map.get("medic_id") != null)
+                st.setInt(4, ((Double) map.get("medic_id")).intValue());
+            else
+                st.setNull(4, Types.INTEGER);
+
             st.setBoolean(5, (Boolean) map.get("email_notify"));
             st.setBoolean(6, (Boolean) map.get("sms_notify"));
             st.executeUpdate();

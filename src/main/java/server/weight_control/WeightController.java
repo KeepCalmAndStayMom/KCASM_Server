@@ -78,7 +78,7 @@ public class WeightController {
 
         msg = "Paziente " + patientId + ": " + msg;
 
-        List<Integer> medics = MedicHasPatientDB.SelectMedics(patientId);
+        List<Integer> medics = MedicHasPatientDB.selectMedics(patientId);
 
         if(medics!=null && !medics.isEmpty()) {
             for(Integer medicId: medics) {
