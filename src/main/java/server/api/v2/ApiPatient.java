@@ -405,6 +405,27 @@ public class ApiPatient {
                 response.status(404);
                 return "";
             });
+            put("/received", (request, response) -> {
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.setMessageAsRead(map)) {
+                        String timedate = request.queryParams("timedate").replace("T", " ");
+
+                        if(MessageMedicPatientDB.setMessageAsRead(Integer.parseInt(request.params("patient_id")), Integer.parseInt(request.queryParams("medic_id")), timedate) && timedate.matches(Regex.TIMEDATE_REGEX)) {
+                            response.status(200);
+                            return "OK";
+                        }
+                    }
+                    else {
+                        response.status(304);
+                        return "";
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
+            });
         });
     }
 

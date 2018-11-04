@@ -30,6 +30,7 @@ public class MessageMedicPatientDB {
                 map.put("timedate", rs.getString("timedate"));
                 map.put("medic_sender", rs.getBoolean("medic_sender"));
                 map.put("text", rs.getString("message"));
+                map.put("read", rs.getBoolean("read"));
                 list.add(map);
             }
 
@@ -139,6 +140,8 @@ public class MessageMedicPatientDB {
             map.put("timedate", rs.getString("timedate"));
             map.put("medic_sender", rs.getBoolean("medic_sender"));
             map.put("text", rs.getString("message"));
+            map.put("read", rs.getBoolean("read"));
+            conn.close();
 
             return map;
         } catch (SQLException e) {
@@ -146,6 +149,30 @@ public class MessageMedicPatientDB {
         }
 
         return null;
+    }
+
+    public static boolean setMessageAsRead(int patientId, int medicId, String timedate) {
+        final String sql = "UPDATE Message_Medic_Patient SET Message_Medic_Patient.read=? WHERE patient_id=? AND medic_id=? AND timedate=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setBoolean(1, true);
+            st.setInt(2, patientId);
+            st.setInt(3, medicId);
+            st.setString(4, timedate);
+
+            if(st.executeUpdate() != 0) {
+                conn.close();
+                return true;
+            }
+            conn.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 }

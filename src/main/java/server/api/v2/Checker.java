@@ -1,7 +1,6 @@
 package server.api.v2;
 
 import com.google.common.collect.ImmutableSet;
-
 import java.util.*;
 
 public class Checker {
@@ -15,6 +14,7 @@ public class Checker {
     private final static Set MEDIC_MESSAGE_KEYSET = ImmutableSet.of("patient_id", "timedate", "subject", "message");
     private final static Set PATIENT_ADD_MEDIC = ImmutableSet.of("medic_id");
     private final static Set MEDIC_ADD_PATIENT = ImmutableSet.of("patient_id");
+    private final static Set SET_MESSAGE_AS_READ = ImmutableSet.of("read");
 
     public static boolean patientMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PATIENT_KEYSET);
@@ -111,6 +111,16 @@ public class Checker {
         Set<String> keys = map.keySet();
 
         if(!keys.containsAll(MEDIC_ADD_PATIENT))
+            return false;
+
+        return true;
+    }
+
+    public static boolean setMessageAsRead(Map<String, ?> map) {
+        map.keySet().retainAll(SET_MESSAGE_AS_READ);
+        Set<String> keys = map.keySet();
+
+        if(!keys.containsAll(SET_MESSAGE_AS_READ) || !((Boolean) map.get("read")))
             return false;
 
         return true;

@@ -264,13 +264,33 @@ public class ApiMedic {
                 if(query != null && query.size() > 0) {
                     response.status(200);
                     response.type("application/json");
-                    System.out.println(query);
 
                     return "{ " + JsonBuilder.jsonList("messages-received", query, links, "message", "medic", "received").toString() + " }";
                 }
 
                 response.status(404);
                 return "";
+            });
+            put("/received", (request, response) -> {
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.setMessageAsRead(map)) {
+                        String timedate = request.queryParams("timedate").replace("T", " ");
+
+                        if(MessageMedicPatientDB.setMessageAsRead(Integer.parseInt(request.queryParams("patient_id")), Integer.parseInt(request.params("medic_id")), timedate) && timedate.matches(Regex.TIMEDATE_REGEX)) {
+                            response.status(200);
+                            return "OK";
+                        }
+                    }
+                    else {
+                        response.status(304);
+                        return "";
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
         });
     }
