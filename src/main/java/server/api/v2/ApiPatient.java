@@ -672,7 +672,23 @@ public class ApiPatient {
                 return "";
             });
             post("", (request, response) -> {
-                //aggiunta di un nuovo peso
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.weightMapValidation(map)) {
+                        map.put("patient_id", Integer.parseInt(request.params("patient_id")));
+
+                        if(WeightDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
+                    }
+
+                    response.status(400);
+                    return "ERRORE";
+                }
+
+
                 return "";
             });
             put("", (request, response) ->{
