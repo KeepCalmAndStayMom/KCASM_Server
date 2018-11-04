@@ -30,9 +30,10 @@ public class ApiPatient {
                     Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
                     if(Checker.patientMapValidation(map)) {
-                        PatientDB.insert(map);
-                        response.status(201);
-                        return "OK";
+                        if(PatientDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
                     }
                 }
 
@@ -287,9 +288,10 @@ public class ApiPatient {
                     if(map != null && Checker.patientMessageMapValidation(map)) {
                         map.put("patient_id", Double.parseDouble(request.params("patient_id")));
                         map.put("medic_sender", false);
-                        MessageMedicPatientDB.insert(map);
-                        response.status(201);
-                        return "OK";
+                        if(MessageMedicPatientDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
                     }
                 }
 
@@ -405,9 +407,10 @@ public class ApiPatient {
 
                     if(map != null && Checker.loginDataMapValidation(map)) {
                         map.put("patient_id", Integer.parseInt(request.params("patient_id")));
-                        LoginDB.insert(map);
-                        response.status(201);
-                        return "OK";
+                        if(LoginDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
                     }
                 }
 
@@ -444,9 +447,10 @@ public class ApiPatient {
 
                     if(map != null && Checker.patientInitialDataMapValidation(map)) {
                         map.put("patient_id", Integer.parseInt(request.params("patient_id")));
-                        PatientInitialDB.insert(map);
-                        response.status(201);
-                        return "OK";
+                        if(PatientInitialDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
                     }
                 }
 

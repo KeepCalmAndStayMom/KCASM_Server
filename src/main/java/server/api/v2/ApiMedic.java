@@ -22,8 +22,19 @@ public class ApiMedic {
     private void apiMedic() {
         path(baseURL + "/medics", () -> {
             post("", (request, response) -> {
-                //aggiunta di un nuovo medico solo admin
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.medicMapValidation(map)) {
+                        if(MedicDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
 
             path("/:medic_id", () -> {
@@ -98,9 +109,10 @@ public class ApiMedic {
 
                     if(map != null && Checker.loginDataMapValidation(map)) {
                         map.put("medic_id", Integer.parseInt(request.params("medic_id")));
-                        LoginDB.insert(map);
-                        response.status(201);
-                        return "OK";
+                        if(LoginDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
                     }
                 }
 
@@ -138,9 +150,10 @@ public class ApiMedic {
                     if(Checker.medicMessageMapValidation(map)) {
                         map.put("medic_id", Double.parseDouble(request.params("medic_id")));
                         map.put("medic_sender", true);
-                        MessageMedicPatientDB.insert(map);
-                        response.status(201);
-                        return "OK";
+                        if(MessageMedicPatientDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
                     }
                 }
 

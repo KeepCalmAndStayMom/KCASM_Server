@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Checker {
     private final static Set PATIENT_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address_home", "address_hospital");
-    private final static Set MEDIC_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "specialization");
+    private final static Set MEDIC_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address", "specialization");
     private final static Set LOGIN_KEYSET = ImmutableSet.of("email", "password", "email_notify", "sms_notify");
     private final static Set WEIGHT_KEYSET = ImmutableSet.of("date", "weight");
     private final static Set TASK_KEYSET = ImmutableSet.of("patient_id", "medic_id", "date", "category", "description", "starting_program", "executed");
