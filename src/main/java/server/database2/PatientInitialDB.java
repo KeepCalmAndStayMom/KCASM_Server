@@ -68,7 +68,7 @@ public class PatientInitialDB {
             st.setDouble(3, (Double) map.get("height"));
             st.setString(4, String.valueOf(map.get("bmi")));
             st.setBoolean(5, (Boolean) map.get("twin"));
-            st.setInt(6, (Integer) map.get("patient_id"));
+            st.setInt(6, (int) map.get("patient_id"));
             st.executeUpdate();
             conn.close();
             return true;

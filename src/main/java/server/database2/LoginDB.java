@@ -118,12 +118,12 @@ public class LoginDB {
             st.setString(2, String.valueOf(map.get("password")));
 
             if(map.get("patient_id") != null)
-                st.setInt(3, ((Double) map.get("patient_id")).intValue());
+                st.setInt(3, (int) map.get("patient_id"));
             else
                 st.setNull(3, Types.INTEGER);
 
             if(map.get("medic_id") != null)
-                st.setInt(4, ((Double) map.get("medic_id")).intValue());
+                st.setInt(4, (int) map.get("medic_id"));
             else
                 st.setNull(4, Types.INTEGER);
 
