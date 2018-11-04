@@ -304,9 +304,16 @@ public class ApiPatient {
                     if(map != null && Checker.patientMessageMapValidation(map)) {
                         map.put("patient_id", Double.parseDouble(request.params("patient_id")));
                         map.put("medic_sender", false);
-                        if(MessageMedicPatientDB.insert(map)) {
-                            response.status(201);
-                            return "OK";
+
+                        if(MedicHasPatientDB.checkMedicPatientAssociation(((Double) map.get("patient_id")).intValue(), ((Double) map.get("medic_id")).intValue())) {
+                            if(MessageMedicPatientDB.insert(map)) {
+                                response.status(201);
+                                return "OK";
+                            }
+                        }
+                        else {
+                            response.status(403);
+                            return "FORBIDDEN";
                         }
                     }
                 }

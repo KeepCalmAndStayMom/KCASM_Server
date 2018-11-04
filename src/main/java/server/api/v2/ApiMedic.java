@@ -167,15 +167,21 @@ public class ApiMedic {
                     if(Checker.medicMessageMapValidation(map)) {
                         map.put("medic_id", Double.parseDouble(request.params("medic_id")));
                         map.put("medic_sender", true);
-                        if(MessageMedicPatientDB.insert(map)) {
-                            response.status(201);
-                            return "OK";
+                        if(MedicHasPatientDB.checkMedicPatientAssociation(((Double) map.get("patient_id")).intValue(), ((Double) map.get("medic_id")).intValue())) {
+                            if(MessageMedicPatientDB.insert(map)) {
+                                response.status(201);
+                                return "OK";
+                            }
+                        }
+                        else {
+                            response.status(403);
+                            return "FORBIDDEN";
                         }
                     }
                 }
 
                 response.status(400);
-                return "ERROR";
+                return "ERRORE";
             });
             get("/sent", (request, response) -> {
                 //get dei messaggi inviati medico
@@ -511,6 +517,10 @@ public class ApiMedic {
                             response.status(201);
                             return "OK";
                         }
+                    }
+                    else {
+                        response.status(403);
+                        return "FORBIDDEN";
                     }
                 }
             }
