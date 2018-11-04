@@ -63,7 +63,7 @@ public class TaskDietDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Task_Diet(patient_id, medic_id, date, category, description, starting_program, executed) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Task_Diet(patient_id, medic_id, date, category, description, starting_program) VALUES (?, ?, ?, ?, ?, ?)";
         return SharedTaskFunctionDB.executeInsert(sql, map);
     }
 

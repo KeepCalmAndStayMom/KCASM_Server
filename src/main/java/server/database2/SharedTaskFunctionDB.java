@@ -92,13 +92,12 @@ public class SharedTaskFunctionDB {
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("patient_id"));
+            st.setInt(1, ((Double) map.get("patient_id")).intValue());
             st.setInt(2, (Integer) map.get("medic_id"));
             st.setString(3, String.valueOf(map.get("date")));
             st.setString(4, String.valueOf(map.get("category")));
             st.setString(5, String.valueOf(map.get("description")));
             st.setBoolean(6, (Boolean) map.get("starting_program"));
-            st.setBoolean(7, (Boolean) map.get("executed"));
             st.executeUpdate();
             conn.close();
             return true;

@@ -9,7 +9,7 @@ public class Checker {
     private final static Set MEDIC_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address", "specialization");
     private final static Set LOGIN_KEYSET = ImmutableSet.of("email", "password", "email_notify", "sms_notify");
     private final static Set WEIGHT_KEYSET = ImmutableSet.of("date", "weight");
-    private final static Set TASK_KEYSET = ImmutableSet.of("patient_id", "medic_id", "date", "category", "description", "starting_program", "executed");
+    private final static Set TASK_KEYSET = ImmutableSet.of("patient_id", "date", "category", "description", "starting_program");
     private final static Set INITIAL_DATA_KEYSET = ImmutableSet.of("pregnancy_start_date", "weight", "height", "bmi", "twin");
     private final static Set PATIENT_MESSAGE_KEYSET = ImmutableSet.of("medic_id", "timedate", "subject", "message");
     private final static Set MEDIC_MESSAGE_KEYSET = ImmutableSet.of("patient_id", "timedate", "subject", "message");

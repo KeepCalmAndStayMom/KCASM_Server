@@ -281,10 +281,6 @@ public class ApiMedic {
             });
 
             path("/general", () -> {
-                post("", (request, response) -> {
-                    //aggiunta task generale
-                    return "";
-                });
                 get("", (request, response) -> {
                     //get task generali medico
                     int medicId = Integer.parseInt(request.params("medic_id"));
@@ -340,10 +336,6 @@ public class ApiMedic {
                 medicTask("general");
             });
             path("/activities", () -> {
-                post("", (request, response) -> {
-                    //aggiunta attività
-                    return "";
-                });
                 get("", (request, response) -> {
                     //get attività medico
                     int medicId = Integer.parseInt(request.params("medic_id"));
@@ -396,10 +388,6 @@ public class ApiMedic {
                 medicTask("activities");
             });
             path("/diets", () -> {
-                post("", (request, response) -> {
-                    //aggiunta dieta
-                    return "";
-                });
                 get("", (request, response) -> {
                     //get diete medico
                     int medicId = Integer.parseInt(request.params("medic_id"));
@@ -495,6 +483,40 @@ public class ApiMedic {
         delete("/:task_id", (request, response) -> {
            //rimozione task
            return "";
+        });
+        post("", (request, response) -> {
+            if(request.contentType().contains("json")) {
+                Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                if(map != null && Checker.taskMapValidation(map)) {
+                    map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+
+                    if(MedicHasPatientDB.checkMedicPatientAssociation(((Double) map.get("patient_id")).intValue(), (int) map.get("medic_id"))) {
+                        boolean result = false;
+
+                        switch (taskCategory) {
+                            case "general":
+                                result = TaskGeneralDB.insert(map);
+
+                                break;
+                            case "activities":
+                                result = TaskActivityDB.insert(map);
+
+                                break;
+                            case "diets":
+                                result = TaskDietDB.insert(map);
+                        }
+
+                        if (result) {
+                            response.status(201);
+                            return "OK";
+                        }
+                    }
+                }
+            }
+
+            response.status(400);
+            return "ERRORE";
         });
     }
 }

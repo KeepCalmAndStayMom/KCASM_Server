@@ -74,4 +74,24 @@ public class MedicHasPatientDB {
         return false;
     }
 
+    static public boolean checkMedicPatientAssociation(int patient_id, int medic_id) {
+
+        final String sql = "SELECT * FROM Medic_has_Patient WHERE patient_id=? AND medic_id=?";
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, patient_id);
+            st.setInt(2, medic_id);
+            ResultSet rs = st.executeQuery();
+
+            if(rs.next())
+                return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

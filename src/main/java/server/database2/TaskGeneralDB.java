@@ -77,7 +77,7 @@ public class TaskGeneralDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Task_General(patient_id, medic_id, date, category, description, starting_program, executed) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Task_General(patient_id, medic_id, date, category, description, starting_program) VALUES (?, ?, ?, ?, ?, ?)";
         return SharedTaskFunctionDB.executeInsert(sql, map);
     }
 
