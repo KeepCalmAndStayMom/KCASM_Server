@@ -76,6 +76,23 @@ public class ApiMedic {
                     return "";
                 });
 
+                post("/patients", (request, response) -> {
+                    if(request.contentType().contains("json")) {
+                        Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                        if(map != null && Checker.medicAddPatient(map)) {
+                            map.put("medic_id", Double.parseDouble(request.params("medic_id")));
+                            if(MedicHasPatientDB.insert(map)) {
+                                response.status(201);
+                                return "OK";
+                            }
+                        }
+                    }
+
+                    response.status(400);
+                    return "ERRORE";
+                });
+
                 medicTasks();
 
                 medicMessages();

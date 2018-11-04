@@ -79,6 +79,22 @@ public class ApiPatient {
                         response.status(404);
                         return "";
                     });
+                    post("", (request, response) -> {
+                        if(request.contentType().contains("json")) {
+                            Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                            if(map != null && Checker.patientAddMedic(map)) {
+                                map.put("patient_id", Double.parseDouble(request.params("patient_id")));
+                                if(MedicHasPatientDB.insert(map)) {
+                                    response.status(201);
+                                    return "OK";
+                                }
+                            }
+                        }
+
+                        response.status(400);
+                        return "ERRORE";
+                    });
                 });
 
                 //API DISPOSITIVI

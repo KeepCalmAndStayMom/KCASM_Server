@@ -13,6 +13,8 @@ public class Checker {
     private final static Set INITIAL_DATA_KEYSET = ImmutableSet.of("pregnancy_start_date", "weight", "height", "bmi", "twin");
     private final static Set PATIENT_MESSAGE_KEYSET = ImmutableSet.of("medic_id", "timedate", "subject", "message");
     private final static Set MEDIC_MESSAGE_KEYSET = ImmutableSet.of("patient_id", "timedate", "subject", "message");
+    private final static Set PATIENT_ADD_MEDIC = ImmutableSet.of("medic_id");
+    private final static Set MEDIC_ADD_PATIENT = ImmutableSet.of("patient_id");
 
     public static boolean patientMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PATIENT_KEYSET);
@@ -89,6 +91,26 @@ public class Checker {
         Set<String> keys = map.keySet();
 
         if(!keys.containsAll(MEDIC_MESSAGE_KEYSET) || !((String) map.get("timedate")).matches(Regex.TIMEDATE_REGEX))
+            return false;
+
+        return true;
+    }
+
+    public static boolean patientAddMedic(Map<String, ?> map) {
+        map.keySet().retainAll(PATIENT_ADD_MEDIC);
+        Set<String> keys = map.keySet();
+
+        if(!keys.containsAll(PATIENT_ADD_MEDIC))
+            return false;
+
+        return true;
+    }
+
+    public static boolean medicAddPatient(Map<String, ?> map) {
+        map.keySet().retainAll(MEDIC_ADD_PATIENT);
+        Set<String> keys = map.keySet();
+
+        if(!keys.containsAll(MEDIC_ADD_PATIENT))
             return false;
 
         return true;

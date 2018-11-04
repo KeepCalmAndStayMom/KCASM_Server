@@ -63,8 +63,8 @@ public class MedicHasPatientDB {
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("medic_id"));
-            st.setInt(2, (Integer) map.get("patient_id"));
+            st.setInt(1, ((Double) map.get("medic_id")).intValue());
+            st.setInt(2, ((Double) map.get("patient_id")).intValue());
             st.executeUpdate();
             conn.close();
             return true;
