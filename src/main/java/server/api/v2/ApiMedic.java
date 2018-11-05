@@ -53,8 +53,25 @@ public class ApiMedic {
                     return "";
                 });
                 put("", (request, response) -> {
-                   //modifica dati medico
-                    return "";
+                    if(request.contentType().contains("json")) {
+                        Map map = gson.fromJson(request.body(), Map.class);
+
+                        if(map != null && Checker.medicMapValidation(map)) {
+                            map.put("id", Integer.parseInt(request.params("medic_id")));
+
+                            if(MedicDB.update(map)) {
+                                response.status(200);
+                                return "OK";
+                            }
+                            else {
+                                response.status(304);
+                                return "NON MODIFICATO";
+                            }
+                        }
+                    }
+
+                    response.status(400);
+                    return "ERRORE";
                 });
                 delete("", (request, response) -> {
                    //rimozione di un medico solo admin

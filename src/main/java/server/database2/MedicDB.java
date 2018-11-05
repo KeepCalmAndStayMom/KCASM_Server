@@ -42,7 +42,7 @@ public class MedicDB {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("name")));
             st.setString(2, String.valueOf(map.get("surname")));
-            st.setInt(3, (Integer) map.get("age"));
+            st.setInt(3, ((Double) map.get("age")).intValue());
             st.setString(4, String.valueOf(map.get("phone")));
             st.setString(5, String.valueOf(map.get("specialization")));
             st.setInt(6, (Integer) map.get("id"));
