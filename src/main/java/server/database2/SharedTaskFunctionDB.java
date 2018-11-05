@@ -226,4 +226,22 @@ public class SharedTaskFunctionDB {
 
         return map;
     }
+
+    static boolean patientUpdate(String sql) {
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+
+            if(st.executeUpdate() != 0) {
+                conn.close();
+                return true;
+            }
+            conn.close();
+        }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

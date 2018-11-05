@@ -9,6 +9,7 @@ public class Checker {
     private final static Set LOGIN_KEYSET = ImmutableSet.of("email", "password", "email_notify", "sms_notify");
     private final static Set WEIGHT_KEYSET = ImmutableSet.of("date", "weight");
     private final static Set TASK_KEYSET = ImmutableSet.of("patient_id", "date", "category", "description", "starting_program");
+    private final static Set PUT_PATIENT_TASK_KEYSET = ImmutableSet.of("executed");
     private final static Set POST_INITIAL_DATA_KEYSET = ImmutableSet.of("pregnancy_start_date", "weight", "height", "bmi", "twin");
     private final static Set PUT_INITIAL_DATA_KEYSET = ImmutableSet.of("twin");
     private final static Set PATIENT_MESSAGE_KEYSET = ImmutableSet.of("medic_id", "timedate", "subject", "message");
@@ -62,6 +63,16 @@ public class Checker {
         Set<String> keys = map.keySet();
 
         if(!keys.containsAll(TASK_KEYSET) || !((String) map.get("date")).matches(Regex.DATE_REGEX))
+            return false;
+
+        return true;
+    }
+
+    public static boolean putPatientTaskMapValidation(Map<String, ?> map) {
+        map.keySet().retainAll(PUT_PATIENT_TASK_KEYSET);
+        Set<String> keys = map.keySet();
+
+        if(!keys.containsAll(PUT_PATIENT_TASK_KEYSET))
             return false;
 
         return true;

@@ -731,8 +731,42 @@ public class ApiPatient {
             return "";
         });
         put("/:task_id", (request, response) -> {
-            //modifica task solo executed
-            return "";
+            if(request.contentType().contains("json")) {
+                Map map = gson.fromJson(request.body(), Map.class);
+
+                if(map != null && Checker.putPatientTaskMapValidation(map)) {
+                    map.put("patient_id", Integer.parseInt(request.params("patient_id")));
+                    map.put("id", Integer.parseInt(request.params("task_id")));
+                    boolean result = false;
+
+                    switch(taskCategory) {
+                        case "general":
+                            result = TaskGeneralDB.updatePatient(map);
+
+                            break;
+                        case "activities":
+                            result = TaskActivityDB.updatePatient(map);
+
+                            break;
+                        case "diets":
+                            result = TaskDietDB.updatePatient(map);
+
+                            break;
+                    }
+
+                    if(result) {
+                        response.status(200);
+                        return "OK";
+                    }
+                    else {
+                        response.status(304);
+                        return "NON MODIFICATO";
+                    }
+                }
+            }
+
+            response.status(400);
+            return "ERRORE";
         });
     }
 

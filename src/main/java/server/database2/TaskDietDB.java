@@ -62,6 +62,11 @@ public class TaskDietDB {
         return SharedTaskFunctionDB.executeUpdate(sql, map);
     }
 
+    public static boolean updatePatient(Map<String, Object> map) {
+        String sql = "UPDATE Task_Diet SET executed=" + map.get("executed") + " WHERE id=" + map.get("id");
+        return SharedTaskFunctionDB.patientUpdate(sql);
+    }
+
     static public boolean insert(Map<String, Object> map) {
         final String sql = "INSERT INTO Task_Diet(patient_id, medic_id, date, category, description, starting_program) VALUES (?, ?, ?, ?, ?, ?)";
         return SharedTaskFunctionDB.executeInsert(sql, map);
