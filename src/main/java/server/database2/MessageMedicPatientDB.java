@@ -151,16 +151,16 @@ public class MessageMedicPatientDB {
         return null;
     }
 
-    public static boolean setMessageAsRead(int patientId, int medicId, String timedate) {
+    public static boolean setMessageAsRead(Map<String, ?> map) {
         final String sql = "UPDATE Message_Medic_Patient SET Message_Medic_Patient.read=? WHERE patient_id=? AND medic_id=? AND timedate=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setBoolean(1, true);
-            st.setInt(2, patientId);
-            st.setInt(3, medicId);
-            st.setString(4, timedate);
+            st.setInt(2, (Integer) map.get("patient_id"));
+            st.setInt(3, (Integer) map.get("medic_id"));
+            st.setString(4, (String) map.get("timedate"));
 
             if(st.executeUpdate() != 0) {
                 conn.close();

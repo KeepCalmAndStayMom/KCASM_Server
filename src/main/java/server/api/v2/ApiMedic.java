@@ -63,10 +63,6 @@ public class ApiMedic {
                                 response.status(200);
                                 return "OK";
                             }
-                            else {
-                                response.status(304);
-                                return "NON MODIFICATO";
-                            }
                         }
                     }
 
@@ -163,10 +159,6 @@ public class ApiMedic {
                         if(LoginDB.updateMedic(map)) {
                             response.status(200);
                             return "OK";
-                        }
-                        else {
-                            response.status(304);
-                            return "NON MODIFICATO";
                         }
                     }
                 }
@@ -306,20 +298,17 @@ public class ApiMedic {
                 return "";
             });
             put("/received", (request, response) -> {
-                if(request.contentType().contains("json")) {
-                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+                Map<String, Object> map = new LinkedHashMap<>();
+                String timedate = request.queryParams("timedate").replace("T", " ");
 
-                    if(map != null && Checker.setMessageAsRead(map)) {
-                        String timedate = request.queryParams("timedate").replace("T", " ");
+                if(timedate.matches(Regex.TIMEDATE_REGEX)) {
+                    map.put("patient_id", Integer.parseInt(request.queryParams("patient_id")));
+                    map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+                    map.put("timedate", timedate);
 
-                        if(MessageMedicPatientDB.setMessageAsRead(Integer.parseInt(request.queryParams("patient_id")), Integer.parseInt(request.params("medic_id")), timedate) && timedate.matches(Regex.TIMEDATE_REGEX)) {
-                            response.status(200);
-                            return "OK";
-                        }
-                    }
-                    else {
-                        response.status(304);
-                        return "";
+                    if(MessageMedicPatientDB.setMessageAsRead(map)) {
+                        response.status(200);
+                        return "OK";
                     }
                 }
 
@@ -563,10 +552,6 @@ public class ApiMedic {
                     if(result) {
                         response.status(200);
                         return "OK";
-                    }
-                    else {
-                        response.status(304);
-                        return "NON MODIFICATO";
                     }
                 }
             }
