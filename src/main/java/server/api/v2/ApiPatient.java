@@ -58,8 +58,25 @@ public class ApiPatient {
                     return "";
                 });
                 put("", (request, response) -> {
-                    //modifica dati paziente
-                    return "";
+                    if(request.contentType().contains("json")) {
+                        Map map = gson.fromJson(request.body(), Map.class);
+
+                        if(map != null && Checker.patientMapValidation(map)) {
+                             map.put("id", Integer.parseInt(request.params("patient_id")));
+
+                             if(PatientDB.update(map)) {
+                                 response.status(200);
+                                 return "OK";
+                             }
+                             else {
+                                 response.status(304);
+                                 return "NON MODIFICATO";
+                             }
+                        }
+                    }
+
+                    response.status(400);
+                    return "ERRORE";
                 });
                 delete("", (request, response) -> {
                     //cancellazione utente solo admin
