@@ -523,7 +523,7 @@ public class ApiPatient {
                 if(request.contentType().contains("json")) {
                     Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
-                    if(map != null && Checker.patientInitialDataMapValidation(map)) {
+                    if(map != null && Checker.postPatientInitialDataMapValidation(map)) {
                         map.put("patient_id", Integer.parseInt(request.params("patient_id")));
                         if(PatientInitialDB.insert(map)) {
                             response.status(201);
@@ -536,8 +536,25 @@ public class ApiPatient {
                 return "ERRORE";
             });
             put("", (request, response) -> {
-                //modifica twin solo medico
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.putPatientInitialDataMapValidation(map)) {
+                        map.put("patient_id", Integer.parseInt(request.params("patient_id")));
+
+                        if(PatientInitialDB.update(map)) {
+                            response.status(200);
+                            return "OK";
+                        }
+                        else {
+                            response.status(304);
+                            return "NON MODIFICATO";
+                        }
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
         });
     }

@@ -9,7 +9,8 @@ public class Checker {
     private final static Set LOGIN_KEYSET = ImmutableSet.of("email", "password", "email_notify", "sms_notify");
     private final static Set WEIGHT_KEYSET = ImmutableSet.of("date", "weight");
     private final static Set TASK_KEYSET = ImmutableSet.of("patient_id", "date", "category", "description", "starting_program");
-    private final static Set INITIAL_DATA_KEYSET = ImmutableSet.of("pregnancy_start_date", "weight", "height", "bmi", "twin");
+    private final static Set POST_INITIAL_DATA_KEYSET = ImmutableSet.of("pregnancy_start_date", "weight", "height", "bmi", "twin");
+    private final static Set PUT_INITIAL_DATA_KEYSET = ImmutableSet.of("twin");
     private final static Set PATIENT_MESSAGE_KEYSET = ImmutableSet.of("medic_id", "timedate", "subject", "message");
     private final static Set MEDIC_MESSAGE_KEYSET = ImmutableSet.of("patient_id", "timedate", "subject", "message");
     private final static Set PATIENT_ADD_MEDIC = ImmutableSet.of("medic_id");
@@ -66,11 +67,21 @@ public class Checker {
         return true;
     }
 
-    public static boolean patientInitialDataMapValidation(Map<String, ?> map) {
-        map.keySet().retainAll(INITIAL_DATA_KEYSET);
+    public static boolean postPatientInitialDataMapValidation(Map<String, ?> map) {
+        map.keySet().retainAll(POST_INITIAL_DATA_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(INITIAL_DATA_KEYSET) || !((String) map.get("pregnancy_start_date")).matches(Regex.DATE_REGEX))
+        if(!keys.containsAll(POST_INITIAL_DATA_KEYSET) || !((String) map.get("pregnancy_start_date")).matches(Regex.DATE_REGEX))
+            return false;
+
+        return true;
+    }
+
+    public static boolean putPatientInitialDataMapValidation(Map<String, ?> map) {
+        map.keySet().retainAll(PUT_INITIAL_DATA_KEYSET);
+        Set<String> keys = map.keySet();
+
+        if(!keys.containsAll(PUT_INITIAL_DATA_KEYSET))
             return false;
 
         return true;
