@@ -90,13 +90,13 @@ public class WeightDB {
     }
 
     static public boolean update(Map<String, Object> map) {
-        final String sql = "UPDATE Weight SET weight=? WHERE patient_id=? AND 'date'=?";
+        final String sql = "UPDATE Weight SET weight=? WHERE patient_id=? AND date=?";
 
-        Map<String, Double> pesi = WeightDB.select((Integer) map.get("Patient_id"));
+        Map<String, Double> pesi = WeightDB.select((Integer) map.get("patient_id"));
         assert pesi != null;
         Object[] date = pesi.keySet().toArray();
 
-        if(String.valueOf(map.get("date")).equals(String.valueOf(date.length-1))) {
+        if(String.valueOf(map.get("date")).equals(String.valueOf(date[date.length-1]))) {
             try {
                 conn = DBConnectOnline.getInstance().getConnection();
                 PreparedStatement st = conn.prepareStatement(sql);
@@ -104,10 +104,9 @@ public class WeightDB {
                 st.setInt(2, (Integer) map.get("patient_id"));
                 st.setString(3, String.valueOf(map.get("date")));
 
-
                 if (st.executeUpdate() != 0) {
                     conn.close();
-                    MainServer.cpt.startcheck((Integer) map.get("patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
+                    //MainServer.cpt.startcheck((Integer) map.get("patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
                     return true;
                 }
                 conn.close();

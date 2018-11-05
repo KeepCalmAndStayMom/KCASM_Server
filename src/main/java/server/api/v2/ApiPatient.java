@@ -804,7 +804,7 @@ public class ApiPatient {
                 if(request.contentType().contains("json")) {
                     Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
-                    if(map != null && Checker.weightMapValidation(map)) {
+                    if(map != null && Checker.postWeightMapValidation(map)) {
                         map.put("patient_id", Integer.parseInt(request.params("patient_id")));
 
                         if(WeightDB.insert(map)) {
@@ -821,8 +821,23 @@ public class ApiPatient {
                 return "";
             });
             put("", (request, response) ->{
-                //modifica ultimo peso inserito
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map map = gson.fromJson(request.body(), Map.class);
+                    String date = request.queryParams("date");
+
+                    if(map != null && Checker.putWeightMapValidation(map) && date.matches(Regex.DATE_REGEX)) {
+                        map.put("patient_id", Integer.parseInt(request.params("patient_id")));
+                        map.put("date", date);
+
+                        if(WeightDB.update(map)) {
+                            response.status(200);
+                            return "OK";
+                        }
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
         });
     }

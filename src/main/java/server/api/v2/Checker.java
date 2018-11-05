@@ -7,7 +7,8 @@ public class Checker {
     private final static Set PATIENT_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address_home", "address_hospital");
     private final static Set MEDIC_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address", "specialization");
     private final static Set LOGIN_KEYSET = ImmutableSet.of("email", "password", "email_notify", "sms_notify");
-    private final static Set WEIGHT_KEYSET = ImmutableSet.of("date", "weight");
+    private final static Set POST_WEIGHT_KEYSET = ImmutableSet.of("date", "weight");
+    private final static Set PUT_WEIGHT_KEYSET = ImmutableSet.of("weight");
     private final static Set TASK_KEYSET = ImmutableSet.of("patient_id", "date", "category", "description", "starting_program");
     private final static Set PUT_MEDIC_TASK_KEYSET = ImmutableSet.of("date", "category", "description", "starting_program");
     private final static Set PUT_PATIENT_TASK_KEYSET = ImmutableSet.of("executed");
@@ -49,11 +50,21 @@ public class Checker {
         return true;
     }
 
-    public static boolean weightMapValidation(Map<String, ?> map) {
-        map.keySet().retainAll(WEIGHT_KEYSET);
+    public static boolean postWeightMapValidation(Map<String, ?> map) {
+        map.keySet().retainAll(POST_WEIGHT_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(WEIGHT_KEYSET) || !((String) map.get("date")).matches(Regex.DATE_REGEX))
+        if(!keys.containsAll(POST_WEIGHT_KEYSET) || !((String) map.get("date")).matches(Regex.DATE_REGEX))
+            return false;
+
+        return true;
+    }
+
+    public static boolean putWeightMapValidation(Map<String, ?> map) {
+        map.keySet().retainAll(PUT_WEIGHT_KEYSET);
+        Set<String> keys = map.keySet();
+
+        if(!keys.containsAll(PUT_WEIGHT_KEYSET))
             return false;
 
         return true;
