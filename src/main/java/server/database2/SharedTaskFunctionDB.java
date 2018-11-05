@@ -227,7 +227,7 @@ public class SharedTaskFunctionDB {
         return map;
     }
 
-    static boolean patientUpdate(String sql) {
+    static boolean update(String sql) {
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);

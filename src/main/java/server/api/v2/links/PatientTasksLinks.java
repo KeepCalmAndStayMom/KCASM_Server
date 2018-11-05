@@ -96,7 +96,7 @@ public class PatientTasksLinks {
         StringBuilder json = new StringBuilder();
 
         json.append("\"link\": ");
-        json.append(Link.jsonLink(BASE_URL + "patients/" + patientId + "/tasks/" + taskCategory + "/" + taskId, "patient/tasks/" + taskCategory, "GET"));
+        json.append(Link.jsonLink(BASE_URL + "patients/" + patientId + "/tasks/" + taskCategory + "/" + taskId, "self", "GET"));
 
         return json.toString();
     }

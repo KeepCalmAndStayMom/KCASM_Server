@@ -537,8 +537,42 @@ public class ApiMedic {
             return "";
         });
         put("/:task_id", (request, response) -> {
-            //modifica task
-            return "";
+            if(request.contentType().contains("json")) {
+                Map map = gson.fromJson(request.body(), Map.class);
+
+                if(map != null && Checker.putMedicTaskMapValidation(map)) {
+                    map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+                    map.put("id", Integer.parseInt(request.params("task_id")));
+                    boolean result = false;
+
+                    switch(taskCategory) {
+                        case "general":
+                            result = TaskGeneralDB.updateMedic(map);
+
+                            break;
+                        case "activities":
+                            result = TaskActivityDB.updateMedic(map);
+
+                            break;
+                        case "diets":
+                            result = TaskDietDB.updateMedic(map);
+
+                            break;
+                    }
+
+                    if(result) {
+                        response.status(200);
+                        return "OK";
+                    }
+                    else {
+                        response.status(304);
+                        return "NON MODIFICATO";
+                    }
+                }
+            }
+
+            response.status(400);
+            return "ERRORE";
         });
         delete("/:task_id", (request, response) -> {
            //rimozione task
