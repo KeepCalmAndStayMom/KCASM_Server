@@ -98,4 +98,26 @@ public class HueDB {
         }
         return false;
     }
+
+    static public Map<String, Object> selectTotal(int patientId, String date) {
+        final String sql = "SELECT chromotherapy, COUNT(chromotherapy) AS total FROM Hue WHERE patient_id=? AND timedate LIKE ? GROUP BY chromotherapy";
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, patientId);
+            st.setString(2, date + "%");
+            ResultSet rs = st.executeQuery();
+            Map map = new LinkedHashMap();
+
+            while(rs.next()) {
+                map.put(rs.getString("chromotherapy"), rs.getInt("total"));
+            }
+
+            if(map.size() > 0)
+                return map;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

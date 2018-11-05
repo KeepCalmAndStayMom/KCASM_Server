@@ -102,4 +102,28 @@ public class SensorDB {
         }
         return false;
     }
+
+    public static Map<String, Object> selectTotal(int patientId, String date) {
+        final String sql = "SELECT AVG(temperature) AS temperature, AVG(luminescence) AS luminescence, AVG(humidity) AS humidity FROM Sensor WHERE patient_id=? AND timedate LIKE ?";
+
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, patientId);
+            st.setString(2, date + "%");
+            ResultSet rs = st.executeQuery();
+            Map map = new LinkedHashMap();
+
+            rs.next();
+            map.put("temperature", rs.getDouble("temperature"));
+            map.put("luminescence", rs.getDouble("luminescence"));
+            map.put("humidity", rs.getDouble("humidity"));
+
+            return map;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
