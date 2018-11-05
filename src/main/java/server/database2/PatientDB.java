@@ -85,16 +85,16 @@ public class PatientDB {
         return false;
     }
 
-    static public boolean delete(Map<String, Object> map) {
+    static public boolean delete(int patientId) {
         final String sql = "DELETE from Patient WHERE id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("id"));
+            st.setInt(1, patientId);
             if(st.executeUpdate() != 0) {
                 conn.close();
-                MainServer.cpt.removeID((Integer) map.get("id"));
+                MainServer.cpt.removeID(patientId);
                 return true;
             }
 

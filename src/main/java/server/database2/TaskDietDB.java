@@ -77,9 +77,9 @@ public class TaskDietDB {
         return SharedTaskFunctionDB.executeInsert(sql, map);
     }
 
-    static public boolean delete(Map<String, Object> map) {
+    static public boolean delete(int taskId) {
         final String sql = "DELETE from Task_Diet WHERE id=?";
-        return SharedTaskFunctionDB.executeDelete(sql, (Integer) map.get("id"));
+        return SharedTaskFunctionDB.executeDelete(sql, taskId);
     }
 
     public static List<Map<String, Object>> selectDateInterval(Integer patientId, String medic_id, String startdate, String enddate, String executed, String userType) {

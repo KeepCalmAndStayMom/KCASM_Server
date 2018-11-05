@@ -91,8 +91,8 @@ public class TaskGeneralDB {
         return SharedTaskFunctionDB.executeInsert(sql, map);
     }
 
-    static public boolean delete(Map<String, Object> map) {
+    static public boolean delete(int taskId) {
         final String sql = "DELETE from Task_General WHERE id=?";
-        return SharedTaskFunctionDB.executeDelete(sql, (Integer) map.get("id"));
+        return SharedTaskFunctionDB.executeDelete(sql, taskId);
     }
 }

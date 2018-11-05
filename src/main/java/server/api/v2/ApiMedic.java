@@ -70,8 +70,13 @@ public class ApiMedic {
                     return "ERRORE";
                 });
                 delete("", (request, response) -> {
-                   //rimozione di un medico solo admin
-                   return "";
+                    if(MedicDB.delete(Integer.parseInt(request.params("medic_id")))) {
+                        response.status(200);
+                        return "OK";
+                    }
+
+                    response.status(404);
+                    return "ERRORE";
                 });
                 get("/patients", (request, response) -> {
                     //get dei pazienti del medico
@@ -560,8 +565,30 @@ public class ApiMedic {
             return "ERRORE";
         });
         delete("/:task_id", (request, response) -> {
-           //rimozione task
-           return "";
+            boolean result = false;
+
+            switch (taskCategory) {
+                case "general":
+                    result = TaskGeneralDB.delete(Integer.parseInt(request.params("task_id")));
+
+                    break;
+                case "activities":
+                    result = TaskActivityDB.delete(Integer.parseInt(request.params("task_id")));
+
+                    break;
+                case "diets":
+                    result = TaskDietDB.delete(Integer.parseInt(request.params("task_id")));
+
+                    break;
+            }
+
+            if(result) {
+                response.status(200);
+                return "OK";
+            }
+
+            response.status(404);
+            return "ERRORE";
         });
         post("", (request, response) -> {
             if(request.contentType().contains("json")) {

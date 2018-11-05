@@ -81,13 +81,13 @@ public class MedicDB {
         return false;
     }
 
-    static public boolean delete(Map<String, Object> map) {
+    static public boolean delete(int medicId) {
         final String sql = "DELETE from Medic WHERE id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("id"));
+            st.setInt(1, medicId);
             if(st.executeUpdate() != 0) {
                 conn.close();
                 return true;

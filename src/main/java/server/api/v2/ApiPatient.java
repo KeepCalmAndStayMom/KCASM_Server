@@ -75,8 +75,13 @@ public class ApiPatient {
                     return "ERRORE";
                 });
                 delete("", (request, response) -> {
-                    //cancellazione utente solo admin
-                    return "";
+                    if(PatientDB.delete(Integer.parseInt(request.params("patient_id")))) {
+                        response.status(200);
+                        return "OK";
+                    }
+
+                    response.status(404);
+                    return "ERRORE";
                 });
                 path("/medics", () -> {
                     get("", (request, response) -> {

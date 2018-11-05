@@ -107,6 +107,7 @@ public class MedicTasksLinks {
 
         json.append("\"links\": [ ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/" + taskCategory + "/" + taskId, "self", "PUT")).append(", ");
+        json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/" + taskCategory + "/" + taskId, "self", "DELETE")).append(", ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/" + taskCategory, "medic/tasks/" + taskCategory, "GET")).append(", ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId, "medic", "GET")).append(", ");
         json.append(Link.jsonLink(BASE_URL + "patients/" + patientId, "patient", "GET")).append(" ]");
