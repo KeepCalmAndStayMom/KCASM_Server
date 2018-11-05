@@ -154,8 +154,25 @@ public class ApiMedic {
                 return "ERRORE";
             });
             put("", (request, response) -> {
-                //modifica dati login paziente
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.loginDataMapValidation(map)) {
+                        map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+
+                        if(LoginDB.updateMedic(map)) {
+                            response.status(200);
+                            return "OK";
+                        }
+                        else {
+                            response.status(304);
+                            return "NON MODIFICATO";
+                        }
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
         });
     }

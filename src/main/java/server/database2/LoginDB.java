@@ -68,9 +68,9 @@ public class LoginDB {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
-            st.setInt(3, (Integer) map.get("patient_id"));
-            st.setBoolean(4, (Boolean) map.get("email_notify"));
+            st.setBoolean(3, (Boolean) map.get("email_notify"));
             st.setBoolean(4, (Boolean) map.get("sms_notify"));
+            st.setInt(5, (Integer) map.get("patient_id"));
 
             if(st.executeUpdate() != 0) {
                 conn.close();
@@ -81,6 +81,7 @@ public class LoginDB {
             e.printStackTrace();
 
         }
+
         return false;
     }
 
@@ -92,9 +93,9 @@ public class LoginDB {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
-            st.setInt(3, (Integer) map.get("medic_id"));
-            st.setBoolean(4, (Boolean) map.get("email_notify"));
+            st.setBoolean(3, (Boolean) map.get("email_notify"));
             st.setBoolean(4, (Boolean) map.get("sms_notify"));
+            st.setInt(5, (Integer) map.get("medic_id"));
 
             if(st.executeUpdate() != 0) {
                 conn.close();
