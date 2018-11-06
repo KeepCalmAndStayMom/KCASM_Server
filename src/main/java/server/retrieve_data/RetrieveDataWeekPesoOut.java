@@ -41,7 +41,7 @@ public class RetrieveDataWeekPesoOut implements RetrieveDataInterface{
                 count += (int) ChronoUnit.DAYS.between(actualDate, previousDate);
                 previousDate = actualDate;
                 lastDateIndex--;
-                if(date[lastDateIndex]==null)
+                if(lastDateIndex<0)
                     break;
                 actualDate = LocalDate.parse(String.valueOf(date[lastDateIndex]));
             }

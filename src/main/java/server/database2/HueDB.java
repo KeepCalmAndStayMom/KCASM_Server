@@ -99,22 +99,29 @@ public class HueDB {
         return false;
     }
 
-    static public Map<String, Object> selectTotal(int patientId, String date) {
-        final String sql = "SELECT chromotherapy, COUNT(chromotherapy) AS total FROM Hue WHERE patient_id=? AND timedate LIKE ? GROUP BY chromotherapy";
+    static public Map<String, Integer> selectTotal(int patientId, String date) {
+        final String sql = "SELECT COUNT(chromotherapy) AS total FROM Hue WHERE patient_id=? AND timedate LIKE ? AND chromotherapy=?";
+        List<String> bmiList = BMIDB.select();
+
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
             st.setString(2, date + "%");
-            ResultSet rs = st.executeQuery();
-            Map map = new LinkedHashMap();
+            Map<String, Integer> map = new LinkedHashMap<>();
 
-            while(rs.next()) {
-                map.put(rs.getString("chromotherapy"), rs.getInt("total"));
+            for(String bmi: bmiList) {
+                st.setString(3, bmi);
+                ResultSet rs = st.executeQuery();
+
+                if(rs.next())
+                    map.put(bmi, rs.getInt("total"));
+                else
+                    map.put(bmi, 0);
+
             }
 
-            if(map.size() > 0)
-                return map;
+            return map;
         } catch (SQLException e) {
             e.printStackTrace();
         }
