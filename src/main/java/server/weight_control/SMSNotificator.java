@@ -21,16 +21,10 @@ class SMSNotificator {
     private final static String NEXMO_API_KEY = "635924f3";
     private final static String NEXMO_API_SECRET = "577sIM8w7pdEYRyS";
 
-    private final static String PHONE_NUMBER_USER_TEST = "+393341790295";
-
     private static AuthMethod auth = new TokenAuthMethod(NEXMO_API_KEY, NEXMO_API_SECRET);
     private static NexmoClient client = new NexmoClient(auth);
 
     static void sendSMS(String msg, String patientPhone) {
-
-        //testing
-        patientPhone = PHONE_NUMBER_USER_TEST;
-
         try {
             client.getSmsClient().submitMessage(new TextMessage(NEXMO_PHONE_NUMBER, patientPhone, msg));
             System.out.println("SMS inviato correttamente");

@@ -106,7 +106,7 @@ public class WeightDB {
 
                 if (st.executeUpdate() != 0) {
                     conn.close();
-                    //MainServer.cpt.startcheck((Integer) map.get("patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
+                    MainServer.weightController.startcheck((Integer) map.get("patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
                     return true;
                 }
                 conn.close();
@@ -121,20 +121,29 @@ public class WeightDB {
     static public boolean insert(Map<String, Object> map) {
         final String sql = "INSERT INTO Weight(patient_id, date, weight) VALUES (?, ?, ?)";
 
-        try {
-            conn = DBConnectOnline.getInstance().getConnection();
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("patient_id"));
-            st.setString(2, String.valueOf(map.get("date")));
-            st.setDouble(3, (Double) map.get("weight"));
-            st.executeUpdate();
-            conn.close();
+        Map<String, Double> pesi = WeightDB.select((Integer) map.get("patient_id"));
+        assert pesi != null;
+        Object[] date = pesi.keySet().toArray();
 
-            MainServer.cpt.startcheck((Integer) map.get("patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
+        if(String.valueOf(map.get("date")).equals(String.valueOf(date[date.length-1]))) {
+            return update(map);
+        }
+        else {
+            try {
+                conn = DBConnectOnline.getInstance().getConnection();
+                PreparedStatement st = conn.prepareStatement(sql);
+                st.setInt(1, (Integer) map.get("patient_id"));
+                st.setString(2, String.valueOf(map.get("date")));
+                st.setDouble(3, (Double) map.get("weight"));
+                st.executeUpdate();
+                conn.close();
 
-            return true;
-        } catch(SQLException e) {
-            e.printStackTrace();
+                MainServer.weightController.startcheck((Integer) map.get("patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
+
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }

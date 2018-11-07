@@ -2,7 +2,6 @@ package server.retrieve_data;
 
 import server.database2.PatientInitialDB;
 import server.database2.WeightDB;
-import server.weight_control.SogliePeso;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;

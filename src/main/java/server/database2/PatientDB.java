@@ -94,7 +94,7 @@ public class PatientDB {
             st.setInt(1, patientId);
             if(st.executeUpdate() != 0) {
                 conn.close();
-                MainServer.cpt.removeID(patientId);
+                MainServer.weightController.removeID(patientId);
                 return true;
             }
 

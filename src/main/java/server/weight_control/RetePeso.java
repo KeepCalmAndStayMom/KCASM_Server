@@ -4,9 +4,9 @@ import smile.Network;
 
 import java.time.LocalDate;
 
-public class NetSmile2 extends AbstractNetSmile {
+public class RetePeso extends AbstractNetSmile {
 
-    NetSmile2() {
+    RetePeso() {
         System.setProperty("jsmile.native.library", "C:\\Users\\Gabriele\\IdeaProjects\\KCASM_Server\\lib\\jsmile.dll");
 
         new smile.License(
@@ -38,7 +38,7 @@ public class NetSmile2 extends AbstractNetSmile {
     }
 
     @Override
-    public String getResultUtility(){
+    public String getResultMessage(){
         double[] result = net.getNodeValue("Utility");
         double[] cD = net.getNodeValue("Cambiare_Dieta");
         double[] cA = net.getNodeValue("Cambiare_Attivita");

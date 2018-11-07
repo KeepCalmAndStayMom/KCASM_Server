@@ -1,6 +1,5 @@
 package server;
 
-import server.api.v1.ApiService;
 import server.api.v2.ApiMedic;
 import server.api.v2.ApiPatient;
 import server.mqtt.MQTTSubscriber;
@@ -10,10 +9,10 @@ import java.time.LocalDate;
 
 public class MainServer {
 
-    public static WeightController cpt;
+    public static WeightController weightController;
 
     public static void main(String[] args) {
-        cpt = new WeightController();
+        weightController = new WeightController();
 
         MQTTSubscriber subscriber = new MQTTSubscriber();
         subscriber.start();
@@ -22,9 +21,11 @@ public class MainServer {
         new ApiPatient();
         new ApiMedic();
 
-        //cpt.startcheck(1, LocalDate.parse("2018-01-02"), 0d);
-        //cpt.startcheck(2, LocalDate.parse("2018-03-01"), 1.5d);
-        //cpt.startcheck(3, LocalDate.parse("2018-03-01"), 3d);
-        //cpt.startcheck(4, LocalDate.parse("2018-03-01"), 0d);
+        /*System.out.println("start");
+        weightController.startcheck(1, LocalDate.parse("2018-01-02"), 0d);
+        weightController.startcheck(2, LocalDate.parse("2018-03-01"), 1.5d);
+        weightController.startcheck(3, LocalDate.parse("2018-03-01"), 3d);
+        weightController.startcheck(4, LocalDate.parse("2018-03-01"), 0d);
+        System.out.println("end");*/
     }
 }

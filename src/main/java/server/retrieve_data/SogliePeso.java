@@ -1,9 +1,9 @@
-package server.weight_control;
+package server.retrieve_data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SogliePeso {
+class SogliePeso {
     private static final double     WEEK_INC1 = 15,
                                     WEEK_INC2 = 30,
                                     SOTT_GEM_MIN = 18,
@@ -40,7 +40,7 @@ public class SogliePeso {
         return list;
     }
 
-    public static List<Double> getListSogliaMin(String bmi, boolean gemelli)
+    static List<Double> getListSogliaMin(String bmi, boolean gemelli)
     {
         if(gemelli)
         {
@@ -71,7 +71,7 @@ public class SogliePeso {
         return null;
     }
 
-    public static List<Double> getListSogliaMax(String bmi, boolean gemelli)
+    static List<Double> getListSogliaMax(String bmi, boolean gemelli)
     {
         if(gemelli)
         {
