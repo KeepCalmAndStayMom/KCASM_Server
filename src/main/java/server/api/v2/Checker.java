@@ -24,149 +24,104 @@ public class Checker {
         map.keySet().retainAll(PATIENT_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(PATIENT_KEYSET) || !((String)map.get("phone")).matches(Regex.PHONE_FORMAT))
-            return false;
-
-        return true;
+        return keys.containsAll(PATIENT_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
     }
 
     public static boolean medicMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(MEDIC_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(MEDIC_KEYSET) || !((String) map.get("phone")).matches(Regex.PHONE_FORMAT))
-            return false;
-
-        return true;
+        return keys.containsAll(MEDIC_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
     }
 
     public static boolean loginDataMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(LOGIN_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(LOGIN_KEYSET) || !((String) map.get("email")).matches(Regex.EMAIL_REGEX))
-            return false;
-
-        return true;
+        return keys.containsAll(LOGIN_KEYSET) && ((String) map.get("email")).matches(Regex.EMAIL_REGEX);
     }
 
     public static boolean postWeightMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(POST_WEIGHT_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(POST_WEIGHT_KEYSET) || !((String) map.get("date")).matches(Regex.DATE_REGEX))
-            return false;
-
-        return true;
+        return keys.containsAll(POST_WEIGHT_KEYSET) && ((String) map.get("date")).matches(Regex.DATE_REGEX);
     }
 
     public static boolean putWeightMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PUT_WEIGHT_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(PUT_WEIGHT_KEYSET))
-            return false;
-
-        return true;
+        return keys.containsAll(PUT_WEIGHT_KEYSET);
     }
 
     public static boolean taskMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(TASK_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(TASK_KEYSET) || !((String) map.get("date")).matches(Regex.DATE_REGEX))
-            return false;
-
-        return true;
+        return keys.containsAll(TASK_KEYSET) && ((String) map.get("date")).matches(Regex.DATE_REGEX);
     }
 
     public static boolean putPatientTaskMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PUT_PATIENT_TASK_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(PUT_PATIENT_TASK_KEYSET))
-            return false;
-
-        return true;
+        return keys.containsAll(PUT_PATIENT_TASK_KEYSET);
     }
 
     public static boolean putMedicTaskMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PUT_MEDIC_TASK_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(PUT_MEDIC_TASK_KEYSET) || !((String) map.get("date")).matches(Regex.DATE_REGEX))
-            return false;
-
-        return true;
+        return keys.containsAll(PUT_MEDIC_TASK_KEYSET) && ((String) map.get("date")).matches(Regex.DATE_REGEX);
     }
 
     public static boolean postPatientInitialDataMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(POST_INITIAL_DATA_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(POST_INITIAL_DATA_KEYSET) || !((String) map.get("pregnancy_start_date")).matches(Regex.DATE_REGEX))
-            return false;
-
-        return true;
+        return keys.containsAll(POST_INITIAL_DATA_KEYSET) && ((String) map.get("pregnancy_start_date")).matches(Regex.DATE_REGEX);
     }
 
     public static boolean putPatientInitialDataMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PUT_INITIAL_DATA_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(PUT_INITIAL_DATA_KEYSET))
-            return false;
-
-        return true;
+        return keys.containsAll(PUT_INITIAL_DATA_KEYSET);
     }
 
     public static boolean patientMessageMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PATIENT_MESSAGE_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(PATIENT_MESSAGE_KEYSET) || !((String) map.get("timedate")).matches(Regex.TIMEDATE_REGEX))
-            return false;
-
-        return true;
+        return keys.containsAll(PATIENT_MESSAGE_KEYSET) && ((String) map.get("timedate")).matches(Regex.TIMEDATE_REGEX);
     }
 
     public static boolean medicMessageMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(MEDIC_MESSAGE_KEYSET);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(MEDIC_MESSAGE_KEYSET) || !((String) map.get("timedate")).matches(Regex.TIMEDATE_REGEX))
-            return false;
-
-        return true;
+        return keys.containsAll(MEDIC_MESSAGE_KEYSET) && ((String) map.get("timedate")).matches(Regex.TIMEDATE_REGEX);
     }
 
     public static boolean patientAddMedic(Map<String, ?> map) {
         map.keySet().retainAll(PATIENT_ADD_MEDIC);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(PATIENT_ADD_MEDIC))
-            return false;
-
-        return true;
+        return keys.containsAll(PATIENT_ADD_MEDIC);
     }
 
     public static boolean medicAddPatient(Map<String, ?> map) {
         map.keySet().retainAll(MEDIC_ADD_PATIENT);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(MEDIC_ADD_PATIENT))
-            return false;
-
-        return true;
+        return keys.containsAll(MEDIC_ADD_PATIENT);
     }
 
     public static boolean setMessageAsRead(Map<String, ?> map) {
         map.keySet().retainAll(SET_MESSAGE_AS_READ);
         Set<String> keys = map.keySet();
 
-        if(!keys.containsAll(SET_MESSAGE_AS_READ) || !((Boolean) map.get("read")))
-            return false;
-
-        return true;
+        return keys.containsAll(SET_MESSAGE_AS_READ) && (Boolean) map.get("read");
     }
 }

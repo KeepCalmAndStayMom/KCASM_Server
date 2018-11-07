@@ -1,12 +1,9 @@
 package server;
 
-import server.api.v1.ApiService;
 import server.api.v2.ApiMedic;
-import server.api.v2.ApiPatient;
+import server.api.v2.patient.ApiPatient;
 import server.mqtt.MQTTSubscriber;
 import server.weight_control.WeightController;
-
-import java.time.LocalDate;
 
 public class MainServer {
 
