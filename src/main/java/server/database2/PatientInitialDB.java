@@ -12,7 +12,7 @@ public class PatientInitialDB {
     static Connection conn;
 
     static public Map<String, Object> select(int id) {
-        final String sql = "SELECT * FROM Patient_Initial WHERE Patient_id=?";
+        final String sql = "SELECT * FROM Patient_Initial WHERE patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -36,13 +36,13 @@ public class PatientInitialDB {
     }
 
     static public boolean update(Map<String, Object> map) {
-        final String sql = "UPDATE Patient_Initial SET twin=? WHERE Patient_id=?";
+        final String sql = "UPDATE Patient_Initial SET twin=? WHERE patient_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setBoolean(1, (Boolean) map.get("twin"));
-            st.setInt(2, (Integer) map.get("Patient_id"));
+            st.setInt(2, (Integer) map.get("patient_id"));
 
             if(st.executeUpdate() != 0) {
                 conn.close();
@@ -58,7 +58,7 @@ public class PatientInitialDB {
 
     static public boolean insert(Map<String, Object> map) {
 
-        final String sql = "INSERT INTO Patient_Initial(pregnancy_start_date, weight, height, bmi, twin, Patient_id) VALUES (?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Patient_Initial(pregnancy_start_date, weight, height, bmi, twin, patient_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -68,7 +68,7 @@ public class PatientInitialDB {
             st.setDouble(3, (Double) map.get("height"));
             st.setString(4, String.valueOf(map.get("bmi")));
             st.setBoolean(5, (Boolean) map.get("twin"));
-            st.setInt(6, (Integer) map.get("Patient_id"));
+            st.setInt(6, (int) map.get("patient_id"));
             st.executeUpdate();
             conn.close();
             return true;

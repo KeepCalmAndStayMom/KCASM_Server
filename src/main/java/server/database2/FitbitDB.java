@@ -16,7 +16,7 @@ public class FitbitDB {
 
         while(rs.next()) {
             map = new LinkedHashMap<>();
-            map.put("Patient_id", rs.getInt("Patient_id"));
+            map.put("patient_id", rs.getInt("patient_id"));
             map.put("timedate", rs.getString("timedate"));
             map.put("avg_heartbeats", rs.getInt("avg_heartbeats"));
             map.put("calories", rs.getInt("calories"));
@@ -24,7 +24,7 @@ public class FitbitDB {
             map.put("floors", rs.getInt("floors"));
             map.put("steps", rs.getInt("steps"));
             map.put("distance", rs.getDouble("distance"));
-            map.put("minutes_sleep", rs.getInt("minutes_sleep"));
+            map.put("minutes_asleep", rs.getInt("minutes_asleep"));
             map.put("minutes_awake", rs.getInt("minutes_awake"));
             list.add(map);
         }
@@ -34,7 +34,7 @@ public class FitbitDB {
 
     static public List<Map<String, Object>> selectDate(int patientId, String date) {
 
-        final String sql = "SELECT * FROM Fitbit WHERE Patient_id=? AND timedate LIKE ?";
+        final String sql = "SELECT * FROM Fitbit WHERE patient_id=? AND timedate LIKE ?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -50,7 +50,7 @@ public class FitbitDB {
 
     static public List<Map<String, Object>> selectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
-        String sql = "SELECT * FROM Fitbit WHERE Patient_id=? AND timedate BETWEEN ? AND ?";
+        String sql = "SELECT * FROM Fitbit WHERE patient_id=? AND timedate BETWEEN ? AND ?";
 
         if(startTimedate.length()==10)
             startTimedate += "T00:00:00";
@@ -73,7 +73,7 @@ public class FitbitDB {
 
     static public List<Map<String, Object>> select(int patientId) {
 
-        final String sql = "SELECT * FROM Fitbit WHERE Patient_id=?";
+        final String sql = "SELECT * FROM Fitbit WHERE patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -89,12 +89,12 @@ public class FitbitDB {
 
     static public boolean insert(Map<String, Object> map) {
 
-        final String sql = "INSERT INTO Fitbit(Patient_id, timedate, avg_heartbeats, calories, elevation, floors, steps, distance, minutes_sleep, minutes_awake) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Fitbit(patient_id, timedate, avg_heartbeats, calories, elevation, floors, steps, distance, minutes_sleep, minutes_awake) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("Patient_id"));
+            st.setInt(1, (Integer) map.get("patient_id"));
             st.setString(2, String.valueOf(map.get("timedate")));
             st.setInt(3, (Integer) map.get("avg_heartbeats"));
             st.setInt(4, (Integer) map.get("calories"));
@@ -102,7 +102,7 @@ public class FitbitDB {
             st.setInt(6, (Integer) map.get("floors"));
             st.setInt(7, (Integer) map.get("steps"));
             st.setDouble(8, (Double) map.get("distance"));
-            st.setInt(9, (Integer) map.get("minutes_sleep"));
+            st.setInt(9, (Integer) map.get("minutes_asleep"));
             st.setInt(10, (Integer) map.get("minutes_awake"));
             st.executeUpdate();
             conn.close();

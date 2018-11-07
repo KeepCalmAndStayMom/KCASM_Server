@@ -42,7 +42,7 @@ public class MedicDB {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("name")));
             st.setString(2, String.valueOf(map.get("surname")));
-            st.setInt(3, (Integer) map.get("age"));
+            st.setInt(3, ((Double) map.get("age")).intValue());
             st.setString(4, String.valueOf(map.get("phone")));
             st.setString(5, String.valueOf(map.get("specialization")));
             st.setInt(6, (Integer) map.get("id"));
@@ -61,16 +61,17 @@ public class MedicDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Medic(id, name, surname, age, phone, specialization) VALUES (null, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Medic(name, surname, age, phone, address, specialization) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("name")));
             st.setString(2, String.valueOf(map.get("surname")));
-            st.setInt(3, (Integer) map.get("age"));
+            st.setInt(3, ((Double) map.get("age")).intValue());
             st.setString(4, String.valueOf(map.get("phone")));
-            st.setString(5, String.valueOf(map.get("specialization")));
+            st.setString(5, String.valueOf(map.get("address")));
+            st.setString(6, String.valueOf(map.get("specialization")));
             st.executeUpdate();
             conn.close();
             return true;
@@ -80,13 +81,13 @@ public class MedicDB {
         return false;
     }
 
-    static public boolean delete(Map<String, Object> map) {
+    static public boolean delete(int medicId) {
         final String sql = "DELETE from Medic WHERE id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("id"));
+            st.setInt(1, medicId);
             if(st.executeUpdate() != 0) {
                 conn.close();
                 return true;
@@ -99,7 +100,7 @@ public class MedicDB {
     }
 
     public static List<Map<String, Object>> selectPatientsOfMedic(int id) {
-        final String sql = "SELECT Patient.id, Patient.name, Patient.surname FROM Patient JOIN Medic_has_Patient ON Patient.id=Patient_id WHERE Medic_id=?";
+        final String sql = "SELECT Patient.id, Patient.name, Patient.surname FROM Patient JOIN Medic_has_Patient ON Patient.id=patient_id WHERE medic_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();

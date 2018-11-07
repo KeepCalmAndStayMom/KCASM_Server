@@ -1,7 +1,5 @@
 package server.database2;
 
-import server.database.DBConnect;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,11 +25,12 @@ public class MessageMedicPatientDB {
 
             while(rs.next()) {
                 map = new LinkedHashMap<>();
-                map.put("medic_id", rs.getInt("Medic_id"));
-                map.put("patient_id", rs.getInt("Patient_id"));
+                map.put("medic_id", rs.getInt("medic_id"));
+                map.put("patient_id", rs.getInt("patient_id"));
                 map.put("timedate", rs.getString("timedate"));
                 map.put("medic_sender", rs.getBoolean("medic_sender"));
                 map.put("text", rs.getString("message"));
+                map.put("read", rs.getBoolean("read"));
                 list.add(map);
             }
 
@@ -43,13 +42,13 @@ public class MessageMedicPatientDB {
     }
 
     static public List<Map<String, Object>> selectPatientReceived(int Patient_id, String medic_id, String startdate, String enddate) {
-        final String base = "SELECT * FROM Message_Medic_Patient WHERE Patient_id=? AND medic_sender=1";
+        final String base = "SELECT * FROM Message_Medic_Patient WHERE patient_id=? AND medic_sender=1";
 
         StringBuilder sql = new StringBuilder();
         sql.append(base);
 
         if(medic_id != null)
-            sql.append(" AND Medic_id=" + medic_id);
+            sql.append(" AND medic_id=" + medic_id);
 
         if(startdate != null && enddate == null)
             sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + startdate +" 23:59:59\'");
@@ -60,12 +59,12 @@ public class MessageMedicPatientDB {
     }
 
     static public List<Map<String, Object>> selectPatientSent(int Patient_id, String medic_id, String startdate, String enddate) {
-        String base = "SELECT * FROM Message_Medic_Patient WHERE Patient_id=? AND medic_sender=0";
+        String base = "SELECT * FROM Message_Medic_Patient WHERE patient_id=? AND medic_sender=0";
         StringBuilder sql = new StringBuilder();
         sql.append(base);
 
         if(medic_id != null)
-            sql.append(" AND Medic_id=" + medic_id);
+            sql.append(" AND medic_id=" + medic_id);
 
         if(startdate != null && enddate == null)
             sql.append(" AND timedate BETWEEN " + "\'" + startdate + " 00:00:00\' AND \'" + startdate +" 23:59:59\'");
@@ -76,10 +75,10 @@ public class MessageMedicPatientDB {
     }
 
     static public List<Map<String, Object>> selectMedicReceived(int medicId, String patientId, String ... date) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM Message_Medic_Patient WHERE Medic_id=? AND medic_sender=0");
+        StringBuilder sql = new StringBuilder("SELECT * FROM Message_Medic_Patient WHERE medic_id=? AND medic_sender=0");
 
         if(patientId != null)
-            sql.append(" AND Patient_id=" + patientId);
+            sql.append(" AND patient_id=" + patientId);
         else if(date.length == 1)
             sql.append(" AND timedate LIKE \'" + date[0] + "%\'");
         else if(date.length == 2)
@@ -89,10 +88,10 @@ public class MessageMedicPatientDB {
     }
 
     static public List<Map<String, Object>> selectMedicSent(int medicId, String patientId, String ... date) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM Message_Medic_Patient WHERE Medic_id=? AND medic_sender=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM Message_Medic_Patient WHERE medic_id=? AND medic_sender=1");
 
         if(patientId != null)
-            sql.append(" AND Patient_id=" + patientId);
+            sql.append(" AND patient_id=" + patientId);
         else if(date.length == 1)
             sql.append(" AND timedate LIKE \'" + date[0] + "%\'");
         else if(date.length == 2)
@@ -103,16 +102,17 @@ public class MessageMedicPatientDB {
 
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Message_Medic_Patient(Medic_id, Patient_id, timedate, medic_sender, message) VALUES (?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Message_Medic_Patient(medic_id, patient_id, subject, timedate, medic_sender, message) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("Medic_id"));
-            st.setInt(2, (Integer) map.get("Patient_id"));
-            st.setString(3, String.valueOf(map.get("timedate")));
-            st.setBoolean(4, (Boolean) map.get("medic_sender"));
-            st.setString(5, String.valueOf(map.get("message")));
+            st.setInt(1, ((Double) map.get("medic_id")).intValue());
+            st.setInt(2, ((Double) map.get("patient_id")).intValue());
+            st.setString(3, String.valueOf(map.get("subject")));
+            st.setString(4, String.valueOf(map.get("timedate")));
+            st.setBoolean(5, (Boolean) map.get("medic_sender"));
+            st.setString(6, String.valueOf(map.get("message")));
             st.executeUpdate();
             conn.close();
             return true;
@@ -123,7 +123,7 @@ public class MessageMedicPatientDB {
     }
 
     public static Map<String, Object> selectSingleMessage(int patientId, int medic_id, String timedate) {
-        final String sql = "SELECT * FROM Message_Medic_Patient WHERE Patient_id=? AND Medic_id=? AND timedate=?";
+        final String sql = "SELECT * FROM Message_Medic_Patient WHERE patient_id=? AND medic_id=? AND timedate=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -140,6 +140,8 @@ public class MessageMedicPatientDB {
             map.put("timedate", rs.getString("timedate"));
             map.put("medic_sender", rs.getBoolean("medic_sender"));
             map.put("text", rs.getString("message"));
+            map.put("read", rs.getBoolean("read"));
+            conn.close();
 
             return map;
         } catch (SQLException e) {
@@ -147,6 +149,30 @@ public class MessageMedicPatientDB {
         }
 
         return null;
+    }
+
+    public static boolean setMessageAsRead(Map<String, ?> map) {
+        final String sql = "UPDATE Message_Medic_Patient SET Message_Medic_Patient.read=? WHERE patient_id=? AND medic_id=? AND timedate=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setBoolean(1, true);
+            st.setInt(2, (Integer) map.get("patient_id"));
+            st.setInt(3, (Integer) map.get("medic_id"));
+            st.setString(4, (String) map.get("timedate"));
+
+            if(st.executeUpdate() != 0) {
+                conn.close();
+                return true;
+            }
+            conn.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 }

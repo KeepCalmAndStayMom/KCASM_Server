@@ -12,9 +12,9 @@ public class MedicHasPatientDB {
 
     static Connection conn;
 
-    static public List<Integer> SelectPatients(int Medic_id) {
+    static public List<Integer> selectPatients(int Medic_id) {
 
-        final String sql = "SELECT * FROM Medic_has_Patient WHERE Medic_id=?";
+        final String sql = "SELECT * FROM Medic_has_Patient WHERE medic_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -24,7 +24,7 @@ public class MedicHasPatientDB {
             List<Integer> list = new ArrayList<>();
 
             while(rs.next()) {
-                list.add(rs.getInt("Patient_id"));
+                list.add(rs.getInt("patient_id"));
             }
 
             return list;
@@ -34,9 +34,9 @@ public class MedicHasPatientDB {
         return null;
     }
 
-    static public List<Integer> SelectMedics(int Patient_id) {
+    static public List<Integer> selectMedics(int Patient_id) {
 
-        final String sql = "SELECT * FROM Medic_has_Patient WHERE Patient_id=?";
+        final String sql = "SELECT * FROM Medic_has_Patient WHERE patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -46,7 +46,7 @@ public class MedicHasPatientDB {
             List<Integer> list = new ArrayList<>();
 
             while(rs.next()) {
-                list.add(rs.getInt("Medic_id"));
+                list.add(rs.getInt("medic_id"));
             }
 
             return list;
@@ -56,21 +56,41 @@ public class MedicHasPatientDB {
         return null;
     }
 
-    static public boolean Insert(Map<String, Object> map) {
+    static public boolean insert(Map<String, Object> map) {
 
-        final String sql = "INSERT INTO Medic_has_Patient(Medic_id, Patient_id) VALUES (?, ?)";
+        final String sql = "INSERT INTO Medic_has_Patient(medic_id, patient_id) VALUES (?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("Medic_id"));
-            st.setInt(2, (Integer) map.get("Patient_id"));
+            st.setInt(1, ((Double) map.get("medic_id")).intValue());
+            st.setInt(2, ((Double) map.get("patient_id")).intValue());
             st.executeUpdate();
             conn.close();
             return true;
         } catch(SQLException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    static public boolean checkMedicPatientAssociation(int patient_id, int medic_id) {
+
+        final String sql = "SELECT * FROM Medic_has_Patient WHERE patient_id=? AND medic_id=?";
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, patient_id);
+            st.setInt(2, medic_id);
+            ResultSet rs = st.executeQuery();
+
+            if(rs.next())
+                return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 

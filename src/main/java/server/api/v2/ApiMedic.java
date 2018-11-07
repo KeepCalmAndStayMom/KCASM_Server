@@ -1,5 +1,6 @@
 package server.api.v2;
 
+import com.google.gson.Gson;
 import server.api.v2.links.LinksBuilder;
 import server.api.v2.links.MedicTasksLinks;
 import server.database2.*;
@@ -11,17 +12,29 @@ import java.util.Map;
 import static spark.Spark.*;
 
 public class ApiMedic {
-    private String baseURL = "/api/v2";
+    private final static String baseURL = "/api/v2";
     private final static String DATE_REGEX = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$";
     private final static String TIMEDATE_REGEX = "^(19|20)\\d\\d-(0[1-9]|1[012])-([012]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$";
+    private Gson gson = new Gson();
 
     public ApiMedic() { apiMedic(); }
 
     private void apiMedic() {
         path(baseURL + "/medics", () -> {
             post("", (request, response) -> {
-                //aggiunta di un nuovo medico solo admin
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.medicMapValidation(map)) {
+                        if(MedicDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
 
             path("/:medic_id", () -> {
@@ -40,12 +53,30 @@ public class ApiMedic {
                     return "";
                 });
                 put("", (request, response) -> {
-                   //modifica dati medico
-                    return "";
+                    if(request.contentType().contains("json")) {
+                        Map map = gson.fromJson(request.body(), Map.class);
+
+                        if(map != null && Checker.medicMapValidation(map)) {
+                            map.put("id", Integer.parseInt(request.params("medic_id")));
+
+                            if(MedicDB.update(map)) {
+                                response.status(200);
+                                return "OK";
+                            }
+                        }
+                    }
+
+                    response.status(400);
+                    return "ERRORE";
                 });
                 delete("", (request, response) -> {
-                   //rimozione di un medico solo admin
-                   return "";
+                    if(MedicDB.delete(Integer.parseInt(request.params("medic_id")))) {
+                        response.status(200);
+                        return "OK";
+                    }
+
+                    response.status(404);
+                    return "ERRORE";
                 });
                 get("/patients", (request, response) -> {
                     //get dei pazienti del medico
@@ -61,6 +92,23 @@ public class ApiMedic {
 
                     response.status(404);
                     return "";
+                });
+
+                post("/patients", (request, response) -> {
+                    if(request.contentType().contains("json")) {
+                        Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                        if(map != null && Checker.medicAddPatient(map)) {
+                            map.put("medic_id", Double.parseDouble(request.params("medic_id")));
+                            if(MedicHasPatientDB.insert(map)) {
+                                response.status(201);
+                                return "OK";
+                            }
+                        }
+                    }
+
+                    response.status(400);
+                    return "ERRORE";
                 });
 
                 medicTasks();
@@ -91,11 +139,37 @@ public class ApiMedic {
             });
             post("", (request, response) -> {
                 //aggiunta dato di login solo admin
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.loginDataMapValidation(map)) {
+                        map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+                        if(LoginDB.insert(map)) {
+                            response.status(201);
+                            return "OK";
+                        }
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
             put("", (request, response) -> {
-                //modifica dati login paziente
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map map = gson.fromJson(request.body(), Map.class);
+
+                    if(map != null && Checker.loginDataMapValidation(map)) {
+                        map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+
+                        if(LoginDB.updateMedic(map)) {
+                            response.status(200);
+                            return "OK";
+                        }
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
         });
     }
@@ -118,7 +192,27 @@ public class ApiMedic {
             });
             post("", (request, response) -> {
                 //aggiunta un nuovo messaggio
-                return "";
+                if(request.contentType().contains("json")) {
+                    Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                    if(Checker.medicMessageMapValidation(map)) {
+                        map.put("medic_id", Double.parseDouble(request.params("medic_id")));
+                        map.put("medic_sender", true);
+                        if(MedicHasPatientDB.checkMedicPatientAssociation(((Double) map.get("patient_id")).intValue(), ((Double) map.get("medic_id")).intValue())) {
+                            if(MessageMedicPatientDB.insert(map)) {
+                                response.status(201);
+                                return "OK";
+                            }
+                        }
+                        else {
+                            response.status(403);
+                            return "FORBIDDEN";
+                        }
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
             get("/sent", (request, response) -> {
                 //get dei messaggi inviati medico
@@ -138,7 +232,7 @@ public class ApiMedic {
                         response.status(200);
                         response.type("application/json");
 
-                        return JsonBuilder.jsonObject(message, LinksBuilder.singleMessageLink(medicId, "medic", "sent", Integer.parseInt(patientId), timedate)).toString();
+                        return JsonBuilder.jsonObject(message, LinksBuilder.singleMessage(medicId, "medic", "sent", Integer.parseInt(patientId), timedate)).toString();
                     }
                 }
                 else if(date != null && date.matches(DATE_REGEX)) {
@@ -182,7 +276,7 @@ public class ApiMedic {
                         response.status(200);
                         response.type("application/json");
 
-                        return JsonBuilder.jsonObject(message, LinksBuilder.singleMessageLink(medicId, "medic", "received", Integer.parseInt(patientId), timedate)).toString();
+                        return JsonBuilder.jsonObject(message, LinksBuilder.singleMessage(medicId, "medic", "received", Integer.parseInt(patientId), timedate)).toString();
                     }
                 }
                 else if(date != null && date.matches(DATE_REGEX)) {
@@ -201,13 +295,30 @@ public class ApiMedic {
                 if(query != null && query.size() > 0) {
                     response.status(200);
                     response.type("application/json");
-                    System.out.println(query);
 
                     return "{ " + JsonBuilder.jsonList("messages-received", query, links, "message", "medic", "received").toString() + " }";
                 }
 
                 response.status(404);
                 return "";
+            });
+            put("/received", (request, response) -> {
+                Map<String, Object> map = new LinkedHashMap<>();
+                String timedate = request.queryParams("timedate").replace("T", " ");
+
+                if(timedate.matches(Regex.TIMEDATE_REGEX)) {
+                    map.put("patient_id", Integer.parseInt(request.queryParams("patient_id")));
+                    map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+                    map.put("timedate", timedate);
+
+                    if(MessageMedicPatientDB.setMessageAsRead(map)) {
+                        response.status(200);
+                        return "OK";
+                    }
+                }
+
+                response.status(400);
+                return "ERRORE";
             });
         });
     }
@@ -220,14 +331,10 @@ public class ApiMedic {
                 response.status(200);
                 response.type("application/json");
 
-                return JsonBuilder.jsonList(null, null, MedicTasksLinks.tasksMenu(medicId, "medic"), null, null);
+                return JsonBuilder.jsonList(null, null, MedicTasksLinks.tasksMenu(medicId, "medic"), null);
             });
 
             path("/general", () -> {
-                post("", (request, response) -> {
-                    //aggiunta task generale
-                    return "";
-                });
                 get("", (request, response) -> {
                     //get task generali medico
                     int medicId = Integer.parseInt(request.params("medic_id"));
@@ -283,10 +390,6 @@ public class ApiMedic {
                 medicTask("general");
             });
             path("/activities", () -> {
-                post("", (request, response) -> {
-                    //aggiunta attività
-                    return "";
-                });
                 get("", (request, response) -> {
                     //get attività medico
                     int medicId = Integer.parseInt(request.params("medic_id"));
@@ -339,10 +442,6 @@ public class ApiMedic {
                 medicTask("activities");
             });
             path("/diets", () -> {
-                post("", (request, response) -> {
-                    //aggiunta dieta
-                    return "";
-                });
                 get("", (request, response) -> {
                     //get diete medico
                     int medicId = Integer.parseInt(request.params("medic_id"));
@@ -407,12 +506,20 @@ public class ApiMedic {
             int taskId = Integer.parseInt(request.params("task_id"));
             Map<String, Object> query = new LinkedHashMap<>();
 
-            if(taskCategory.equals("general"))
-                query = SharedTaskFunctionDB.selectSingleTaskGeneral(medicId, taskId, "medic");
-            else if(taskCategory.equals("activities"))
-                query = SharedTaskFunctionDB.selectSingleTaskActivities(medicId, taskId, "medic");
-            else if(taskCategory.equals("diets"))
-                query = SharedTaskFunctionDB.selectSingleTaskDiets(medicId, taskId, "medic");
+            switch (taskCategory) {
+                case "general":
+                    query = SharedTaskFunctionDB.selectSingleTaskGeneral(medicId, taskId, "medic");
+
+                    break;
+                case "activities":
+                    query = SharedTaskFunctionDB.selectSingleTaskActivities(medicId, taskId, "medic");
+
+                    break;
+                case "diets":
+                    query = SharedTaskFunctionDB.selectSingleTaskDiets(medicId, taskId, "medic");
+
+                    break;
+            }
 
             if(query != null) {
                 response.status(200);
@@ -424,12 +531,102 @@ public class ApiMedic {
             return "";
         });
         put("/:task_id", (request, response) -> {
-            //modifica task
-            return "";
+            if(request.contentType().contains("json")) {
+                Map map = gson.fromJson(request.body(), Map.class);
+
+                if(map != null && Checker.putMedicTaskMapValidation(map)) {
+                    map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+                    map.put("id", Integer.parseInt(request.params("task_id")));
+                    boolean result = false;
+
+                    switch(taskCategory) {
+                        case "general":
+                            result = TaskGeneralDB.updateMedic(map);
+
+                            break;
+                        case "activities":
+                            result = TaskActivityDB.updateMedic(map);
+
+                            break;
+                        case "diets":
+                            result = TaskDietDB.updateMedic(map);
+
+                            break;
+                    }
+
+                    if(result) {
+                        response.status(200);
+                        return "OK";
+                    }
+                }
+            }
+
+            response.status(400);
+            return "ERRORE";
         });
         delete("/:task_id", (request, response) -> {
-           //rimozione task
-           return "";
+            boolean result = false;
+
+            switch (taskCategory) {
+                case "general":
+                    result = TaskGeneralDB.delete(Integer.parseInt(request.params("task_id")));
+
+                    break;
+                case "activities":
+                    result = TaskActivityDB.delete(Integer.parseInt(request.params("task_id")));
+
+                    break;
+                case "diets":
+                    result = TaskDietDB.delete(Integer.parseInt(request.params("task_id")));
+
+                    break;
+            }
+
+            if(result) {
+                response.status(200);
+                return "OK";
+            }
+
+            response.status(404);
+            return "ERRORE";
+        });
+        post("", (request, response) -> {
+            if(request.contentType().contains("json")) {
+                Map<String, Object> map = gson.fromJson(request.body(), Map.class);
+
+                if(map != null && Checker.taskMapValidation(map)) {
+                    map.put("medic_id", Integer.parseInt(request.params("medic_id")));
+
+                    if(MedicHasPatientDB.checkMedicPatientAssociation(((Double) map.get("patient_id")).intValue(), (int) map.get("medic_id"))) {
+                        boolean result = false;
+
+                        switch (taskCategory) {
+                            case "general":
+                                result = TaskGeneralDB.insert(map);
+
+                                break;
+                            case "activities":
+                                result = TaskActivityDB.insert(map);
+
+                                break;
+                            case "diets":
+                                result = TaskDietDB.insert(map);
+                        }
+
+                        if (result) {
+                            response.status(201);
+                            return "OK";
+                        }
+                    }
+                    else {
+                        response.status(403);
+                        return "FORBIDDEN";
+                    }
+                }
+            }
+
+            response.status(400);
+            return "ERRORE";
         });
     }
 }

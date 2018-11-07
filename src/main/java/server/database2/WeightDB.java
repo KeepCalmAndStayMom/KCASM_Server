@@ -17,7 +17,7 @@ public class WeightDB {
 
     static public Map<String, Double> select(int id) {
 
-        final String sql = "SELECT * FROM Weight WHERE Patient_id=?";
+        final String sql = "SELECT * FROM Weight WHERE patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -39,7 +39,7 @@ public class WeightDB {
 
     public static List<Map<String, Object>> selectList(int id) {
 
-        final String sql = "SELECT * FROM Weight WHERE Patient_id=?";
+        final String sql = "SELECT * FROM Weight WHERE patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -51,7 +51,7 @@ public class WeightDB {
 
             while(rs.next()) {
                 map = new LinkedHashMap<>();
-                map.put("patient_id", rs.getInt("Patient_id"));
+                map.put("patient_id", rs.getInt("patient_id"));
                 map.put("date", rs.getString("date"));
                 map.put("weight", rs.getString("weight"));
 
@@ -66,7 +66,7 @@ public class WeightDB {
     }
 
     public static Map<String, Object> selectSingleWeight(int id, String date) {
-        final String sql = "SELECT * FROM Weight WHERE Patient_id=? AND date=?";
+        final String sql = "SELECT * FROM Weight WHERE patient_id=? AND date=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -78,7 +78,7 @@ public class WeightDB {
             Map<String, Object> map = new LinkedHashMap<>();
 
             rs.next();
-            map.put("patient_id", rs.getInt("Patient_id"));
+            map.put("patient_id", rs.getInt("patient_id"));
             map.put("date", rs.getString("date"));
             map.put("weight", rs.getString("weight"));
 
@@ -90,24 +90,23 @@ public class WeightDB {
     }
 
     static public boolean update(Map<String, Object> map) {
-        final String sql = "UPDATE Weight SET weight=? WHERE Patient_id=? AND 'date'=?";
+        final String sql = "UPDATE Weight SET weight=? WHERE patient_id=? AND date=?";
 
-        Map<String, Double> pesi = WeightDB.select((Integer) map.get("Patient_id"));
+        Map<String, Double> pesi = WeightDB.select((Integer) map.get("patient_id"));
         assert pesi != null;
         Object[] date = pesi.keySet().toArray();
 
-        if(String.valueOf(map.get("date")).equals(String.valueOf(date.length-1))) {
+        if(String.valueOf(map.get("date")).equals(String.valueOf(date[date.length-1]))) {
             try {
                 conn = DBConnectOnline.getInstance().getConnection();
                 PreparedStatement st = conn.prepareStatement(sql);
                 st.setDouble(1, (Double) map.get("weight"));
-                st.setInt(2, (Integer) map.get("Patient_id"));
+                st.setInt(2, (Integer) map.get("patient_id"));
                 st.setString(3, String.valueOf(map.get("date")));
-
 
                 if (st.executeUpdate() != 0) {
                     conn.close();
-                    MainServer.cpt.startcheck((Integer) map.get("Patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
+                    //MainServer.cpt.startcheck((Integer) map.get("patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
                     return true;
                 }
                 conn.close();
@@ -120,18 +119,18 @@ public class WeightDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Weight(Patient_id, date, weight) VALUES (?, ?, ?)";
+        final String sql = "INSERT INTO Weight(patient_id, date, weight) VALUES (?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, (Integer) map.get("Patient_id"));
+            st.setInt(1, (Integer) map.get("patient_id"));
             st.setString(2, String.valueOf(map.get("date")));
             st.setDouble(3, (Double) map.get("weight"));
             st.executeUpdate();
             conn.close();
 
-            MainServer.cpt.startcheck((Integer) map.get("Patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
+            MainServer.cpt.startcheck((Integer) map.get("patient_id"), LocalDate.parse(String.valueOf(map.get("date"))), (Double) map.get("weight"));
 
             return true;
         } catch(SQLException e) {
