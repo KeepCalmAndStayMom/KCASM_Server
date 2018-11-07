@@ -90,8 +90,9 @@ public class WeightController {
                 map.put("medic_id", medicId);
                 map.put("patient_id", 0);
                 map.put("timedate", LocalDateTime.now());
-                map.put("medic_sender", false);
+                map.put("subject", "Controllo Peso");
                 map.put("message", msg);
+                map.put("medic_sender", false);
                 MessageMedicPatientDB.insert(map);
 
                 /*if((Boolean) map.get("email_notify")) {
