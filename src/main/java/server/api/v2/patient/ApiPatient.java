@@ -1,14 +1,11 @@
 package server.api.v2.patient;
 
-import com.auth0.jwt.internal.org.bouncycastle.util.encoders.Base64;
 import com.google.gson.Gson;
 import server.api.v2.Checker;
 import server.api.v2.JsonBuilder;
 import server.api.v2.links.LinksBuilder;
 import server.api.v2.patient.measures.ApiMeasures;
 import server.database2.*;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,22 +21,6 @@ public class ApiPatient {
     }
 
     private void apiPatient() {
-        post(baseURL + "/login_data", (request, response) -> {
-            String base64 = request.headers("Authorization").replace("Basic ", "");
-            String[] auth = new String(Base64.decode(base64.getBytes()), "UTF-8").split(":");
-
-            Map query = LoginDB.select(auth[0], auth[1]);
-
-            if(query != null) {
-                response.status(200);
-                response.type("application/json");
-                return JsonBuilder.jsonObject(query, null);
-            }
-
-            response.status(401);
-            return "ERRORE";
-        });
-
         path(baseURL + "/patients", () -> {
             addPatient();
 
