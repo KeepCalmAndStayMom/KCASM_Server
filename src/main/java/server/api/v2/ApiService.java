@@ -1,5 +1,6 @@
 package server.api.v2;
 
+import server.api.v2.medic.ApiMedic;
 import server.api.v2.patient.ApiPatient;
 import server.database2.LoginDB;
 import static spark.Spark.*;
@@ -12,6 +13,7 @@ public class ApiService {
 
     public ApiService() {
         new ApiPatient();
+        new ApiMedic();
         login();
     }
 
