@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,7 @@ public class WeightController {
 
     private void sendNotification(int patientId, String msg)
     {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         msg = "Paziente " + patientId + ": " + msg;
 
@@ -89,7 +91,7 @@ public class WeightController {
                 Map<String, Object> map = new HashMap<>();
                 map.put("medic_id", medicId);
                 map.put("patient_id", 0);
-                map.put("timedate", LocalDateTime.now());
+                map.put("timedate", dtf.format(LocalDateTime.now()));
                 map.put("subject", "Controllo Peso");
                 map.put("message", msg);
                 map.put("medic_sender", false);

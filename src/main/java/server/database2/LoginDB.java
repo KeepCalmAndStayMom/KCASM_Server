@@ -12,6 +12,33 @@ public class LoginDB {
 
     static Connection conn;
 
+    static public Map<String, Object> selectLogin(String email, String password)
+    {
+        final String sql = "SELECT patient_id, medic_id FROM Login WHERE email=? AND password=?";
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, email);
+            st.setString(2, password);
+            ResultSet rs = st.executeQuery();
+
+            LinkedHashMap<String, Object> map = null;
+
+            if(rs.next())
+            {
+                map = new LinkedHashMap<>();
+                if(rs.getObject("patient_id")!=null)
+                    map.put("patient_id", rs.getInt("patient_id"));
+                else
+                    map.put("medic_id", rs.getInt("medic_id"));
+            }
+            return map;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     static public Map<String, Object> selectPatient(int patientId) {
         final String sql = "SELECT * FROM Login WHERE patient_id=?";
         try {
