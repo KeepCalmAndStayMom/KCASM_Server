@@ -5,8 +5,6 @@ import server.api.v2.ApiServiceV2;
 import server.mqtt.MQTTSubscriber;
 import server.weight_control.WeightController;
 
-import java.time.LocalDate;
-
 public class MainServer {
 
     public static WeightController weightController;
