@@ -138,4 +138,34 @@ public class LoginDB {
         }
         return false;
     }
+
+    public static Map<String, Integer> selectLogin(String email, String password) {
+        final String sql = "SELECT patient_id, medic_id FROM Login WHERE email=? AND password=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, email);
+            st.setString(2, password);
+            ResultSet rs = st.executeQuery();
+            Map map = null;
+
+            if(rs.next()) {
+                map = new LinkedHashMap();
+
+                if(rs.getObject("patient_id")!=null)
+                    map.put("patient_id", rs.getInt("patient_id"));
+                else
+                    map.put("medic_id", rs.getInt("medic_id"));
+            }
+
+
+            return map;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

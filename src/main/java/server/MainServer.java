@@ -1,7 +1,7 @@
 package server;
 
-import server.api.v2.ApiMedic;
-import server.api.v2.ApiPatient;
+import server.api.v2.medic.ApiMedic;
+import server.api.v2.ApiServiceV2;
 import server.mqtt.MQTTSubscriber;
 import server.weight_control.WeightController;
 
@@ -18,7 +18,7 @@ public class MainServer {
         subscriber.start();
 
         //new ApiService();
-        new ApiPatient();
+        new ApiServiceV2();
         new ApiMedic();
 
         /*System.out.println("start");
