@@ -139,7 +139,7 @@ public class LoginDB {
         return false;
     }
 
-    public static Map<String, Integer> select(String email, String password) {
+    public static Map<String, Integer> selectLogin(String email, String password) {
         final String sql = "SELECT patient_id, medic_id FROM Login WHERE email=? AND password=?";
 
         try {
@@ -148,11 +148,17 @@ public class LoginDB {
             st.setString(1, email);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
-            Map map = new LinkedHashMap();
+            Map map = null;
 
-            rs.next();
-            map.put("patient_id", rs.getObject("patient_id"));
-            map.put("medic_id", rs.getObject("medic_id"));
+            if(rs.next()) {
+                map = new LinkedHashMap();
+
+                if(rs.getObject("patient_id")!=null)
+                    map.put("patient_id", rs.getInt("patient_id"));
+                else
+                    map.put("medic_id", rs.getInt("medic_id"));
+            }
+
 
             return map;
         }

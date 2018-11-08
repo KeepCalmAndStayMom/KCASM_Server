@@ -8,21 +8,21 @@ import static spark.Spark.*;
 import java.util.Base64;
 import java.util.Map;
 
-public class ApiService {
+public class ApiServiceV2 {
     private final static String baseURL = "/api/v2";
 
-    public ApiService() {
+    public ApiServiceV2() {
         new ApiPatient();
         new ApiMedic();
         login();
     }
 
-    public void login() {
+    private void login() {
         post(baseURL + "/login_data", (request, response) -> {
             String base64 = request.headers("Authorization").replace("Basic ", "");
             String[] auth = new String(Base64.getDecoder().decode(base64), "UTF-8").split(":");
 
-            Map query = LoginDB.select(auth[0], auth[1]);
+            Map query = LoginDB.selectLogin(auth[0], auth[1]);
 
             if(query != null) {
                 response.status(200);
