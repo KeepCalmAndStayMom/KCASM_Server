@@ -1,7 +1,6 @@
 package server.weight_control;
 
 
-import server.database2.LoginDB;
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;

@@ -1,7 +1,7 @@
 package server.weight_control;
 
-import server.database2.MedicHasPatientDB;
-import server.database2.MessageMedicPatientDB;
+import server.database.v2.MedicHasPatientDB;
+import server.database.v2.MessageMedicPatientDB;
 import server.evidence_filter.EvidenceFilterInterface;
 import server.retrieve_data.RetrieveDataInterface;
 import java.io.BufferedReader;

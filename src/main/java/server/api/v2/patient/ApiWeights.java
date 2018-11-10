@@ -5,7 +5,7 @@ import server.api.v2.Checker;
 import server.api.v2.JsonBuilder;
 import server.api.v2.Regex;
 import server.api.v2.links.LinksBuilder;
-import server.database2.WeightDB;
+import server.database.v2.WeightDB;
 
 import java.util.List;
 import java.util.Map;

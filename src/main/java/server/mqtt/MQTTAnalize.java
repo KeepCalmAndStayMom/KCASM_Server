@@ -1,9 +1,9 @@
 package server.mqtt;
 
 import com.google.gson.Gson;
-import server.database2.FitbitDB;
-import server.database2.HueDB;
-import server.database2.SensorDB;
+import server.database.v2.FitbitDB;
+import server.database.v2.HueDB;
+import server.database.v2.SensorDB;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;

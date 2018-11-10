@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class RetePeso extends AbstractNetSmile {
 
     RetePeso() {
-        System.setProperty("jsmile.native.library", "C:\\Users\\Gabriele\\IdeaProjects\\KCASM_Server\\lib\\jsmile.dll");
+        System.setProperty("jsmile.native.library", System.getProperty("user.home") + "\\IdeaProjects\\KCASM_Server\\lib\\jsmile.dll");
 
         new smile.License(
                 "SMILE LICENSE fda8796e a63255b4 d9d96382 " +

@@ -3,9 +3,9 @@ package server.api.v2.patient.measures;
 import server.api.v2.JsonBuilder;
 import server.api.v2.Regex;
 import server.api.v2.links.MeasuresLinks;
-import server.database2.FitbitDB;
-import server.database2.HueDB;
-import server.database2.SensorDB;
+import server.database.v2.FitbitDB;
+import server.database.v2.HueDB;
+import server.database.v2.SensorDB;
 
 import java.util.List;
 import java.util.Map;

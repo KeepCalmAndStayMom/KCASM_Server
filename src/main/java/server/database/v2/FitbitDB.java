@@ -1,4 +1,4 @@
-package server.database2;
+package server.database.v2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class SensorDB {
+public class FitbitDB {
 
     static Connection conn;
 
-    static private List<Map<String, Object>> getListSensor(ResultSet rs) throws SQLException {
+    static private List<Map<String, Object>> getListFitbit(ResultSet rs) throws SQLException {
         List<Map<String, Object>> list = new ArrayList<>();
         LinkedHashMap<String, Object> map;
 
@@ -18,9 +18,14 @@ public class SensorDB {
             map = new LinkedHashMap<>();
             map.put("patient_id", rs.getInt("patient_id"));
             map.put("timedate", rs.getString("timedate"));
-            map.put("temperature", rs.getDouble("temperature"));
-            map.put("luminescence", rs.getDouble("luminescence"));
-            map.put("humidity", rs.getDouble("humidity"));
+            map.put("avg_heartbeats", rs.getInt("avg_heartbeats"));
+            map.put("calories", rs.getInt("calories"));
+            map.put("elevation", rs.getDouble("elevation"));
+            map.put("floors", rs.getInt("floors"));
+            map.put("steps", rs.getInt("steps"));
+            map.put("distance", rs.getDouble("distance"));
+            map.put("minutes_asleep", rs.getInt("minutes_asleep"));
+            map.put("minutes_awake", rs.getInt("minutes_awake"));
             list.add(map);
         }
 
@@ -29,14 +34,14 @@ public class SensorDB {
 
     static public List<Map<String, Object>> selectDate(int patientId, String date) {
 
-        final String sql = "SELECT * FROM Sensor WHERE patient_id=? AND timedate LIKE ?";
+        final String sql = "SELECT * FROM Fitbit WHERE patient_id=? AND timedate LIKE ?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
             st.setString(2, date + "%");
 
-            return getListSensor(st.executeQuery());
+            return getListFitbit(st.executeQuery());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,7 +50,7 @@ public class SensorDB {
 
     static public List<Map<String, Object>> selectDateInterval(int patientId, String startTimedate, String endTimedate) {
 
-        final String sql = "SELECT * FROM Sensor WHERE patient_id=? AND timedate BETWEEN ? AND ?";
+        String sql = "SELECT * FROM Fitbit WHERE patient_id=? AND timedate BETWEEN ? AND ?";
 
         if(startTimedate.length()==10)
             startTimedate += "T00:00:00";
@@ -59,7 +64,7 @@ public class SensorDB {
             st.setString(2, startTimedate.replace("T", " "));
             st.setString(3, endTimedate.replace("T", " "));
 
-            return getListSensor(st.executeQuery());
+            return getListFitbit(st.executeQuery());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -68,13 +73,13 @@ public class SensorDB {
 
     static public List<Map<String, Object>> select(int patientId) {
 
-        final String sql = "SELECT * FROM Sensor WHERE patient_id=?";
+        final String sql = "SELECT * FROM Fitbit WHERE patient_id=?";
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, patientId);
 
-            return getListSensor(st.executeQuery());
+            return getListFitbit(st.executeQuery());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -84,16 +89,21 @@ public class SensorDB {
 
     static public boolean insert(Map<String, Object> map) {
 
-        final String sql = "INSERT INTO Sensor(patient_id, timedate, temperature, luminescence, humidity) VALUES (?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Fitbit(patient_id, timedate, avg_heartbeats, calories, elevation, floors, steps, distance, minutes_sleep, minutes_awake) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, (Integer) map.get("patient_id"));
             st.setString(2, String.valueOf(map.get("timedate")));
-            st.setDouble(3,  (Double) map.get("temperature"));
-            st.setDouble(4,  (Double) map.get("luminescence"));
-            st.setDouble(5,  (Double) map.get("humidity"));
+            st.setInt(3, (Integer) map.get("avg_heartbeats"));
+            st.setInt(4, (Integer) map.get("calories"));
+            st.setDouble(5, (Double) map.get("elevation"));
+            st.setInt(6, (Integer) map.get("floors"));
+            st.setInt(7, (Integer) map.get("steps"));
+            st.setDouble(8, (Double) map.get("distance"));
+            st.setInt(9, (Integer) map.get("minutes_asleep"));
+            st.setInt(10, (Integer) map.get("minutes_awake"));
             st.executeUpdate();
             conn.close();
             return true;
@@ -103,27 +113,4 @@ public class SensorDB {
         return false;
     }
 
-    public static Map<String, Object> selectTotal(int patientId, String date) {
-        final String sql = "SELECT AVG(temperature) AS temperature, AVG(luminescence) AS luminescence, AVG(humidity) AS humidity FROM Sensor WHERE patient_id=? AND timedate LIKE ?";
-
-
-        try {
-            conn = DBConnectOnline.getInstance().getConnection();
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, patientId);
-            st.setString(2, date + "%");
-            ResultSet rs = st.executeQuery();
-            Map map = new LinkedHashMap();
-
-            rs.next();
-            map.put("temperature", rs.getDouble("temperature"));
-            map.put("luminescence", rs.getDouble("luminescence"));
-            map.put("humidity", rs.getDouble("humidity"));
-
-            return map;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

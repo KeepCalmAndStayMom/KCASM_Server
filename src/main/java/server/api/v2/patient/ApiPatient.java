@@ -5,7 +5,9 @@ import server.api.v2.Checker;
 import server.api.v2.JsonBuilder;
 import server.api.v2.links.LinksBuilder;
 import server.api.v2.patient.measures.ApiMeasures;
-import server.database2.*;
+import server.database.v2.MedicHasPatientDB;
+import server.database.v2.PatientDB;
+
 import java.util.List;
 import java.util.Map;
 

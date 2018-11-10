@@ -2,7 +2,7 @@ package server.mqtt;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import server.database.HomestationDB;
+import server.database.v1.HomestationDB;
 
 public class MQTTSubscriber {
 

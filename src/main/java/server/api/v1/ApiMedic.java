@@ -1,8 +1,8 @@
 package server.api.v1;
 
 import com.google.gson.Gson;
-import server.database.LoginDB;
-import server.database.MedicDB;
+import server.database.v1.LoginDB;
+import server.database.v1.MedicDB;
 import java.util.Map;
 import static spark.Spark.get;
 import static spark.Spark.post;

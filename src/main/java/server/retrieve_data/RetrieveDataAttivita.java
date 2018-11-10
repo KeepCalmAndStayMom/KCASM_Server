@@ -1,6 +1,6 @@
 package server.retrieve_data;
 
-import server.database2.TaskActivityDB;
+import server.database.v2.TaskActivityDB;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;

@@ -1,9 +1,9 @@
 package server.api.v1;
 
 import com.google.gson.Gson;
-import server.database.LoginDB;
-import server.database.UserDB;
-import server.database.UserInitialDateDB;
+import server.database.v1.LoginDB;
+import server.database.v1.UserDB;
+import server.database.v1.UserInitialDateDB;
 
 import java.util.Map;
 import static spark.Spark.get;

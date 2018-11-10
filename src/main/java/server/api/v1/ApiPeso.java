@@ -1,7 +1,7 @@
 package server.api.v1;
 
 import com.google.gson.Gson;
-import server.database.PesoDB;
+import server.database.v1.PesoDB;
 import java.util.Map;
 
 import static spark.Spark.post;

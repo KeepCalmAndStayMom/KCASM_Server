@@ -1,7 +1,7 @@
 package server.api.v1;
 
 import com.google.gson.Gson;
-import server.database.AttivitaDB;
+import server.database.v1.AttivitaDB;
 
 import java.util.List;
 import java.util.Map;

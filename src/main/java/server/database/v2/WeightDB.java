@@ -1,4 +1,4 @@
-package server.database2;
+package server.database.v2;
 
 import server.MainServer;
 import java.sql.Connection;

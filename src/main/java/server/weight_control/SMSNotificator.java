@@ -1,19 +1,12 @@
 package server.weight_control;
 
-import com.google.gson.Gson;
 import com.nexmo.client.NexmoClient;
 import com.nexmo.client.NexmoClientException;
 import com.nexmo.client.auth.AuthMethod;
 import com.nexmo.client.auth.TokenAuthMethod;
 import com.nexmo.client.sms.messages.TextMessage;
-import server.database2.PatientDB;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
 
 class SMSNotificator {
 

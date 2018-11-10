@@ -5,7 +5,7 @@ import server.api.v2.Checker;
 import server.api.v2.JsonBuilder;
 import server.api.v2.Regex;
 import server.api.v2.links.MedicTasksLinks;
-import server.database2.*;
+import server.database.v2.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;

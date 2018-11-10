@@ -5,10 +5,10 @@ import server.api.v2.Checker;
 import server.api.v2.JsonBuilder;
 import server.api.v2.Regex;
 import server.api.v2.links.PatientTasksLinks;
-import server.database2.SharedTaskFunctionDB;
-import server.database2.TaskActivityDB;
-import server.database2.TaskDietDB;
-import server.database2.TaskGeneralDB;
+import server.database.v2.SharedTaskFunctionDB;
+import server.database.v2.TaskActivityDB;
+import server.database.v2.TaskDietDB;
+import server.database.v2.TaskGeneralDB;
 
 import java.util.LinkedHashMap;
 import java.util.List;

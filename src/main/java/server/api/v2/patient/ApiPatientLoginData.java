@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import server.api.v2.Checker;
 import server.api.v2.JsonBuilder;
 import server.api.v2.links.LinksBuilder;
-import server.database2.LoginDB;
+import server.database.v2.LoginDB;
 
 import java.util.Map;
 

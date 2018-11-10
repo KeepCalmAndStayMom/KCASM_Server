@@ -1,7 +1,7 @@
 package server.api.v1;
 
 import com.google.gson.Gson;
-import server.database.FitbitDB;
+import server.database.v1.FitbitDB;
 import java.util.Map;
 import static spark.Spark.get;
 import static spark.Spark.post;

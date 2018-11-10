@@ -1,7 +1,7 @@
 package server.retrieve_data;
 
-import server.database2.PatientInitialDB;
-import server.database2.WeightDB;
+import server.database.v2.PatientInitialDB;
+import server.database.v2.WeightDB;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
