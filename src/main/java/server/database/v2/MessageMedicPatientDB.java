@@ -28,8 +28,9 @@ public class MessageMedicPatientDB {
                 map.put("medic_id", rs.getInt("medic_id"));
                 map.put("patient_id", rs.getInt("patient_id"));
                 map.put("timedate", rs.getString("timedate"));
+                map.put("subject", rs.getString("subject"));
+                map.put("message", rs.getString("message"));
                 map.put("medic_sender", rs.getBoolean("medic_sender"));
-                map.put("text", rs.getString("message"));
                 map.put("read", rs.getBoolean("read"));
                 list.add(map);
             }
