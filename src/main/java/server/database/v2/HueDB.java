@@ -101,7 +101,7 @@ public class HueDB {
 
     static public Map<String, Object> selectTotal(int patientId, String date) {
         final String sql = "SELECT COUNT(chromotherapy) AS total FROM Hue WHERE patient_id=? AND timedate LIKE ? AND chromotherapy=?";
-        List<String> bmiList = BMIDB.select();
+        List<String> chromotherapyList = ChromotherapyDB.select();
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -110,14 +110,14 @@ public class HueDB {
             st.setString(2, date + "%");
             Map<String, Object> map = new LinkedHashMap<>();
 
-            for(String bmi: bmiList) {
-                st.setString(3, bmi);
+            for(String chromotherapy: chromotherapyList) {
+                st.setString(3, chromotherapy);
                 ResultSet rs = st.executeQuery();
 
                 if(rs.next())
-                    map.put(bmi, rs.getInt("total"));
+                    map.put(chromotherapy, rs.getInt("total"));
                 else
-                    map.put(bmi, 0);
+                    map.put(chromotherapy, 0);
 
             }
 
