@@ -78,9 +78,20 @@ public class ApiWeights {
             //get pesi della paziente
             int patientId = Integer.parseInt(request.params("patient_id"));
             String date = request.queryParams("date");
+            String startdate = request.queryParams("startdate");
+            String enddate = request.queryParams("enddate");
 
-            if(date == null) {
-                List<Map<String, Object>> query = WeightDB.selectList(patientId);
+            if(date != null && date.matches(Regex.DATE_REGEX)) {
+                Map<String, Object> query = WeightDB.selectSingleWeight(patientId, date);
+                if(query != null) {
+                    response.status(200);
+                    response.type("application/json");
+
+                    return JsonBuilder.jsonObject(query, null).toString();
+                }
+            }
+            else if(startdate != null && enddate != null && startdate.matches(Regex.DATE_REGEX) && enddate.matches(Regex.DATE_REGEX)) {
+                List<Map<String, Object>> query = WeightDB.selectListWithInterval(patientId, startdate, enddate);
 
                 if(query != null && query.size() > 0) {
                     response.status(200);
@@ -90,12 +101,13 @@ public class ApiWeights {
                 }
             }
             else {
-                Map<String, Object> query = WeightDB.selectSingleWeight(patientId, date);
-                if(query != null) {
+                List<Map<String, Object>> query = WeightDB.selectList(patientId);
+
+                if(query != null && query.size() > 0) {
                     response.status(200);
                     response.type("application/json");
 
-                    return JsonBuilder.jsonObject(query, null).toString();
+                    return "{ "+ JsonBuilder.jsonList("weights", query, LinksBuilder.weightsLinks(patientId), "weight").toString() + " }";
                 }
             }
 

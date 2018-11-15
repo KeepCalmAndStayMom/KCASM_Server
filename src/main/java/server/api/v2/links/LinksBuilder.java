@@ -7,7 +7,7 @@ public class LinksBuilder {
 
         json.append("\"links\": [ ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/tasks", "patient/tasks", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weight", "patient/weight", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weights", "patient/weights", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/initial_data", "patient/initial_data", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/medics", "patient/medics", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/messages", "patient/messages", "GET")).append(", ");
@@ -73,7 +73,7 @@ public class LinksBuilder {
         StringBuilder json = new StringBuilder();
 
         json.append("\"link\": ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weight?date=" + date, "self", "GET"));
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weights?date=" + date, "self", "GET"));
 
         return json.toString();
     }
@@ -83,8 +83,8 @@ public class LinksBuilder {
 
         json.append("\"links\": [");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "patient", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weight", "self", "PUT")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weight", "self", "POST")).append(" ]");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weights", "self", "PUT")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weights", "self", "POST")).append(" ]");
 
         return json.toString();
     }
