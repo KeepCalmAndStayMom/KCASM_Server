@@ -65,6 +65,36 @@ public class WeightDB {
         return null;
     }
 
+    public static List<Map<String, Object>> selectListWithInterval(int id, String startdate, String enddate) {
+
+        final String sql = "SELECT * FROM Weight WHERE patient_id=? AND Weight.date BETWEEN ? AND ?";
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id);
+            st.setString(2, startdate);
+            st.setString(3, enddate);
+            ResultSet rs = st.executeQuery();
+
+            List<Map<String, Object>> list = new ArrayList<>();
+            Map<String, Object> map;
+
+            while(rs.next()) {
+                map = new LinkedHashMap<>();
+                map.put("patient_id", rs.getInt("patient_id"));
+                map.put("date", rs.getString("date"));
+                map.put("weight", rs.getString("weight"));
+
+                list.add(map);
+            }
+
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static Map<String, Object> selectSingleWeight(int id, String date) {
         final String sql = "SELECT * FROM Weight WHERE patient_id=? AND date=?";
 
