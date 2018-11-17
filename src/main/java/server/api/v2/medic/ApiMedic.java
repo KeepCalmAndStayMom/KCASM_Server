@@ -96,7 +96,7 @@ public class ApiMedic {
             if(request.contentType().contains("json")) {
                 Map map = gson.fromJson(request.body(), Map.class);
 
-                if(map != null && Checker.medicMapValidation(map)) {
+                if(map != null && Checker.medicPutMapValidation(map)) {
                     map.put("id", Integer.parseInt(request.params("medic_id")));
 
                     if(MedicDB.update(map)) {
@@ -133,7 +133,7 @@ public class ApiMedic {
             if(request.contentType().contains("json")) {
                 Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
-                if(map != null && Checker.medicMapValidation(map)) {
+                if(map != null && Checker.medicPostMapValidation(map)) {
                     if(MedicDB.insert(map)) {
                         response.status(201);
                         return "OK";

@@ -5,7 +5,8 @@ import java.util.*;
 
 public class Checker {
     private final static Set PATIENT_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address_home", "address_hospital", "email_notify", "sms_notify");
-    private final static Set MEDIC_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address", "specialization", "email_notify", "sms_notify");
+    private final static Set POST_MEDIC_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address", "specialization", "email_notify", "sms_notify");
+    private final static Set PUT_MEDIC_KEYSET = ImmutableSet.of("name", "surname", "age", "phone", "address", "email_notify", "sms_notify");
     private final static Set LOGIN_KEYSET = ImmutableSet.of("email", "password");
     private final static Set POST_WEIGHT_KEYSET = ImmutableSet.of("date", "weight");
     private final static Set PUT_WEIGHT_KEYSET = ImmutableSet.of("weight");
@@ -27,11 +28,18 @@ public class Checker {
         return keys.containsAll(PATIENT_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
     }
 
-    public static boolean medicMapValidation(Map<String, ?> map) {
-        map.keySet().retainAll(MEDIC_KEYSET);
+    public static boolean medicPostMapValidation(Map<String, ?> map) {
+        map.keySet().retainAll(POST_MEDIC_KEYSET);
         Set<String> keys = map.keySet();
 
-        return keys.containsAll(MEDIC_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
+        return keys.containsAll(POST_MEDIC_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
+    }
+
+    public static boolean medicPutMapValidation(Map<String, ?> map) {
+        map.keySet().retainAll(PUT_MEDIC_KEYSET);
+        Set<String> keys = map.keySet();
+
+        return keys.containsAll(PUT_MEDIC_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
     }
 
     public static boolean loginDataMapValidation(Map<String, ?> map) {
