@@ -8,6 +8,7 @@ public class LinksBuilder {
         json.append("\"links\": [ ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/tasks", "patient/tasks", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weights", "patient/weights", "GET")).append(", ");
+        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/thresholds", "patient/thresholds", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/initial_data", "patient/initial_data", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/medics", "patient/medics", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/messages", "patient/messages", "GET")).append(", ");

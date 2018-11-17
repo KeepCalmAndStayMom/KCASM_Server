@@ -51,6 +51,8 @@ public class ApiPatient {
 
                 new ApiWeights();
 
+                new ApiThresholds();
+
             });
         });
     }
