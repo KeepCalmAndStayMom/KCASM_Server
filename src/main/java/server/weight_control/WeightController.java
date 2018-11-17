@@ -1,5 +1,6 @@
 package server.weight_control;
 
+import server.database.v2.MedicDB;
 import server.database.v2.MedicHasPatientDB;
 import server.database.v2.MessageMedicPatientDB;
 import server.evidence_filter.EvidenceFilterInterface;
@@ -97,13 +98,13 @@ public class WeightController {
                 map.put("medic_sender", false);
                 MessageMedicPatientDB.insert(map);
 
-                /*if((Boolean) map.get("email_notify")) {
-                    map = LoginDB.selectMedic(medicId);
+                /*
+                map = MedicDB.select(medicId);
+                if((Boolean) map.get("email_notify")) {
                     EmailNotificator.sendEmail(msg, String.valueOf(map.get("email")));
                 }
 
                 if((Boolean) map.get("sms_notify")) {
-                    map = MedicDB.select(medicId);
                     SMSNotificator.sendSMS(msg, String.valueOf(map.get("phone")));
                 }*/
             }
