@@ -36,7 +36,7 @@ public class ApiThresholds {
             }
 
             response.status(404);
-            return "ERRORE";
+            return "";
         });
     }
 

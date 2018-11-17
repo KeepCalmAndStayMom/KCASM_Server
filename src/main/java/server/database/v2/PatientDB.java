@@ -29,6 +29,8 @@ public class PatientDB {
             map.put("phone", rs.getString("phone"));
             map.put("address_home", rs.getString("address_home"));
             map.put("address_hospital", rs.getString("address_hospital"));
+            map.put("email_notify", rs.getBoolean("email_notify"));
+            map.put("sms_notify", rs.getBoolean("sms_notify"));
 
             return map;
         } catch (SQLException e) {
@@ -38,7 +40,7 @@ public class PatientDB {
     }
 
     static public boolean update(Map<String, Object> map) {
-        final String sql = "UPDATE Patient SET name=?, surname=?, age=?, phone=?, address_home=?, address_hospital=? WHERE id=?";
+        final String sql = "UPDATE Patient SET name=?, surname=?, age=?, phone=?, address_home=?, address_hospital=?, email_notify=?, sms_notify=? WHERE id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -49,7 +51,9 @@ public class PatientDB {
             st.setString(4, String.valueOf(map.get("phone")));
             st.setString(5, String.valueOf(map.get("address_home")));
             st.setString(6, String.valueOf(map.get("address_hospital")));
-            st.setInt(7, (Integer) map.get("id"));
+            st.setBoolean(7, (boolean) map.get("email_notify"));
+            st.setBoolean(8, (boolean) map.get("sms_notify"));
+            st.setInt(9, (Integer) map.get("id"));
 
 
             if(st.executeUpdate() != 0) {
@@ -65,7 +69,7 @@ public class PatientDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Patient(name, surname, age, phone, address_home, address_hospital) VALUES (?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Patient(name, surname, age, phone, address_home, address_hospital, email_notify, sms_notify) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -76,6 +80,8 @@ public class PatientDB {
             st.setString(4, String.valueOf(map.get("phone")));
             st.setString(5, String.valueOf(map.get("address_home")));
             st.setString(6, String.valueOf(map.get("address_hospital")));
+            st.setBoolean(7, (boolean) map.get("email_notify"));
+            st.setBoolean(8, (boolean) map.get("sms_notify"));
             st.executeUpdate();
             conn.close();
             return true;

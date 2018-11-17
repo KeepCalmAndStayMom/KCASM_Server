@@ -26,8 +26,6 @@ public class LoginDB {
             map.put("patient_id", rs.getInt("patient_id"));
             map.put("email", rs.getString("email"));
             map.put("password", rs.getString("password"));
-            map.put("email_notify", rs.getBoolean("email_notify"));
-            map.put("sms_notify", rs.getBoolean("sms_notify"));
 
             return map;
         } catch (SQLException e) {
@@ -50,8 +48,6 @@ public class LoginDB {
             map.put("medic_id", rs.getInt("medic_id"));
             map.put("email", rs.getString("email"));
             map.put("password", rs.getString("password"));
-            map.put("email_notify", rs.getBoolean("email_notify"));
-            map.put("sms_notify", rs.getBoolean("sms_notify"));
 
             return map;
         } catch (SQLException e) {
@@ -61,16 +57,14 @@ public class LoginDB {
     }
 
     static public boolean updatePatient(Map<String, Object> map) {
-        final String sql = "UPDATE Login SET email=?, password=?, email_notify=?, sms_notify=? WHERE patient_id=?";
+        final String sql = "UPDATE Login SET email=?, password=? WHERE patient_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
-            st.setBoolean(3, (Boolean) map.get("email_notify"));
-            st.setBoolean(4, (Boolean) map.get("sms_notify"));
-            st.setInt(5, (Integer) map.get("patient_id"));
+            st.setInt(3, (Integer) map.get("patient_id"));
 
             if(st.executeUpdate() != 0) {
                 conn.close();
@@ -86,16 +80,14 @@ public class LoginDB {
     }
 
     static public boolean updateMedic(Map<String, Object> map) {
-        final String sql = "UPDATE Login SET email=?, password=?, email_notify=?, sms_notify=? WHERE medic_id=?";
+        final String sql = "UPDATE Login SET email=?, password=? WHERE medic_id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, String.valueOf(map.get("email")));
             st.setString(2, String.valueOf(map.get("password")));
-            st.setBoolean(3, (Boolean) map.get("email_notify"));
-            st.setBoolean(4, (Boolean) map.get("sms_notify"));
-            st.setInt(5, (Integer) map.get("medic_id"));
+            st.setInt(3, (Integer) map.get("medic_id"));
 
             if(st.executeUpdate() != 0) {
                 conn.close();
@@ -110,7 +102,7 @@ public class LoginDB {
     }
 
     static public boolean insert(Map<String, Object> map) {
-        final String sql = "INSERT INTO Login(email, password, patient_id, medic_id, email_notify, sms_notify) VALUES (?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Login(email, password, patient_id, medic_id) VALUES (?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -128,8 +120,6 @@ public class LoginDB {
             else
                 st.setNull(4, Types.INTEGER);
 
-            st.setBoolean(5, (Boolean) map.get("email_notify"));
-            st.setBoolean(6, (Boolean) map.get("sms_notify"));
             st.executeUpdate();
             conn.close();
             return true;
