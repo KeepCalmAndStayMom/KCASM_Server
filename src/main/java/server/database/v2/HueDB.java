@@ -21,7 +21,7 @@ public class HueDB {
             map.put("chromotherapy", rs.getString("chromotherapy"));
             list.add(map);
         }
-
+        conn.close();
         return list;
     }
 
@@ -120,7 +120,7 @@ public class HueDB {
                     map.put(chromotherapy, 0);
 
             }
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();

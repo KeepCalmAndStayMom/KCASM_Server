@@ -28,7 +28,7 @@ public class FitbitDB {
             map.put("minutes_awake", rs.getInt("minutes_awake"));
             list.add(map);
         }
-
+        conn.close();
         return list;
     }
 

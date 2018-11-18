@@ -26,7 +26,7 @@ public class MedicHasPatientDB {
             while(rs.next()) {
                 list.add(rs.getInt("patient_id"));
             }
-
+            conn.close();
             return list;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class MedicHasPatientDB {
             while(rs.next()) {
                 list.add(rs.getInt("medic_id"));
             }
-
+            conn.close();
             return list;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,9 +84,11 @@ public class MedicHasPatientDB {
             st.setInt(2, medic_id);
             ResultSet rs = st.executeQuery();
 
-            if(rs.next())
+            if(rs.next()) {
+                conn.close();
                 return true;
-
+            }
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

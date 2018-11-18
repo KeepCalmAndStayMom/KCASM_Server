@@ -18,12 +18,15 @@ public class BMIDB {
             ResultSet rs = st.executeQuery();
             List<String> list = new LinkedList<>();
 
+
             while(rs.next())
                 list.add(rs.getString("bmi"));
 
+            conn.close();
             return list;
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
         return null;
     }

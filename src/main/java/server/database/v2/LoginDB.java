@@ -26,7 +26,7 @@ public class LoginDB {
             map.put("patient_id", rs.getInt("patient_id"));
             map.put("email", rs.getString("email"));
             map.put("password", rs.getString("password"));
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class LoginDB {
             map.put("medic_id", rs.getInt("medic_id"));
             map.put("email", rs.getString("email"));
             map.put("password", rs.getString("password"));
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,7 +149,7 @@ public class LoginDB {
                     map.put("medic_id", rs.getInt("medic_id"));
             }
 
-
+            conn.close();
             return map;
         }
         catch (SQLException e) {

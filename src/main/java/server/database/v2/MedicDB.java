@@ -28,7 +28,7 @@ public class MedicDB {
             map.put("specialization", rs.getString("specialization"));
             map.put("email_notify", rs.getBoolean("email_notify"));
             map.put("sms_notify", rs.getBoolean("sms_notify"));
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,7 +124,7 @@ public class MedicDB {
 
                 list.add(patient);
             }
-
+            conn.close();
             return list;
 
         } catch(SQLException e) {

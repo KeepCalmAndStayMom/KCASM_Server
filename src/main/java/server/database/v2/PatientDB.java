@@ -31,7 +31,7 @@ public class PatientDB {
             map.put("address_hospital", rs.getString("address_hospital"));
             map.put("email_notify", rs.getBoolean("email_notify"));
             map.put("sms_notify", rs.getBoolean("sms_notify"));
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,7 +131,7 @@ public class PatientDB {
 
                 list.add(medic);
             }
-
+            conn.close();
             return list;
 
         } catch(SQLException e) {

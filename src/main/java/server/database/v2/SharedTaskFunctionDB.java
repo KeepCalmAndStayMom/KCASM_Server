@@ -29,7 +29,7 @@ public class SharedTaskFunctionDB {
             map.put("executed", rs.getBoolean("executed"));
             list.add(map);
         }
-
+        conn.close();
         return list;
     }
 
@@ -54,7 +54,7 @@ public class SharedTaskFunctionDB {
             //st.setInt(1, patientId);
             st.setString(1, date);
 
-            return SharedTaskFunctionDB.getListTask(st.executeQuery());
+            return getListTask(st.executeQuery());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -138,7 +138,7 @@ public class SharedTaskFunctionDB {
             st.setString(1, startdate);
             st.setString(2, enddate);
 
-            return SharedTaskFunctionDB.getListTask(st.executeQuery());
+            return getListTask(st.executeQuery());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -223,7 +223,7 @@ public class SharedTaskFunctionDB {
         map.put("description", rs.getString("description"));
         map.put("starting_program", rs.getBoolean("starting_program"));
         map.put("executed", rs.getBoolean("executed"));
-
+        conn.close();
         return map;
     }
 

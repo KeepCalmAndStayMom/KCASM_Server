@@ -99,7 +99,7 @@ public class WeightController {
                 map.put("medic_sender", false);
                 MessageMedicPatientDB.insert(map);
 
-
+/*
                 map = MedicDB.select(medicId);
                 if((Boolean) map.get("email_notify")) {
                     Map<String, Object> map2 = LoginDB.selectMedic(medicId);
@@ -108,7 +108,7 @@ public class WeightController {
 
                 if((Boolean) map.get("sms_notify")) {
                     SMSNotificator.sendSMS(msg, String.valueOf(map.get("phone")));
-                }
+                }*/
             }
         }
     }

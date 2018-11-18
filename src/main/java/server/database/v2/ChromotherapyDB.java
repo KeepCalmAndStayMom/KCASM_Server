@@ -21,6 +21,7 @@ public class ChromotherapyDB {
             while(rs.next())
                 list.add(rs.getString("chromotherapy"));
 
+            conn.close();
             return list;
         } catch (SQLException e) {
             e.printStackTrace();

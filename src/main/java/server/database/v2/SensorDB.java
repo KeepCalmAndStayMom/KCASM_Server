@@ -23,7 +23,7 @@ public class SensorDB {
             map.put("humidity", rs.getDouble("humidity"));
             list.add(map);
         }
-
+        conn.close();
         return list;
     }
 
@@ -119,7 +119,7 @@ public class SensorDB {
             map.put("temperature", rs.getDouble("temperature"));
             map.put("luminescence", rs.getDouble("luminescence"));
             map.put("humidity", rs.getDouble("humidity"));
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -27,7 +27,7 @@ public class PatientInitialDB {
             map.put("height", rs.getDouble("height"));
             map.put("bmi", rs.getString("bmi"));
             map.put("twin", rs.getBoolean("twin"));
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();

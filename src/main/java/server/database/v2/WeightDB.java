@@ -29,7 +29,7 @@ public class WeightDB {
             while(rs.next()) {
                 map.put(rs.getString("date"), rs.getDouble("weight"));
             }
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,7 +57,7 @@ public class WeightDB {
 
                 list.add(map);
             }
-
+            conn.close();
             return list;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,7 +87,7 @@ public class WeightDB {
 
                 list.add(map);
             }
-
+            conn.close();
             return list;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,7 +111,7 @@ public class WeightDB {
             map.put("patient_id", rs.getInt("patient_id"));
             map.put("date", rs.getString("date"));
             map.put("weight", rs.getString("weight"));
-
+            conn.close();
             return map;
         } catch (SQLException e) {
             e.printStackTrace();

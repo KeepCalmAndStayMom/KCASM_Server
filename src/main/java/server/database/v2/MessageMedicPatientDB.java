@@ -34,7 +34,7 @@ public class MessageMedicPatientDB {
                 map.put("read", rs.getBoolean("read"));
                 list.add(map);
             }
-
+            conn.close();
             return list;
         } catch (SQLException e) {
             e.printStackTrace();
