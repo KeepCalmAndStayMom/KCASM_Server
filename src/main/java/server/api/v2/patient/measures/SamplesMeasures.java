@@ -34,7 +34,7 @@ public class SamplesMeasures {
                 query = SensorDB.selectDate(patientId, date);
                 links = MeasuresLinks.sensorLinks(patientId, "samples", date);
             }
-            else if(startdate != null && enddate != null && (startdate.matches(Regex.DATE_REGEX) || startdate.matches(Regex.TIMEDATE_REGEX)) && (enddate.matches(Regex.DATE_REGEX) || enddate.matches(Regex.TIMEDATE_REGEX))) {
+            else if(startdate != null && enddate != null && (startdate.matches(Regex.DATE_REGEX) || startdate.matches(Regex.URL_TIMEDATE_REGEX)) && (enddate.matches(Regex.DATE_REGEX) || enddate.matches(Regex.URL_TIMEDATE_REGEX))) {
                 query = SensorDB.selectDateInterval(patientId, startdate, enddate);
                 links = MeasuresLinks.sensorLinks(patientId, "samples", startdate, enddate);
             }
@@ -69,7 +69,7 @@ public class SamplesMeasures {
                 query = HueDB.selectDate(patientId, date);
                 links = MeasuresLinks.hueLinks(patientId, "samples", date);
             }
-            else if(startdate != null && enddate != null && (startdate.matches(Regex.DATE_REGEX) || startdate.matches(Regex.TIMEDATE_REGEX)) && (enddate.matches(Regex.DATE_REGEX) || enddate.matches(Regex.TIMEDATE_REGEX))) {
+            else if(startdate != null && enddate != null && (startdate.matches(Regex.DATE_REGEX) || startdate.matches(Regex.URL_TIMEDATE_REGEX)) && (enddate.matches(Regex.DATE_REGEX) || enddate.matches(Regex.URL_TIMEDATE_REGEX))) {
                 query = HueDB.selectDateInterval(patientId, startdate, enddate);
                 links = MeasuresLinks.hueLinks(patientId, "samples", startdate, enddate);
             }
@@ -100,16 +100,20 @@ public class SamplesMeasures {
             String date = request.queryParams("date");
             String startdate = request.queryParams("startdate");
             String enddate = request.queryParams("enddate");
+            System.out.println(startdate + " " + enddate);
 
             if(date != null && date.matches(Regex.DATE_REGEX)) {
+                System.out.println("DATA");
                 query = FitbitDB.selectDate(patientId, date);
                 links = MeasuresLinks.fitbitLinks(patientId, "samples", date);
             }
-            else if(startdate != null && enddate != null && (startdate.matches(Regex.DATE_REGEX) || startdate.matches(Regex.TIMEDATE_REGEX)) && (enddate.matches(Regex.DATE_REGEX) || enddate.matches(Regex.TIMEDATE_REGEX))) {
+            else if(startdate != null && enddate != null && (startdate.matches(Regex.DATE_REGEX) || startdate.matches(Regex.URL_TIMEDATE_REGEX)) && (enddate.matches(Regex.DATE_REGEX) || enddate.matches(Regex.URL_TIMEDATE_REGEX))) {
+                System.out.println("INTERVALLO");
                 query = FitbitDB.selectDateInterval(patientId, startdate, enddate);
                 links = MeasuresLinks.fitbitLinks(patientId, "samples", startdate, enddate);
             }
             else {
+                System.out.println("NO FILTRI");
                 query = FitbitDB.select(patientId);
                 links = MeasuresLinks.fitbitLinks(patientId, "samples");
             }

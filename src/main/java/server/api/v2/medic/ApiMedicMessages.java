@@ -92,7 +92,7 @@ public class ApiMedicMessages {
                 response.status(200);
                 response.type("application/json");
 
-                return "{ " + JsonBuilder.jsonList("messages-received", query, links, "message", "medic", "received").toString() + " }";
+                return "{ " + JsonBuilder.jsonList("messages_received", query, links, "message", "medic", "received").toString() + " }";
             }
 
             response.status(404);
@@ -139,7 +139,7 @@ public class ApiMedicMessages {
                 response.status(200);
                 response.type("application/json");
 
-                return "{ " + JsonBuilder.jsonList("messages-sent", query, links, "message", "medic", "sent").toString() + " }";
+                return "{ " + JsonBuilder.jsonList("messages_sent", query, links, "message", "medic", "sent").toString() + " }";
             }
 
             response.status(404);
@@ -154,9 +154,10 @@ public class ApiMedicMessages {
                 Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
                 if(Checker.medicMessageMapValidation(map)) {
-                    map.put("medic_id", Double.parseDouble(request.params("medic_id")));
+                    map.replace("medic_id", ((Double)map.get("medic_id")).intValue());
+                    map.put("medic_id", Integer.parseInt(request.params("medic_id")));
                     map.put("medic_sender", true);
-                    if(MedicHasPatientDB.checkMedicPatientAssociation(((Double) map.get("patient_id")).intValue(), ((Double) map.get("medic_id")).intValue())) {
+                    if(MedicHasPatientDB.checkMedicPatientAssociation((int) map.get("patient_id"), (int) map.get("medic_id"))) {
                         if(MessageMedicPatientDB.insert(map)) {
                             response.status(201);
                             return "OK";

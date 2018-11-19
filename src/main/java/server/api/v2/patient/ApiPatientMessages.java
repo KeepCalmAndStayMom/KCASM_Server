@@ -79,7 +79,7 @@ public class ApiPatientMessages {
                     response.status(200);
                     response.type("application/json");
 
-                    return "{ " + JsonBuilder.jsonList("messages-received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, date, null), "message","patient", "received").toString() + " }";
+                    return "{ " + JsonBuilder.jsonList("messages_received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, date, null), "message","patient", "received").toString() + " }";
                 }
             }
             else {
@@ -89,7 +89,7 @@ public class ApiPatientMessages {
                     response.status(200);
                     response.type("application/json");
 
-                    return "{ " + JsonBuilder.jsonList("messages-received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, startdate, enddate), "message","patient", "received").toString() + " }";
+                    return "{ " + JsonBuilder.jsonList("messages_received", list, LinksBuilder.messagesLinks(patientId, "patient", "received", medic_id, startdate, enddate), "message","patient", "received").toString() + " }";
                 }
             }
 
@@ -124,7 +124,7 @@ public class ApiPatientMessages {
                     response.status(200);
                     response.type("application/json");
 
-                    return "{ " + JsonBuilder.jsonList("messages-sent", list, LinksBuilder.messagesLinks(patientId, "patient", "sent", medic_id, date, null), "message","patient", "sent").toString() + " }";
+                    return "{ " + JsonBuilder.jsonList("messages_sent", list, LinksBuilder.messagesLinks(patientId, "patient", "sent", medic_id, date, null), "message","patient", "sent").toString() + " }";
                 }
             }
             else {
@@ -134,7 +134,7 @@ public class ApiPatientMessages {
                     response.status(200);
                     response.type("application/json");
 
-                    return "{ " + JsonBuilder.jsonList("messages-sent", list, LinksBuilder.messagesLinks(patientId, "patient", "sent", medic_id, startdate, enddate), "message","patient", "sent").toString() + " }";
+                    return "{ " + JsonBuilder.jsonList("messages_sent", list, LinksBuilder.messagesLinks(patientId, "patient", "sent", medic_id, startdate, enddate), "message","patient", "sent").toString() + " }";
                 }
             }
 
@@ -150,10 +150,11 @@ public class ApiPatientMessages {
                 Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
                 if(map != null && Checker.patientMessageMapValidation(map)) {
-                    map.put("patient_id", Double.parseDouble(request.params("patient_id")));
+                    map.replace("medic_id", ((Double)map.get("medic_id")).intValue());
+                    map.put("patient_id", Integer.parseInt(request.params("patient_id")));
                     map.put("medic_sender", false);
 
-                    if(MedicHasPatientDB.checkMedicPatientAssociation(((Double) map.get("patient_id")).intValue(), ((Double) map.get("medic_id")).intValue())) {
+                    if(MedicHasPatientDB.checkMedicPatientAssociation((int) map.get("patient_id"), (int) map.get("medic_id"))) {
                         if(MessageMedicPatientDB.insert(map)) {
                             response.status(201);
                             return "OK";
