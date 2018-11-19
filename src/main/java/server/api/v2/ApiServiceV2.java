@@ -14,6 +14,7 @@ public class ApiServiceV2 {
     public ApiServiceV2() {
         new ApiPatient();
         new ApiMedic();
+        new ApiTaskCategories();
         login();
     }
 
