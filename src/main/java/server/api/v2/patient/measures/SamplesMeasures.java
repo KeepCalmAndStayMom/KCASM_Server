@@ -47,7 +47,7 @@ public class SamplesMeasures {
                 response.status(200);
                 response.type("application/json");
 
-                return "{ " + JsonBuilder.jsonList("sensor-samples", query, links, "test").toString() + " }";
+                return "{ " + JsonBuilder.jsonList("sensor_samples", query, links, "test").toString() + " }";
             }
 
             response.status(404);
@@ -82,7 +82,7 @@ public class SamplesMeasures {
                 response.status(200);
                 response.type("application/json");
 
-                return "{ " + JsonBuilder.jsonList("hue-samples", query, links, "test").toString() + " }";
+                return "{ " + JsonBuilder.jsonList("hue_samples", query, links, "test").toString() + " }";
             }
 
             response.status(404);
@@ -118,7 +118,7 @@ public class SamplesMeasures {
                 response.status(200);
                 response.type("application/json");
 
-                return "{ " + JsonBuilder.jsonList("fitbit-samples", query, links, "test").toString() + " }";
+                return "{ " + JsonBuilder.jsonList("fitbit_samples", query, links, "test").toString() + " }";
             }
 
             response.status(404);

@@ -65,7 +65,7 @@ public class TotalMeasures {
 
                 if(list != null && list.size() > 0) {
                     for(Map m : list) {
-                        if((Integer) m.get("avg_heartbeats") != 0) {
+                        if(m.get("avg_heartbeats") != null) {
                             avgHeartbeat += (Integer) m.get("avg_heartbeats");
                             count ++;
                         }

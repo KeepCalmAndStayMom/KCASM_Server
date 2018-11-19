@@ -18,7 +18,10 @@ public class FitbitDB {
             map = new LinkedHashMap<>();
             map.put("patient_id", rs.getInt("patient_id"));
             map.put("timedate", rs.getString("timedate"));
-            map.put("avg_heartbeats", rs.getInt("avg_heartbeats"));
+            if(rs.getInt("avg_heartbeats") == 0)
+                map.put("avg_heartbeats", null);
+            else
+                map.put("avg_heartbeats", rs.getInt("avg_heartbeats"));
             map.put("calories", rs.getInt("calories"));
             map.put("elevation", rs.getDouble("elevation"));
             map.put("floors", rs.getInt("floors"));
