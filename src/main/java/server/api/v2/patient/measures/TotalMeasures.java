@@ -60,14 +60,21 @@ public class TotalMeasures {
 
             if(date != null && date.matches(Regex.DATE_REGEX)) {
                 Integer avgHeartbeat = 0;
+                Integer count = 0;
                 List<Map<String, Object>> list = FitbitDB.selectDate(patientId, date);
 
                 if(list != null && list.size() > 0) {
                     for(Map m : list) {
-                        if(m.get("avg_heartbeats") != null)
+                        if((Integer) m.get("avg_heartbeats") != 0) {
                             avgHeartbeat += (Integer) m.get("avg_heartbeats");
+                            count ++;
+                        }
                     }
-                    avgHeartbeat /= list.size();
+
+                    if(count != 0)
+                        avgHeartbeat /= count;
+                    else
+                        avgHeartbeat = null;
 
                     Map<String, Object> map = new LinkedHashMap<>();
                     map.put("avg_heartbeats", avgHeartbeat);
