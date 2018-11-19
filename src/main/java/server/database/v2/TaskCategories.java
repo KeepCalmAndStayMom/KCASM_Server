@@ -28,6 +28,7 @@ public class TaskCategories {
             while(rs.next()) {
                 result.add(rs.getString("name"));
             }
+            conn.close();
 
             return result;
         }

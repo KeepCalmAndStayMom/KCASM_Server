@@ -1,6 +1,7 @@
 package server.api.v2;
 
 import server.api.v2.medic.ApiMedic;
+import server.api.v2.patient.ApiChromotherapyTypes;
 import server.api.v2.patient.ApiPatient;
 import server.database.v2.LoginDB;
 import static spark.Spark.*;
@@ -15,6 +16,8 @@ public class ApiServiceV2 {
         new ApiPatient();
         new ApiMedic();
         new ApiTaskCategories();
+        new ApiBMI();
+        new ApiChromotherapyTypes();
         login();
     }
 

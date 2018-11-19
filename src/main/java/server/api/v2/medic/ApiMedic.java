@@ -6,6 +6,7 @@ import server.api.v2.JsonBuilder;
 import server.api.v2.links.LinksBuilder;
 import server.database.v2.MedicDB;
 import server.database.v2.MedicHasPatientDB;
+import server.database.v2.SpecializationDB;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class ApiMedic {
     private void apiMedic() {
         path(baseURL + "/medics", () -> {
             addMedic();
+            getMedicSpecialization();
 
             path("/:medic_id", () -> {
                 getMedicData();
@@ -40,6 +42,23 @@ public class ApiMedic {
                 new ApiMedicLoginData();
             });
         });
+    }
+
+    private void getMedicSpecialization() {
+        get("/specializations", (request, response) -> {
+            List specializations = SpecializationDB.select();
+
+            if(specializations != null && specializations.size() > 0) {
+                response.status(200);
+                response.type("application/json");
+
+                return specializations;
+            }
+
+            response.status(404);
+            return "";
+        }, gson::toJson);
+
     }
 
     private void addPatientToMedic() {
