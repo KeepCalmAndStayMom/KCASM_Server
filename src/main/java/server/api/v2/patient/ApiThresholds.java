@@ -4,7 +4,9 @@ import server.api.v2.JsonBuilder;
 import server.database.v2.PatientInitialDB;
 import server.retrieve_data.SogliePeso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
@@ -26,8 +28,21 @@ public class ApiThresholds {
                 String bmi = (String) initialData.get("bmi");
                 boolean twin = (boolean) initialData.get("twin");
 
-                thresholds.put("min", SogliePeso.getListSogliaMin(bmi, twin));
-                thresholds.put("max", SogliePeso.getListSogliaMax(bmi, twin));
+                double startPeso = (double) initialData.get("weight");
+
+                List min = new ArrayList();
+                List max = new ArrayList();
+
+                for(double d : SogliePeso.getListSogliaMin(bmi, twin)) {
+                    min.add(startPeso + d);
+                }
+
+                for(double d : SogliePeso.getListSogliaMax(bmi, twin)) {
+                    max.add(startPeso + d);
+                }
+
+                thresholds.put("min", min);
+                thresholds.put("max", max);
 
                 response.status(200);
                 response.type("application/json");
