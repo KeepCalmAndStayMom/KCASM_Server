@@ -62,8 +62,6 @@ public class FitbitDB {
         if(endTimedate.matches(Regex.DATE_REGEX))
             endTimedate += "T23:59:59";
 
-        System.out.println(startTimedate + " " + endTimedate);
-
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);

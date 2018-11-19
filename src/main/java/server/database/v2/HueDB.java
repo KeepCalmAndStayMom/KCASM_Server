@@ -1,5 +1,7 @@
 package server.database.v2;
 
+import server.api.v2.Regex;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,9 +47,9 @@ public class HueDB {
 
         final String sql = "SELECT * FROM Hue WHERE patient_id=? AND timedate BETWEEN ? AND ?";
 
-        if(startTimedate.length()==10)
+        if(startTimedate.matches(Regex.DATE_REGEX))
             startTimedate += "T00:00:00";
-        if(endTimedate.length()==10)
+        if(endTimedate.matches(Regex.DATE_REGEX))
             endTimedate += "T23:59:59";
 
         try {
