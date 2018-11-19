@@ -89,26 +89,27 @@ public class WeightController {
 
         if(medics!=null && !medics.isEmpty()) {
             for(Integer medicId: medics) {
+                if(medicId!=0) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("medic_id", medicId);
+                    map.put("patient_id", 0);
+                    map.put("timedate", dtf.format(LocalDateTime.now()));
+                    map.put("subject", "Controllo Peso");
+                    map.put("message", msg);
+                    map.put("medic_sender", false);
+                    MessageMedicPatientDB.insert(map);
 
-                Map<String, Object> map = new HashMap<>();
-                map.put("medic_id", medicId);
-                map.put("patient_id", 0);
-                map.put("timedate", dtf.format(LocalDateTime.now()));
-                map.put("subject", "Controllo Peso");
-                map.put("message", msg);
-                map.put("medic_sender", false);
-                MessageMedicPatientDB.insert(map);
+                    /*
+                    map = MedicDB.select(medicId);
+                    if((Boolean) map.get("email_notify")) {
+                        Map<String, Object> map2 = LoginDB.selectMedic(medicId);
+                        EmailNotificator.sendEmail(msg, String.valueOf(map2.get("email")));
+                    }
 
-/*
-                map = MedicDB.select(medicId);
-                if((Boolean) map.get("email_notify")) {
-                    Map<String, Object> map2 = LoginDB.selectMedic(medicId);
-                    EmailNotificator.sendEmail(msg, String.valueOf(map2.get("email")));
+                    if((Boolean) map.get("sms_notify")) {
+                        SMSNotificator.sendSMS(msg, String.valueOf(map.get("phone")));
+                    }*/
                 }
-
-                if((Boolean) map.get("sms_notify")) {
-                    SMSNotificator.sendSMS(msg, String.valueOf(map.get("phone")));
-                }*/
             }
         }
     }
