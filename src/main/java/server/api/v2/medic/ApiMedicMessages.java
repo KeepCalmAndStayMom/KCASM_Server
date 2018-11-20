@@ -154,7 +154,7 @@ public class ApiMedicMessages {
                 Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
                 if(Checker.medicMessageMapValidation(map)) {
-                    map.replace("medic_id", ((Double)map.get("medic_id")).intValue());
+                    map.replace("patient_id", ((Double)map.get("patient_id")).intValue());
                     map.put("medic_id", Integer.parseInt(request.params("medic_id")));
                     map.put("medic_sender", true);
                     if(MedicHasPatientDB.checkMedicPatientAssociation((int) map.get("patient_id"), (int) map.get("medic_id"))) {
