@@ -38,7 +38,7 @@ public class MedicDB {
     }
 
     static public boolean update(Map<String, Object> map) {
-        final String sql = "UPDATE Medic SET name=?, surname=?, age=?, phone=?, specialization=?, email_notify=?, sms_notify=? , address=? WHERE id=?";
+        final String sql = "UPDATE Medic SET name=?, surname=?, age=?, phone=?, email_notify=?, sms_notify=? , address=? WHERE id=?";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -47,11 +47,10 @@ public class MedicDB {
             st.setString(2, String.valueOf(map.get("surname")));
             st.setInt(3, ((Double) map.get("age")).intValue());
             st.setString(4, String.valueOf(map.get("phone")));
-            st.setString(5, String.valueOf(map.get("specialization")));
-            st.setBoolean(6, (boolean) map.get("email_notify"));
-            st.setBoolean(7, (boolean) map.get("sms_notify"));
-            st.setString(8, String.valueOf("address"));
-            st.setInt(9, (Integer) map.get("id"));
+            st.setBoolean(5, (boolean) map.get("email_notify"));
+            st.setBoolean(6, (boolean) map.get("sms_notify"));
+            st.setString(7, String.valueOf("address"));
+            st.setInt(8, (Integer) map.get("id"));
 
 
             if(st.executeUpdate() != 0) {
