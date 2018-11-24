@@ -136,15 +136,16 @@ public class ApiMedic {
             Map<String, Object> query = MedicDB.select(medicId);
 
             if(query != null) {
+                query.put("links", LinksBuilder.medicLinks(medicId));
                 response.status(200);
                 response.type("application/json");
 
-                return JsonBuilder.jsonObject(query, LinksBuilder.medicLinks(medicId)).toString();
+                return query;
             }
 
             response.status(404);
             return "";
-        });
+        }, gson::toJson);
     }
 
     private void addMedic() {

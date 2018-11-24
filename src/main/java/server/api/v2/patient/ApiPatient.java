@@ -131,7 +131,7 @@ public class ApiPatient {
             Map<String, Object> query = PatientDB.select(patientId);
 
             if(query != null) {
-                query.put("links", LinksBuilder.patientLinks2(patientId));
+                query.put("links", LinksBuilder.patientLinks(patientId));
                 response.status(200);
                 response.type("application/json");
 
@@ -141,7 +141,7 @@ public class ApiPatient {
             }
 
             response.status(404);
-            return "Paziente non trovato";
+            return "";
         }, gson::toJson);
     }
 

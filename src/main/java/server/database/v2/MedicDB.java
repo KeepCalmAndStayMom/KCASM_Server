@@ -18,17 +18,20 @@ public class MedicDB {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
-            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+            LinkedHashMap<String, Object> map = null;
 
-            rs.next();
-            map.put("name", rs.getString("name"));
-            map.put("surname", rs.getString("surname"));
-            map.put("age", rs.getInt("age"));
-            map.put("phone", rs.getString("phone"));
-            map.put("specialization", rs.getString("specialization"));
-            map.put("email_notify", rs.getBoolean("email_notify"));
-            map.put("sms_notify", rs.getBoolean("sms_notify"));
-            map.put("address", rs.getString("address"));
+            if(rs.next()) {
+                map = new LinkedHashMap<>();
+                map.put("name", rs.getString("name"));
+                map.put("surname", rs.getString("surname"));
+                map.put("age", rs.getInt("age"));
+                map.put("phone", rs.getString("phone"));
+                map.put("specialization", rs.getString("specialization"));
+                map.put("email_notify", rs.getBoolean("email_notify"));
+                map.put("sms_notify", rs.getBoolean("sms_notify"));
+                map.put("address", rs.getString("address"));
+            }
+
             conn.close();
             return map;
         } catch (SQLException e) {

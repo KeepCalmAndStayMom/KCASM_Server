@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class LinksBuilder {
 
-    @Deprecated
+    /*@Deprecated
     public static String patientLinks(int patientId) {
         StringBuilder json = new StringBuilder();
 
@@ -23,9 +23,9 @@ public class LinksBuilder {
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "self", "PUT")).append(" ]");
 
         return json.toString();
-    }
+    }*/
 
-    public static List<Map<String, String>> patientLinks2(int patientId) {
+    public static List<Map<String, String>> patientLinks(int patientId) {
         List<Map<String, String>> links = new ArrayList<>();
 
         links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/tasks", "patient/tasks", "GET"));
@@ -41,7 +41,7 @@ public class LinksBuilder {
         return links;
     }
 
-    public static String medicLinks(int medicId) {
+    /*public static String medicLinks(int medicId) {
         StringBuilder json = new StringBuilder();
 
         json.append("\"links\": [ ");
@@ -52,7 +52,20 @@ public class LinksBuilder {
         json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId, "self", "PUT")).append(" ]");
 
         return json.toString();
+    }*/
+
+    public static List<Map<String, String>> medicLinks(int medicId) {
+        List<Map<String, String>> links = new ArrayList<>();
+
+        links.add(Link.linkMap("http://localhost:4567/api/v2/medics/" + medicId + "/patients", "medic/patients", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/medics/" + medicId + "/tasks", "medic/tasks", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/medics/" + medicId + "/messages", "medic/messages", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/medics/" + medicId + "/login_data", "medic/login_data", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/medics/" + medicId, "self", "PUT"));
+
+        return links;
     }
+
 
     public static String medicListLink(int medicId) {
         StringBuilder json = new StringBuilder();
