@@ -64,12 +64,14 @@ public class ApiPatientMessages {
             String timedate = request.queryParams("timedate");
 
             if(timedate != null) {
-                Map<String, Object> map = MessageMedicPatientDB.selectSingleMessage(patientId, Integer.parseInt(medic_id), timedate.replace("T", " "));
+                Map<String, Object> message = MessageMedicPatientDB.selectSingleMessage(patientId, Integer.parseInt(medic_id), timedate.replace("T", " "));
 
-                if(map != null) {
+                if(message != null) {
+                    message.put("link", LinksBuilder.singleMessage(patientId, "patient", "received", Integer.parseInt(medic_id), timedate));
                     response.status(200);
                     response.type("application/json");
-                    return JsonBuilder.jsonObject(map, LinksBuilder.singleMessage(patientId, "patient", "received", Integer.parseInt(medic_id), timedate)).toString();
+                    /*return JsonBuilder.jsonObject(map, LinksBuilder.singleMessage(patientId, "patient", "received", Integer.parseInt(medic_id), timedate)).toString();*/
+                    return gson.toJson(message);
                 }
             }
             else if(date != null) {
@@ -109,12 +111,14 @@ public class ApiPatientMessages {
             String timedate = request.queryParams("timedate");
 
             if(timedate != null) {
-                Map<String, Object> map = MessageMedicPatientDB.selectSingleMessage(patientId, Integer.parseInt(medic_id), timedate.replace("T", " "));
+                Map<String, Object> message = MessageMedicPatientDB.selectSingleMessage(patientId, Integer.parseInt(medic_id), timedate.replace("T", " "));
 
-                if(map != null) {
+                if(message != null) {
+                    message.put("link", LinksBuilder.singleMessage(patientId, "patient", "sent", Integer.parseInt(medic_id), timedate));
                     response.status(200);
                     response.type("application/json");
-                    return JsonBuilder.jsonObject(map, LinksBuilder.singleMessage(patientId, "patient", "sent", Integer.parseInt(medic_id), timedate)).toString();
+                    /*return JsonBuilder.jsonObject(message, LinksBuilder.singleMessage(patientId, "patient", "sent", Integer.parseInt(medic_id), timedate)).toString();*/
+                    return gson.toJson(message);
                 }
             }
             else if(date != null) {
@@ -175,17 +179,17 @@ public class ApiPatientMessages {
     private void showCategoriesMessages() {
         get("", (request, response) -> {
             int patientId = Integer.parseInt(request.params("patient_id"));
-            String r = JsonBuilder.jsonList(null, null, LinksBuilder.messagesCategoryLinks(patientId, "patient"), null, null).toString();
+            List<Map<String, String>> links = LinksBuilder.messagesCategoryLinks(patientId,"patient");
 
-            if(r != "") {
+            if(links != null) {
                 response.status(200);
                 response.type("application/json");
 
-                return r;
+                return links;
             }
 
             response.status(404);
             return "";
-        });
+        }, gson::toJson);
     }
 }

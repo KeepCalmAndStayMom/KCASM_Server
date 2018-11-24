@@ -134,13 +134,22 @@ public class LinksBuilder {
         return json.toString();
     }
 
-    public static String messagesCategoryLinks(int id, String type) {
+    /*public static String messagesCategoryLinks(int id, String type) {
         StringBuilder json = new StringBuilder();
 
         json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/received", type + "/messages/received", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/sent", type + "/messages/sent", "GET"));
 
         return json.toString();
+    }*/
+
+    public static List<Map<String, String>> messagesCategoryLinks(int id, String type) {
+        List<Map<String, String>> links = new ArrayList<>();
+
+        links.add(Link.linkMap("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/received", type + "/messages/received", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/sent", type + "/messages/sent", "GET"));
+
+        return links;
     }
 
     public static String messagesLinks(int id, String type, String category, String id2, String startdate, String enddate) {
@@ -196,7 +205,7 @@ public class LinksBuilder {
         return json.toString();
     }
 
-    public static String singleMessage(int id, String type, String category, int id2 , String timedate) {
+    /*public static String singleMessage(int id, String type, String category, int id2 , String timedate) {
         StringBuilder json = new StringBuilder();
 
         json.append("\"link\": ");
@@ -206,5 +215,14 @@ public class LinksBuilder {
             json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?patient_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "PUT"));
 
         return json.toString();
+    }*/
+
+    public static Map<String, String> singleMessage(int id, String type, String category, int id2 , String timedate) {
+
+        if(type.equals("patient"))
+            return Link.linkMap("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?medic_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "PUT");
+
+        return Link.linkMap("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?patient_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "PUT");
+
     }
 }
