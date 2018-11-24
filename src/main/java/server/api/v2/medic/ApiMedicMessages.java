@@ -35,12 +35,12 @@ public class ApiMedicMessages {
     private void setMessageAsRead() {
         put("/received", (request, response) -> {
             Map<String, Object> map = new LinkedHashMap<>();
-            String timedate = request.queryParams("timedate").replace("T", " ");
+            String timedate = request.queryParams("timedate");
 
-            if(timedate.matches(Regex.TIMEDATE_REGEX)) {
+            if(timedate.matches(Regex.URL_TIMEDATE_REGEX)) {
                 map.put("patient_id", Integer.parseInt(request.queryParams("patient_id")));
                 map.put("medic_id", Integer.parseInt(request.params("medic_id")));
-                map.put("timedate", timedate);
+                map.put("timedate", timedate.replace("T", " "));
 
                 if(MessageMedicPatientDB.setMessageAsRead(map)) {
                     response.status(200);

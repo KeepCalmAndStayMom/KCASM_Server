@@ -35,12 +35,12 @@ public class ApiPatientMessages {
     private void setReceivedMessageAsRead() {
         put("/received", (request, response) -> {
             Map<String, Object> map = new LinkedHashMap<>();
-            String timedate = request.queryParams("timedate").replace("T", " ");
+            String timedate = request.queryParams("timedate");
 
-            if(timedate.matches(Regex.TIMEDATE_REGEX)) {
+            if(timedate.matches(Regex.URL_TIMEDATE_REGEX)) {
                 map.put("patient_id", Integer.parseInt(request.params("patient_id")));
                 map.put("medic_id", Integer.parseInt(request.queryParams("medic_id")));
-                map.put("timedate", timedate);
+                map.put("timedate", timedate.replace("T", " "));
 
                 if(MessageMedicPatientDB.setMessageAsRead(map)) {
                     response.status(200);
@@ -70,7 +70,7 @@ public class ApiPatientMessages {
                     message.put("link", LinksBuilder.singleMessage(patientId, "patient", "received", Integer.parseInt(medic_id), timedate));
                     response.status(200);
                     response.type("application/json");
-                    /*return JsonBuilder.jsonObject(map, LinksBuilder.singleMessage(patientId, "patient", "received", Integer.parseInt(medic_id), timedate)).toString();*/
+
                     return gson.toJson(message);
                 }
             }
@@ -117,7 +117,7 @@ public class ApiPatientMessages {
                     message.put("link", LinksBuilder.singleMessage(patientId, "patient", "sent", Integer.parseInt(medic_id), timedate));
                     response.status(200);
                     response.type("application/json");
-                    /*return JsonBuilder.jsonObject(message, LinksBuilder.singleMessage(patientId, "patient", "sent", Integer.parseInt(medic_id), timedate)).toString();*/
+
                     return gson.toJson(message);
                 }
             }
@@ -149,7 +149,6 @@ public class ApiPatientMessages {
 
     private void addMessage() {
         post("", (request, response) -> {
-            //aggiunta un nuovo messaggio
             if(request.contentType().contains("json")) {
                 Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 

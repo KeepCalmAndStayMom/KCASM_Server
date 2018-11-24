@@ -1,9 +1,13 @@
 package server.api.v2.links;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class MedicTasksLinks {
     private static final String BASE_URL = "http://localhost:4567/api/v2/";
 
-    public static String tasksMenu(int id, String userType) {
+    /*public static String tasksMenu(int id, String userType) {
         StringBuilder json = new StringBuilder();
 
         json.append(Link.jsonLink(BASE_URL + userType + "s/" + id + "/tasks/general", userType + "/tasks/general", "GET")).append(", ");
@@ -11,6 +15,16 @@ public class MedicTasksLinks {
         json.append(Link.jsonLink(BASE_URL + userType + "s/" + id + "/tasks/diets", userType + "/tasks/diets", "GET"));
 
         return json.toString();
+    }*/
+
+    public static List<Map<String, String>> tasksMenu(int id, String userType) {
+        List<Map<String, String>> links = new ArrayList<>();
+
+        links.add(Link.linkMap(BASE_URL + userType + "s/" + id + "/tasks/general", userType + "/tasks/general", "GET"));
+        links.add(Link.linkMap(BASE_URL + userType + "s/" + id + "/tasks/activities", userType + "/tasks/activities", "GET"));
+        links.add(Link.linkMap(BASE_URL + userType + "s/" + id + "/tasks/diets", userType + "/tasks/diets", "GET"));
+
+        return links;
     }
 
     public static String medicGeneralLinks(int medicId, String patientId, String executed, String startingProgram, String ... date) {
@@ -101,7 +115,7 @@ public class MedicTasksLinks {
         return json.toString();
     }
 
-    public static String medicSingleTaskLinks(int medicId, int taskId, int patientId, String taskCategory) {
+    /*public static String medicSingleTaskLinks(int medicId, int taskId, int patientId, String taskCategory) {
         StringBuilder json = new StringBuilder();
         String href = BASE_URL + "medics/" + medicId + "/tasks/" + taskCategory + "/" + taskId;
 
@@ -113,5 +127,18 @@ public class MedicTasksLinks {
         json.append(Link.jsonLink(BASE_URL + "patients/" + patientId, "patient", "GET")).append(" ]");
 
         return json.toString();
+    }*/
+
+    public static List<Map<String, String>> medicSingleTaskLinks(int medicId, int taskId, int patientId, String taskCategory) {
+        List<Map<String, String>> links = new ArrayList<>();
+        String href = BASE_URL + "medics/" + medicId + "/tasks/" + taskCategory + "/" + taskId;
+
+        links.add(Link.linkMap(BASE_URL + "medics/" + medicId + "/tasks/" + taskCategory + "/" + taskId, "self", "PUT"));
+        links.add(Link.linkMap(BASE_URL + "medics/" + medicId + "/tasks/" + taskCategory + "/" + taskId, "self", "DELETE"));
+        links.add(Link.linkMap(BASE_URL + "medics/" + medicId + "/tasks/" + taskCategory, "medic/tasks/" + taskCategory, "GET"));
+        links.add(Link.linkMap(BASE_URL + "medics/" + medicId, "medic", "GET"));
+        links.add(Link.linkMap(BASE_URL + "patients/" + patientId, "patient", "GET"));
+
+        return links;
     }
 }

@@ -87,7 +87,7 @@ public class ApiWeights {
                     response.status(200);
                     response.type("application/json");
 
-                    return JsonBuilder.jsonObject(query, null).toString();
+                    return gson.toJson(query);
                 }
             }
             else if(startdate != null && enddate != null && startdate.matches(Regex.DATE_REGEX) && enddate.matches(Regex.DATE_REGEX)) {

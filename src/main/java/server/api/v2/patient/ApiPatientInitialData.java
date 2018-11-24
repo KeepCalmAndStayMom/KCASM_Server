@@ -67,19 +67,19 @@ public class ApiPatientInitialData {
 
     private void getPatientInitialData() {
         get("", (request, response) -> {
-            //get dei dati iniziali della paziente
             int patientId = Integer.parseInt(request.params("patient_id"));
             Map<String, Object> query = PatientInitialDB.select(patientId);
 
             if(query != null) {
+                query.put("links", LinksBuilder.initialData(patientId));
                 response.status(200);
                 response.type("application/json");
 
-                return JsonBuilder.jsonObject(query, LinksBuilder.initialData(patientId)).toString();
+                return query;
             }
 
             response.status(404);
             return "";
-        });
+        }, gson::toJson);
     }
 }

@@ -104,7 +104,7 @@ public class LinksBuilder {
         return links;
     }
 
-    public static String initialData(int patientId) {
+    /*public static String initialData(int patientId) {
         StringBuilder json = new StringBuilder();
 
         json.append("\"links\": [");
@@ -112,6 +112,15 @@ public class LinksBuilder {
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/initial_data", "self", "PUT")).append(" ]");
 
         return json.toString();
+    }*/
+
+    public static List<Map<String, String>> initialData(int patientId) {
+        List<Map<String, String>> links = new ArrayList<>();
+
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId, "patient", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/initial_data", "self", "PUT"));
+
+        return links;
     }
 
     public static String singleWeightLink(int patientId, String date) {

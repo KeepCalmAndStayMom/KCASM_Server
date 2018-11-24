@@ -1,5 +1,6 @@
 package server.api.v2.patient;
 
+import com.google.gson.Gson;
 import server.api.v2.JsonBuilder;
 import server.database.v2.PatientInitialDB;
 import server.retrieve_data.SogliePeso;
@@ -12,7 +13,7 @@ import java.util.Map;
 import static spark.Spark.*;
 
 public class ApiThresholds {
-
+    private Gson gson = new Gson();
 
     public ApiThresholds() {
         getThreshold();
@@ -47,12 +48,12 @@ public class ApiThresholds {
                 response.status(200);
                 response.type("application/json");
 
-                return JsonBuilder.jsonObject(thresholds, null);
+                return thresholds;
             }
 
             response.status(404);
             return "";
-        });
+        }, gson::toJson);
     }
 
 }

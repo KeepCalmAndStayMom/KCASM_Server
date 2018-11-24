@@ -1,5 +1,9 @@
 package server.api.v2.links;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class MeasuresLinks {
 
     public static String fitbitLinks(int patientId, String type, String... date) {
@@ -62,16 +66,25 @@ public class MeasuresLinks {
         return json.toString();
     }
 
-    public static String measuresLinks(int patientId) {
+    /*public static String measuresLinks(int patientId) {
         StringBuilder json = new StringBuilder();
 
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/samples", "patient/measures/samples", "GET")).append(", ");
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/total", "patient/measures/total", "GET"));
 
         return json.toString();
+    }*/
+
+    public static List<Map<String, String>> measuresLinks(int patientId) {
+        List<Map<String, String>> links = new ArrayList<>();
+
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/measures/samples", "patient/measures/samples", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/measures/total", "patient/measures/total", "GET"));
+
+        return links;
     }
 
-    public static String measuresSubLinks(int patientId, String type) {
+    /*public static String measuresSubLinks(int patientId, String type) {
         StringBuilder json = new StringBuilder();
 
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/fitbit", "patient/measures/" + type + "/fitbit", "GET")).append(", ");
@@ -79,6 +92,16 @@ public class MeasuresLinks {
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/sensor", "patient/measures/" + type + "/sensor", "GET"));
 
         return json.toString();
+    }*/
+
+    public static List<Map<String, String>> measuresSubLinks(int patientId, String type) {
+        List<Map<String, String>> links = new ArrayList<>();
+
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/fitbit", "patient/measures/" + type + "/fitbit", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/hue", "patient/measures/" + type + "/hue", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/measures/" + type + "/sensor", "patient/measures/" + type + "/sensor", "GET"));
+
+        return links;
     }
 
 }

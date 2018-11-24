@@ -208,8 +208,8 @@ public class ApiMedicTasks {
             response.status(200);
             response.type("application/json");
 
-            return JsonBuilder.jsonList(null, null, MedicTasksLinks.tasksMenu(medicId, "medic"), null);
-        });
+            return MedicTasksLinks.tasksMenu(medicId, "medic");
+        }, gson::toJson);
     }
 
     private void singleTaskOperations(String taskCategory) {
@@ -352,13 +352,14 @@ public class ApiMedicTasks {
             }
 
             if(query != null) {
+                query.put("links", MedicTasksLinks.medicSingleTaskLinks(medicId, taskId, (int) query.get("patient_id"), taskCategory));
                 response.status(200);
                 response.type("application/json");
-                return JsonBuilder.jsonObject(query, MedicTasksLinks.medicSingleTaskLinks(medicId, taskId, (int) query.get("patient_id"), taskCategory));
+                return query;
             }
 
             response.status(404);
             return "";
-        });
+        }, gson::toJson);
     }
 }

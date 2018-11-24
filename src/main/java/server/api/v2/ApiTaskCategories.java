@@ -25,8 +25,8 @@ public class ApiTaskCategories {
             response.type("application/json");
 
 
-            return JsonBuilder.jsonList(null, null, TaskCategoriesLinks.categoriesLinks(), null);
-        });
+            return TaskCategoriesLinks.categoriesLinks();
+        }, gson::toJson);
     }
 
     private void getTaskCategoriesActivities() {
