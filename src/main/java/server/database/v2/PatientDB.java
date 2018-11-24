@@ -20,17 +20,20 @@ public class PatientDB {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
-            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+            LinkedHashMap<String, Object> map = null;
 
-            rs.next();
-            map.put("name", rs.getString("name"));
-            map.put("surname", rs.getString("surname"));
-            map.put("age", rs.getInt("age"));
-            map.put("phone", rs.getString("phone"));
-            map.put("address_home", rs.getString("address_home"));
-            map.put("address_hospital", rs.getString("address_hospital"));
-            map.put("email_notify", rs.getBoolean("email_notify"));
-            map.put("sms_notify", rs.getBoolean("sms_notify"));
+            if(rs.next()) {
+                map = new LinkedHashMap<>();
+                map.put("name", rs.getString("name"));
+                map.put("surname", rs.getString("surname"));
+                map.put("age", rs.getInt("age"));
+                map.put("phone", rs.getString("phone"));
+                map.put("address_home", rs.getString("address_home"));
+                map.put("address_hospital", rs.getString("address_hospital"));
+                map.put("email_notify", rs.getBoolean("email_notify"));
+                map.put("sms_notify", rs.getBoolean("sms_notify"));
+            }
+
             conn.close();
             return map;
         } catch (SQLException e) {

@@ -1,7 +1,13 @@
 package server.api.v2.links;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class LinksBuilder {
 
+    @Deprecated
     public static String patientLinks(int patientId) {
         StringBuilder json = new StringBuilder();
 
@@ -17,6 +23,22 @@ public class LinksBuilder {
         json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "self", "PUT")).append(" ]");
 
         return json.toString();
+    }
+
+    public static List<Map<String, String>> patientLinks2(int patientId) {
+        List<Map<String, String>> links = new ArrayList<>();
+
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/tasks", "patient/tasks", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/weights", "patient/weights", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/thresholds", "patient/thresholds", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/initial_data", "patient/initial_data", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/medics", "patient/medics", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/messages", "patient/messages", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/measures", "patient/measures", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId + "/login_data", "patient/login_data", "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/patients/" + patientId, "self", "PUT"));
+
+        return links;
     }
 
     public static String medicLinks(int medicId) {
