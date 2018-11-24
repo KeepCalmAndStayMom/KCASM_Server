@@ -115,11 +115,10 @@ public class HueDB {
             for(String chromotherapy: chromotherapyList) {
                 st.setString(3, chromotherapy);
                 ResultSet rs = st.executeQuery();
+                map.put("date", date);
 
-                if(rs.next())
-                    map.put(chromotherapy, rs.getInt("total"));
-                else
-                    map.put(chromotherapy, 0);
+                rs.next();
+                map.put(chromotherapy, rs.getInt("total"));
 
             }
             conn.close();

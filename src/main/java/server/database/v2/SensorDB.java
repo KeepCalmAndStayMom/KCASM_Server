@@ -117,10 +117,16 @@ public class SensorDB {
             ResultSet rs = st.executeQuery();
             Map map = new LinkedHashMap();
 
-            rs.next();
-            map.put("temperature", rs.getDouble("temperature"));
-            map.put("luminescence", rs.getDouble("luminescence"));
-            map.put("humidity", rs.getDouble("humidity"));
+            if(selectDate(patientId, date).size() > 0) {
+                rs.next();
+                map.put("date", date);
+                map.put("temperature", rs.getDouble("temperature"));
+                map.put("luminescence", rs.getDouble("luminescence"));
+                map.put("humidity", rs.getDouble("humidity"));
+            }
+            else
+                map = null;
+
             conn.close();
             return map;
         } catch (SQLException e) {

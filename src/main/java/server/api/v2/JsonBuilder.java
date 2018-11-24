@@ -10,10 +10,9 @@ import java.util.Map;
 public class JsonBuilder {
 
     public static StringBuilder jsonObject(Map<String, Object> query, String links) {
-        StringBuilder json = null;
+        StringBuilder json = new StringBuilder();
 
         if(query != null) {
-            json = new StringBuilder();
             json.append("{ ");
             mapToJson(json, query);
             //json.deleteCharAt(json.length()-1);
@@ -25,9 +24,10 @@ public class JsonBuilder {
 
             return json;
         }
+        else
+            json.append("null");
 
         if(links != null) {
-            json = new StringBuilder();
             json.append(links);
         }
 
@@ -79,11 +79,12 @@ public class JsonBuilder {
             else
                 json.append(jsonObject(m, LinksBuilder.innerListMessage((int) m.get("medic_id"), args[0], args[1], (int) m.get("patient_id"), (String) m.get("timedate"))).toString());
         }
-        else if(typeObject.equals("task"))
-            if(args[1].equals("patient"))
+        else if(typeObject.equals("task")) {
+            if (args[1].equals("patient"))
                 json.append(jsonObject(m, PatientTasksLinks.patientInnerListTaskLink((int) m.get("patient_id"), (int) m.get("id"), args[0])).toString());
             else
                 json.append(jsonObject(m, MedicTasksLinks.medicInnerListTaskLink((int) m.get("medic_id"), (int) m.get("id"), args[0])).toString());
+        }
         else
             json.append(jsonObject(m, null).toString());
     }
