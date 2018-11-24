@@ -3,6 +3,7 @@ package server.api.v2.medic;
 import com.google.gson.Gson;
 import server.api.v2.Checker;
 import server.api.v2.JsonBuilder;
+import server.api.v2.links.Link;
 import server.api.v2.links.LinksBuilder;
 import server.database.v2.LoginDB;
 
@@ -50,7 +51,6 @@ public class ApiMedicLoginData {
 
     private void addMedicLoginData() {
         post("", (request, response) -> {
-            //aggiunta dato di login solo admin
             if(request.contentType().contains("json")) {
                 Map<String, Object> map = gson.fromJson(request.body(), Map.class);
 
@@ -70,19 +70,19 @@ public class ApiMedicLoginData {
 
     private void getMedicLoginData() {
         get("", (request, response) -> {
-            //get dati login paziente
             int medicId = Integer.parseInt(request.params("medic_id"));
             Map<String, Object> query = LoginDB.selectMedic(medicId);
 
             if(query != null) {
+                query.put("links", LinksBuilder.loginData(medicId, "medic"));
                 response.status(200);
                 response.type("application/json");
 
-                return JsonBuilder.jsonObject(query, LinksBuilder.loginData(medicId, "medic")).toString();
+                return query;
             }
 
             response.status(404);
             return "";
-        });
+        }, gson::toJson);
     }
 }

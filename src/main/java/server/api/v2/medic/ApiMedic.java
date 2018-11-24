@@ -82,7 +82,6 @@ public class ApiMedic {
 
     private void getPatientsOfMedic() {
         get("/patients", (request, response) -> {
-            //get dei pazienti del medico
             int medicId = Integer.parseInt(request.params("medic_id"));
             List<Map<String, Object>> query = MedicDB.selectPatientsOfMedic(medicId);
 

@@ -85,7 +85,7 @@ public class LinksBuilder {
         return json.toString();
     }
 
-    public static String loginData(int id, String type) {
+    /*public static String loginData(int id, String type) {
         StringBuilder json = new StringBuilder();
 
         json.append("\"links\": [");
@@ -93,6 +93,15 @@ public class LinksBuilder {
         json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/login_data", "self", "PUT")).append(" ]");
 
         return json.toString();
+    }*/
+
+    public static List<Map<String, String>> loginData(int id, String type) {
+        List<Map<String, String>> links = new ArrayList<>();
+
+        links.add(Link.linkMap("http://localhost:4567/api/v2/" + type + "s/" + id, type, "GET"));
+        links.add(Link.linkMap("http://localhost:4567/api/v2/" + type + "s/" + id + "/login_data", "self", "PUT"));
+
+        return links;
     }
 
     public static String initialData(int patientId) {

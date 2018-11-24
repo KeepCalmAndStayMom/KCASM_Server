@@ -20,12 +20,15 @@ public class LoginDB {
             st.setInt(1, patientId);
             ResultSet rs = st.executeQuery();
 
-            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+            LinkedHashMap<String, Object> map = null;
 
-            rs.next();
-            map.put("patient_id", rs.getInt("patient_id"));
-            map.put("email", rs.getString("email"));
-            map.put("password", rs.getString("password"));
+            if(rs.next()) {
+                map = new LinkedHashMap<>();
+                map.put("patient_id", rs.getInt("patient_id"));
+                map.put("email", rs.getString("email"));
+                map.put("password", rs.getString("password"));
+            }
+
             conn.close();
             return map;
         } catch (SQLException e) {
@@ -42,12 +45,15 @@ public class LoginDB {
             st.setInt(1, medicId);
             ResultSet rs = st.executeQuery();
 
-            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+            LinkedHashMap<String, Object> map = null;
 
-            rs.next();
-            map.put("medic_id", rs.getInt("medic_id"));
-            map.put("email", rs.getString("email"));
-            map.put("password", rs.getString("password"));
+            if(rs.next()) {
+                map = new LinkedHashMap<>();
+                map.put("medic_id", rs.getInt("medic_id"));
+                map.put("email", rs.getString("email"));
+                map.put("password", rs.getString("password"));
+            }
+
             conn.close();
             return map;
         } catch (SQLException e) {

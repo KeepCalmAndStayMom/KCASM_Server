@@ -71,14 +71,15 @@ public class ApiPatientLoginData {
             Map<String, Object> query = LoginDB.selectPatient(patientId);
 
             if(query != null) {
+                query.put("links", LinksBuilder.loginData(patientId, "patient"));
                 response.status(200);
                 response.type("application/json");
 
-                return JsonBuilder.jsonObject(query, LinksBuilder.loginData(patientId, "patient")).toString();
+                return query;
             }
 
             response.status(404);
             return "";
-        });
+        }, gson::toJson);
     }
 }
