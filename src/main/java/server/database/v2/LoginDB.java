@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.sql.Types;
@@ -164,4 +165,30 @@ public class LoginDB {
 
         return null;
     }
+
+    public static Map<String, String> selectForPasswordReset(String email) {
+        final String sql = "SELECT password FROM Login WHERE email=?";
+
+        try {
+            conn = DBConnectOnline.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, email);
+            ResultSet rs = st.executeQuery();
+            Map map = null;
+
+            if(rs.next()) {
+                map = new HashMap();
+                map.put("password", rs.getString("password"));
+            }
+
+            conn.close();
+            return map;
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

@@ -1,5 +1,6 @@
 package server.api.v2;
 
+import com.google.gson.Gson;
 import server.api.v2.medic.ApiMedic;
 import server.api.v2.patient.ApiChromotherapyTypes;
 import server.api.v2.patient.ApiPatient;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 public class ApiServiceV2 {
     private final static String baseURL = "/api/v2";
+    private Gson gson = new Gson();
 
     public ApiServiceV2() {
         new ApiPatient();
@@ -37,5 +39,27 @@ public class ApiServiceV2 {
             response.status(401);
             return "ERRORE";
         });
+
+        get(baseURL + "/password_reset", (request, response) ->{
+            String email = request.queryParams("email");
+
+            if(email != null && email.matches(Regex.EMAIL_REGEX)) {
+                Map password = LoginDB.selectForPasswordReset(email);
+                if(password != null) {
+                    response.status(200);
+                    response.type("application/json");
+
+                    return password;
+                }
+
+                response.status(404);
+                return "Email non trovata";
+            }
+
+            response.status(400);
+            response.type("application/json");
+            return "Specifica una email";
+
+        }, gson::toJson);
     }
 }
