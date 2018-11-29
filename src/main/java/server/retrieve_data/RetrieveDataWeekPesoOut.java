@@ -17,12 +17,9 @@ public class RetrieveDataWeekPesoOut implements RetrieveDataInterface{
         Map<String, Object> initial = PatientInitialDB.select(patientID);
         LocalDate startDate = LocalDate.parse(String.valueOf(initial.get("pregnancy_start_date")));
         double startPeso = (Double) initial.get("weight");
-        boolean gemelli = (Boolean) initial.get("twin");
-        String bmi = String.valueOf(initial.get("bmi"));
-        listMin = SogliePeso.getListSogliaMin(bmi, gemelli);
-        listMax = SogliePeso.getListSogliaMax(bmi, gemelli);
 
-        int count = 1;
+        listMin = SogliePeso.getListSogliaMin(String.valueOf(initial.get("bmi")), (Boolean) initial.get("twin"));
+        listMax = SogliePeso.getListSogliaMax(String.valueOf(initial.get("bmi")), (Boolean) initial.get("twin"));
 
         Map<String, Double> pesi = WeightDB.select(patientID);
         assert pesi != null;
@@ -32,7 +29,7 @@ public class RetrieveDataWeekPesoOut implements RetrieveDataInterface{
         LocalDate previousDate = LocalDate.parse(String.valueOf(date[lastDateIndex]));
         LocalDate actualDate = LocalDate.parse(String.valueOf(date[lastDateIndex]));
 
-        int check;
+        int check, count = 1;
         do {
             check = checkPeso(startDate, actualDate, startPeso, pesi.get(date[lastDateIndex]));
             if(check!=0)
