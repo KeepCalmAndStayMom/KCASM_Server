@@ -49,6 +49,7 @@ public class MedicTasksLinks {
 
         json.append("\"links\": [ ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/activities" + params.toString(), "medic/tasks/activities", "GET")).append(", ");
+        json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/general", "medic/tasks/general", "POST")).append(", ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/diets" + params.toString(), "medic/tasks/diets", "GET")).append(" ]");
 
         return json.toString();
@@ -75,6 +76,7 @@ public class MedicTasksLinks {
 
         json.append("\"links\": [ ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/general" + params.toString(), "medic/tasks/general", "GET")).append(", ");
+        json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/activities", "medic/tasks/general", "POST")).append(", ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/diets" + params.toString(), "medic/tasks/diets", "GET")).append(" ]");
 
         return json.toString();
@@ -101,6 +103,7 @@ public class MedicTasksLinks {
 
         json.append("\"links\": [ ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/activities" + params.toString(), "medic/tasks/activities", "GET")).append(", ");
+        json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/diets", "medic/tasks/general", "POST")).append(", ");
         json.append(Link.jsonLink(BASE_URL + "medics/" + medicId + "/tasks/general" + params.toString(), "medic/tasks/general", "GET")).append(" ]");
 
         return json.toString();
