@@ -7,16 +7,6 @@ import java.util.Map;
 public class PatientTasksLinks {
     private static final String BASE_URL = "http://localhost:4567/api/v2/";
 
-    /*public static String tasksMenu(int id, String userType) {
-        StringBuilder json = new StringBuilder();
-
-        json.append(Link.jsonLink(BASE_URL + userType + "s/" + id + "/tasks/general", userType + "/tasks/general", "GET")).append(", ");
-        json.append(Link.jsonLink(BASE_URL + userType + "s/" + id + "/tasks/activities", userType + "/tasks/activities", "GET")).append(", ");
-        json.append(Link.jsonLink(BASE_URL + userType + "s/" + id + "/tasks/diets", userType + "/tasks/diets", "GET"));
-
-        return json.toString();
-    }*/
-
     public static List<Map<String, String>> tasksMenu(int id, String userType) {
         List<Map<String, String>> links = new ArrayList<>();
 
@@ -114,19 +104,6 @@ public class PatientTasksLinks {
 
         return json.toString();
     }
-
-    /*public static String patientSingleTaskLinks(int patientId, int taskId, int medicId, String taskCategory) {
-        StringBuilder json = new StringBuilder();
-        String href = BASE_URL + "patients/" + patientId + "/tasks/" + taskCategory + "/" + taskId;
-
-        json.append("\"links\": [ ");
-        json.append(Link.jsonLink(BASE_URL + "patients/" + patientId + "/tasks/" + taskCategory + "/" + taskId, "self", "PUT")).append(", ");
-        json.append(Link.jsonLink(BASE_URL + "patients/" + patientId + "/tasks/" + taskCategory, "patient/tasks/" + taskCategory, "GET")).append(", ");
-        json.append(Link.jsonLink(BASE_URL + "patients/" + patientId, "patient", "GET")).append(", ");
-        json.append(Link.jsonLink(BASE_URL + "medics/" + medicId, "medic", "GET")).append(" ]");
-
-        return json.toString();
-    }*/
 
     public static List<Map<String, String>> patientSingleTaskLinks(int patientId, int taskId, int medicId, String taskCategory) {
         List<Map<String, String>> links = new ArrayList<>();

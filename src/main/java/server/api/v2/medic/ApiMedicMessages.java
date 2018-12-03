@@ -73,7 +73,7 @@ public class ApiMedicMessages {
                     response.status(200);
                     response.type("application/json");
 
-                    /*return JsonBuilder.jsonObject(message, LinksBuilder.singleMessage(medicId, "medic", "received", Integer.parseInt(patientId), timedate)).toString();*/
+                    /*return JsonBuilder.jsonMap(message, LinksBuilder.singleMessage(medicId, "medic", "received", Integer.parseInt(patientId), timedate)).toString();*/
                     return gson.toJson(message);
                 }
             }
@@ -122,7 +122,7 @@ public class ApiMedicMessages {
                     response.status(200);
                     response.type("application/json");
 
-                    /*return JsonBuilder.jsonObject(message, LinksBuilder.singleMessage(medicId, "medic", "sent", Integer.parseInt(patientId), timedate)).toString();*/
+                    /*return JsonBuilder.jsonMap(message, LinksBuilder.singleMessage(medicId, "medic", "sent", Integer.parseInt(patientId), timedate)).toString();*/
                     return gson.toJson(message);
                 }
             }

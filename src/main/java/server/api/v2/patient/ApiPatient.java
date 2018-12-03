@@ -15,7 +15,7 @@ import static spark.Spark.*;
 
 public class ApiPatient {
 
-    private final static String baseURL = "/api/v2";
+    private final static String BASE_URL = "/api/v2";
     private Gson gson = new Gson();
 
     public ApiPatient() {
@@ -23,7 +23,7 @@ public class ApiPatient {
     }
 
     private void apiPatient() {
-        path(baseURL + "/patients", () -> {
+        path(BASE_URL + "/patients", () -> {
             addPatient();
 
             path("/:patient_id", () -> {
@@ -137,7 +137,7 @@ public class ApiPatient {
 
                 return query;
 
-                /*return JsonBuilder.jsonObject(query, LinksBuilder.patientLinks(patientId)).toString();*/
+                /*return JsonBuilder.jsonMap(query, LinksBuilder.patientLinks(patientId)).toString();*/
             }
 
             response.status(404);

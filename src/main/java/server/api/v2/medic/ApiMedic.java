@@ -14,13 +14,13 @@ import java.util.Map;
 import static spark.Spark.*;
 
 public class ApiMedic {
-    private final static String baseURL = "/api/v2";
+    private final static String BASE_URL = "/api/v2";
     private Gson gson = new Gson();
 
     public ApiMedic() { apiMedic(); }
 
     private void apiMedic() {
-        path(baseURL + "/medics", () -> {
+        path(BASE_URL + "/medics", () -> {
             addMedic();
             getMedicSpecialization();
 

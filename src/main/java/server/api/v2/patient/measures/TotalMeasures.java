@@ -1,15 +1,12 @@
 package server.api.v2.patient.measures;
 
-import com.google.api.client.util.DateTime;
 import server.api.v2.JsonBuilder;
 import server.api.v2.Regex;
 import server.api.v2.links.MeasuresLinks;
 import server.database.v2.FitbitDB;
 import server.database.v2.HueDB;
-import server.database.v2.MessageMedicPatientDB;
 import server.database.v2.SensorDB;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -113,7 +110,7 @@ public class TotalMeasures {
 
             if(date != null && date.matches(Regex.DATE_REGEX)) {
                 List<Map<String, Object>> l = new ArrayList<>();
-                l.add(getFitbitTotal(patientId, date));
+                l.add(getFitbitMapTotal(patientId, date));
 
                 if(!listIsAllNull(l)) {
                     response.status(200);
@@ -129,7 +126,7 @@ public class TotalMeasures {
                 List<Map<String, Object>> l = new ArrayList<>();
 
                 while(startDate.compareTo(endDate) <= 0) {
-                    l.add(getFitbitTotal(patientId, dtf.format(startDate)));
+                    l.add(getFitbitMapTotal(patientId, dtf.format(startDate)));
                     startDate = startDate.plusDays(1);
                 }
 
@@ -144,7 +141,7 @@ public class TotalMeasures {
         });
     }
 
-    private Map<String, Object> getFitbitTotal(int patientId, String date) {
+    private Map<String, Object> getFitbitMapTotal(int patientId, String date) {
         Integer avgHeartbeat = 0;
         Integer count = 0;
         List<Map<String, Object>> list = FitbitDB.selectDate(patientId, date);

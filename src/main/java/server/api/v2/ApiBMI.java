@@ -12,10 +12,10 @@ public class ApiBMI {
     private Gson gson = new Gson();
 
     public ApiBMI() {
-        getBMI();
+        getBMIList();
     }
 
-    private void getBMI() {
+    private void getBMIList() {
         get("/api/v2/bmi", (request, response) -> {
             List bmi = BMIDB.select();
 

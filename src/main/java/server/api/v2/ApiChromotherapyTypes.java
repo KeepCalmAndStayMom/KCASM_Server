@@ -1,4 +1,4 @@
-package server.api.v2.patient;
+package server.api.v2;
 
 import com.google.gson.Gson;
 import server.database.v2.ChromotherapyDB;

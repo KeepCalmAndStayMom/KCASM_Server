@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnectOnline {
 
-    static private final String dbOnline = "jdbc:mysql://195.206.105.227:23306/KCASM_Database";
+    static private final String dbOnline = "jdbc:mysql://185.156.175.51:23306/KCASM_Database";
     static private final String user = "kcasm";
     static private final String password = "tulliocinghiale";
     static private DBConnectOnline instance = null;

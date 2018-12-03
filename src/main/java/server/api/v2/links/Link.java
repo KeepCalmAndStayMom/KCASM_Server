@@ -1,7 +1,6 @@
 package server.api.v2.links;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Link {
 

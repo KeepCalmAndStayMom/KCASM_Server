@@ -19,34 +19,33 @@ public class Checker {
     private final static Set MEDIC_MESSAGE_KEYSET = ImmutableSet.of("patient_id", "timedate", "subject", "message");
     private final static Set PATIENT_ADD_MEDIC = ImmutableSet.of("medic_id");
     private final static Set MEDIC_ADD_PATIENT = ImmutableSet.of("patient_id");
-    private final static Set SET_MESSAGE_AS_READ = ImmutableSet.of("read");
 
     public static boolean patientMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PATIENT_KEYSET);
         Set<String> keys = map.keySet();
 
-        return keys.containsAll(PATIENT_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
+        return keys.containsAll(PATIENT_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_REGEX);
     }
 
     public static boolean medicPostMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(POST_MEDIC_KEYSET);
         Set<String> keys = map.keySet();
 
-        return keys.containsAll(POST_MEDIC_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
+        return keys.containsAll(POST_MEDIC_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_REGEX);
     }
 
     public static boolean medicPutMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(PUT_MEDIC_KEYSET);
         Set<String> keys = map.keySet();
 
-        return keys.containsAll(PUT_MEDIC_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_FORMAT);
+        return keys.containsAll(PUT_MEDIC_KEYSET) && ((String) map.get("phone")).matches(Regex.PHONE_REGEX);
     }
 
     public static boolean loginDataMapValidation(Map<String, ?> map) {
         map.keySet().retainAll(LOGIN_KEYSET);
         Set<String> keys = map.keySet();
 
-        return keys.containsAll(LOGIN_KEYSET) && ((String) map.get("email")).matches(Regex.EMAIL_REGEX);
+        return keys.containsAll(LOGIN_KEYSET) && ((String) map.get("email")).matches(Regex.EMAIL_REGEX) && ((String) map.get("password")).matches(Regex.PASSWORD_REGEX);
     }
 
     public static boolean postWeightMapValidation(Map<String, ?> map) {
@@ -124,12 +123,5 @@ public class Checker {
         Set<String> keys = map.keySet();
 
         return keys.containsAll(MEDIC_ADD_PATIENT);
-    }
-
-    public static boolean setMessageAsRead(Map<String, ?> map) {
-        map.keySet().retainAll(SET_MESSAGE_AS_READ);
-        Set<String> keys = map.keySet();
-
-        return keys.containsAll(SET_MESSAGE_AS_READ) && (Boolean) map.get("read");
     }
 }

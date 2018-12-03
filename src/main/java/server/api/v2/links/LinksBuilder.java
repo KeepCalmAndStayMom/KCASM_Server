@@ -1,29 +1,10 @@
 package server.api.v2.links;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class LinksBuilder {
-
-    /*@Deprecated
-    public static String patientLinks(int patientId) {
-        StringBuilder json = new StringBuilder();
-
-        json.append("\"links\": [ ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/tasks", "patient/tasks", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/weights", "patient/weights", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/thresholds", "patient/thresholds", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/initial_data", "patient/initial_data", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/medics", "patient/medics", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/messages", "patient/messages", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/measures", "patient/measures", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/login_data", "patient/login_data", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "self", "PUT")).append(" ]");
-
-        return json.toString();
-    }*/
 
     public static List<Map<String, String>> patientLinks(int patientId) {
         List<Map<String, String>> links = new ArrayList<>();
@@ -40,19 +21,6 @@ public class LinksBuilder {
 
         return links;
     }
-
-    /*public static String medicLinks(int medicId) {
-        StringBuilder json = new StringBuilder();
-
-        json.append("\"links\": [ ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/patients", "medic/patients", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/tasks", "medic/tasks", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/messages", "medic/messages", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId + "/login_data", "medic/login_data", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/medics/" + medicId, "self", "PUT")).append(" ]");
-
-        return json.toString();
-    }*/
 
     public static List<Map<String, String>> medicLinks(int medicId) {
         List<Map<String, String>> links = new ArrayList<>();
@@ -85,16 +53,6 @@ public class LinksBuilder {
         return json.toString();
     }
 
-    /*public static String loginData(int id, String type) {
-        StringBuilder json = new StringBuilder();
-
-        json.append("\"links\": [");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id, type, "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/login_data", "self", "PUT")).append(" ]");
-
-        return json.toString();
-    }*/
-
     public static List<Map<String, String>> loginData(int id, String type) {
         List<Map<String, String>> links = new ArrayList<>();
 
@@ -103,16 +61,6 @@ public class LinksBuilder {
 
         return links;
     }
-
-    /*public static String initialData(int patientId) {
-        StringBuilder json = new StringBuilder();
-
-        json.append("\"links\": [");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId, "patient", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/patients/" + patientId + "/initial_data", "self", "PUT")).append(" ]");
-
-        return json.toString();
-    }*/
 
     public static List<Map<String, String>> initialData(int patientId) {
         List<Map<String, String>> links = new ArrayList<>();
@@ -142,15 +90,6 @@ public class LinksBuilder {
 
         return json.toString();
     }
-
-    /*public static String messagesCategoryLinks(int id, String type) {
-        StringBuilder json = new StringBuilder();
-
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/received", type + "/messages/received", "GET")).append(", ");
-        json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/sent", type + "/messages/sent", "GET"));
-
-        return json.toString();
-    }*/
 
     public static List<Map<String, String>> messagesCategoryLinks(int id, String type) {
         List<Map<String, String>> links = new ArrayList<>();
@@ -213,18 +152,6 @@ public class LinksBuilder {
 
         return json.toString();
     }
-
-    /*public static String singleMessage(int id, String type, String category, int id2 , String timedate) {
-        StringBuilder json = new StringBuilder();
-
-        json.append("\"link\": ");
-        if(type.equals("patient"))
-            json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?medic_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "PUT"));
-        else
-            json.append(Link.jsonLink("http://localhost:4567/api/v2/" + type + "s/" + id + "/messages/" + category + "?patient_id=" + id2 + "&timedate=" + timedate.replace(" ", "T"), "self", "PUT"));
-
-        return json.toString();
-    }*/
 
     public static Map<String, String> singleMessage(int id, String type, String category, int id2 , String timedate) {
 

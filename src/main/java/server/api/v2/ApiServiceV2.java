@@ -2,7 +2,6 @@ package server.api.v2;
 
 import com.google.gson.Gson;
 import server.api.v2.medic.ApiMedic;
-import server.api.v2.patient.ApiChromotherapyTypes;
 import server.api.v2.patient.ApiPatient;
 import server.database.v2.LoginDB;
 import static spark.Spark.*;
@@ -11,7 +10,7 @@ import java.util.Base64;
 import java.util.Map;
 
 public class ApiServiceV2 {
-    private final static String baseURL = "/api/v2";
+    private final static String BASE_URL = "/api/v2";
     private Gson gson = new Gson();
 
     public ApiServiceV2() {
@@ -24,7 +23,7 @@ public class ApiServiceV2 {
     }
 
     private void login() {
-        post(baseURL + "/login_data", (request, response) -> {
+        post(BASE_URL + "/login_data", (request, response) -> {
             String base64 = request.headers("Authorization").replace("Basic ", "");
             String[] auth = new String(Base64.getDecoder().decode(base64), "UTF-8").split(":");
 
@@ -33,14 +32,14 @@ public class ApiServiceV2 {
             if(query != null) {
                 response.status(200);
                 response.type("application/json");
-                return JsonBuilder.jsonObject(query, null);
+                return JsonBuilder.jsonMap(query, null);
             }
 
             response.status(401);
             return "ERRORE";
         });
 
-        get(baseURL + "/password_reset", (request, response) ->{
+        get(BASE_URL + "/password_reset", (request, response) ->{
             String email = request.queryParams("email");
 
             if(email != null && email.matches(Regex.EMAIL_REGEX)) {

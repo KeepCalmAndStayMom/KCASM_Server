@@ -9,12 +9,12 @@ import java.util.Map;
 
 public class JsonBuilder {
 
-    public static StringBuilder jsonObject(Map<String, Object> query, String links) {
+    public static StringBuilder jsonMap(Map<String, Object> inputMap, String links) {
         StringBuilder json = new StringBuilder();
 
-        if(query != null) {
+        if(inputMap != null) {
             json.append("{ ");
-            mapToJson(json, query);
+            mapToJson(json, inputMap);
             //json.deleteCharAt(json.length()-1);
 
             if(links != null)
@@ -34,16 +34,16 @@ public class JsonBuilder {
         return json;
     }
 
-    public static StringBuilder jsonList(String listName, List<Map<String, Object>> query, String links, String innerObjectType, String ... args) {
+    public static StringBuilder jsonList(String listName, List<Map<String, Object>> inputList, String links, String innerObjectType, String ... args) {
 
-        if(query != null) {
+        if(inputList != null) {
             StringBuilder json = new StringBuilder();
 
             if(listName != null)
                 json.append("\"" + listName + "\": ");
 
             json.append("[ ");
-            for(Map m : query) {
+            for(Map m : inputList) {
                 innerListJsonObject(innerObjectType, args, json, m);
                 json.append(", ");
             }
@@ -60,37 +60,37 @@ public class JsonBuilder {
 
         if(links != null) {
             StringBuilder json = new StringBuilder();
-            return json.append("[ ").append(jsonObject(null, links).toString()).append(" ]");
+            return json.append("[ ").append(jsonMap(null, links).toString()).append(" ]");
         }
 
         return null;
     }
 
-    private static void innerListJsonObject(String typeObject, String[] args, StringBuilder json, Map m) {
+    private static void innerListJsonObject(String typeObject, String[] args, StringBuilder json, Map inputMap) {
         if(typeObject.equals("medic"))
-            json.append(jsonObject(m, LinksBuilder.medicListLink((int) m.get("id"))).toString());
+            json.append(jsonMap(inputMap, LinksBuilder.medicListLink((int) inputMap.get("id"))).toString());
         else if(typeObject.equals("patient"))
-            json.append(jsonObject(m, LinksBuilder.patientListLink((int) m.get("id"))).toString());
+            json.append(jsonMap(inputMap, LinksBuilder.patientListLink((int) inputMap.get("id"))).toString());
         else if(typeObject.equals("weight"))
-            json.append(jsonObject(m, LinksBuilder.singleWeightLink((int) m.get("patient_id"), (String) m.get("date"))).toString());
+            json.append(jsonMap(inputMap, LinksBuilder.singleWeightLink((int) inputMap.get("patient_id"), (String) inputMap.get("date"))).toString());
         else if(typeObject.equals("message")) {
             if (args[0].equals("patient"))
-                json.append(jsonObject(m, LinksBuilder.innerListMessage((int) m.get("patient_id"), args[0], args[1], (int) m.get("medic_id"), (String) m.get("timedate"))).toString());
+                json.append(jsonMap(inputMap, LinksBuilder.innerListMessage((int) inputMap.get("patient_id"), args[0], args[1], (int) inputMap.get("medic_id"), (String) inputMap.get("timedate"))).toString());
             else
-                json.append(jsonObject(m, LinksBuilder.innerListMessage((int) m.get("medic_id"), args[0], args[1], (int) m.get("patient_id"), (String) m.get("timedate"))).toString());
+                json.append(jsonMap(inputMap, LinksBuilder.innerListMessage((int) inputMap.get("medic_id"), args[0], args[1], (int) inputMap.get("patient_id"), (String) inputMap.get("timedate"))).toString());
         }
         else if(typeObject.equals("task")) {
             if (args[1].equals("patient"))
-                json.append(jsonObject(m, PatientTasksLinks.patientInnerListTaskLink((int) m.get("patient_id"), (int) m.get("id"), args[0])).toString());
+                json.append(jsonMap(inputMap, PatientTasksLinks.patientInnerListTaskLink((int) inputMap.get("patient_id"), (int) inputMap.get("id"), args[0])).toString());
             else
-                json.append(jsonObject(m, MedicTasksLinks.medicInnerListTaskLink((int) m.get("medic_id"), (int) m.get("id"), args[0])).toString());
+                json.append(jsonMap(inputMap, MedicTasksLinks.medicInnerListTaskLink((int) inputMap.get("medic_id"), (int) inputMap.get("id"), args[0])).toString());
         }
         else
-            json.append(jsonObject(m, null).toString());
+            json.append(jsonMap(inputMap, null).toString());
     }
 
-    private static StringBuilder mapToJson(StringBuilder json, Map m) {
-        m.forEach((k, v) -> {
+    private static StringBuilder mapToJson(StringBuilder json, Map inputMap) {
+        inputMap.forEach((k, v) -> {
             json.append(" \"" + k + "\"" + ": ");
             if (v instanceof String)
                 json.append("\"" + v + "\",");
