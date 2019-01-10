@@ -93,8 +93,9 @@ public class FitbitDB {
 
 
     static public boolean insert(Map<String, Object> map) {
+        System.out.println("333");
 
-        final String sql = "INSERT INTO Fitbit(patient_id, timedate, avg_heartbeats, calories, elevation, floors, steps, distance, minutes_sleep, minutes_awake) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Fitbit(patient_id, timedate, avg_heartbeats, calories, elevation, floors, steps, distance, minutes_asleep, minutes_awake) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
@@ -109,6 +110,7 @@ public class FitbitDB {
             st.setDouble(8, (Double) map.get("distance"));
             st.setInt(9, (Integer) map.get("minutes_asleep"));
             st.setInt(10, (Integer) map.get("minutes_awake"));
+            System.out.println("444");
             st.executeUpdate();
             conn.close();
             return true;

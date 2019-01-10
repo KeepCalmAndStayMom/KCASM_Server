@@ -25,5 +25,6 @@ public class MainServer {
         weightController.startcheck(3, LocalDate.parse("2018-03-01"), 3d);
         weightController.startcheck(4, LocalDate.parse("2018-03-01"), 0d);
         System.out.println("end");*/
+
     }
 }

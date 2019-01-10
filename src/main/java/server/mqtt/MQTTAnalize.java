@@ -29,9 +29,9 @@ class MQTTAnalize {
                 Map hue = gson.fromJson(messagge, Map.class);
 
                 map = new HashMap<>();
-                map.put("Patient_id", Integer.valueOf(homestation_id));
+                map.put("patient_id", Integer.valueOf(homestation_id));
                 map.put("timedate", timedate);
-                map.put("cromoterapia", String.valueOf(hue.get("cromoterapia")));
+                map.put("chromotherapy", String.valueOf(hue.get("chromotherapy")));
                 HueDB.insert(map);
 
                 break;
@@ -39,7 +39,7 @@ class MQTTAnalize {
                 Map zway = gson.fromJson(messagge, Map.class);
 
                 map = new HashMap<>();
-                map.put("Patient_id", Integer.valueOf(homestation_id));
+                map.put("patient_id", Integer.valueOf(homestation_id));
                 map.put("timedate", timedate);
                 map.put("temperature", zway.get("temperature"));
                 map.put("luminescence", zway.get("luminescence"));
@@ -48,6 +48,7 @@ class MQTTAnalize {
 
                 break;
             case "fitbit":
+                System.out.println("111");
                 Map<String, Map> type = gson.fromJson(messagge, Map.class);
                 Map activities = type.get("Activities");
                 Map sleep = type.get("Sleep");
@@ -61,7 +62,7 @@ class MQTTAnalize {
                    heartbeats = ((Double)heartrate.get("heartbeats")).intValue();
 
                 map = new HashMap<>();
-                map.put("Patient_id", Integer.valueOf(homestation_id));
+                map.put("patient_id", Integer.valueOf(homestation_id));
                 map.put("timedate", timedate);
                 map.put("avg_heartbeats", heartbeats);
                 map.put("calories", activities.get("activitiesCalories"));
@@ -69,9 +70,10 @@ class MQTTAnalize {
                 map.put("floors", activities.get("floors"));
                 map.put("steps", activities.get("steps"));
                 map.put("distance", activities.get("distance"));
-                map.put("minutes_sleep", sleep.get("minutesAsleep"));
+                map.put("minutes_asleep", sleep.get("minutesAsleep"));
                 map.put("minutes_awake", sleep.get("minutesAwake"));
                 FitbitDB.insert(map);
+                System.out.println("222");
 
                 break;
         }
