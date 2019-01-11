@@ -100,6 +100,7 @@ public class FitbitDB {
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
+            System.out.println("444");
             st.setInt(1, (Integer) map.get("patient_id"));
             st.setString(2, String.valueOf(map.get("timedate")));
             st.setInt(3, (Integer) map.get("avg_heartbeats"));
@@ -110,7 +111,7 @@ public class FitbitDB {
             st.setDouble(8, (Double) map.get("distance"));
             st.setInt(9, (Integer) map.get("minutes_asleep"));
             st.setInt(10, (Integer) map.get("minutes_awake"));
-            System.out.println("444");
+            System.out.println("555");
             st.executeUpdate();
             conn.close();
             return true;

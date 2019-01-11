@@ -11,9 +11,9 @@ public class EmailNotificator {
     private final static String PASSWORD_KCASM = "KCASM_96";
     private final static String SUBJECT = "KCASM - Controllo Peso";
 
-    static void sendEmail(String msg, String reciverEmail) {
+    static void sendEmail(String msg, String receiverEmail) {
 
-        if(reciverEmail!=null)
+        if(receiverEmail!=null)
         {
 
             Properties props = new Properties();
@@ -32,7 +32,7 @@ public class EmailNotificator {
 
             try {
                 MimeMessage message = new MimeMessage(session);
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciverEmail));
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
                 message.setSubject(SUBJECT);
                 message.setText(msg);
 
