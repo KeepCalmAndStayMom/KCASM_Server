@@ -52,7 +52,7 @@ public class MedicDB {
             st.setString(4, String.valueOf(map.get("phone")));
             st.setBoolean(5, (boolean) map.get("email_notify"));
             st.setBoolean(6, (boolean) map.get("sms_notify"));
-            st.setString(7, String.valueOf("address"));
+            st.setString(7, String.valueOf(map.get("address")));
             st.setInt(8, (Integer) map.get("id"));
 
 
