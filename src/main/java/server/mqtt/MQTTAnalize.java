@@ -48,7 +48,6 @@ class MQTTAnalize {
 
                 break;
             case "fitbit":
-                System.out.println("111");
                 Map<String, Map> type = gson.fromJson(messagge, Map.class);
                 Map activities = type.get("Activities");
                 Map sleep = type.get("Sleep");
@@ -73,7 +72,6 @@ class MQTTAnalize {
                 map.put("minutes_asleep", sleep.get("minutesAsleep"));
                 map.put("minutes_awake", sleep.get("minutesAwake"));
                 FitbitDB.insert(map);
-                System.out.println("222");
 
                 break;
         }

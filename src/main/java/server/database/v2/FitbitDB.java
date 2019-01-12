@@ -93,25 +93,21 @@ public class FitbitDB {
 
 
     static public boolean insert(Map<String, Object> map) {
-        System.out.println("333");
-
         final String sql = "INSERT INTO Fitbit(patient_id, timedate, avg_heartbeats, calories, elevation, floors, steps, distance, minutes_asleep, minutes_awake) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             conn = DBConnectOnline.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            System.out.println("444");
             st.setInt(1, (Integer) map.get("patient_id"));
             st.setString(2, String.valueOf(map.get("timedate")));
             st.setInt(3, (Integer) map.get("avg_heartbeats"));
-            st.setInt(4, (Integer) map.get("calories"));
+            st.setInt(4, ((Double) map.get("calories")).intValue());
             st.setDouble(5, (Double) map.get("elevation"));
-            st.setInt(6, (Integer) map.get("floors"));
-            st.setInt(7, (Integer) map.get("steps"));
-            st.setDouble(8, (Double) map.get("distance"));
-            st.setInt(9, (Integer) map.get("minutes_asleep"));
-            st.setInt(10, (Integer) map.get("minutes_awake"));
-            System.out.println("555");
+            st.setInt(6, ((Double) map.get("floors")).intValue());
+            st.setInt(7, ((Double) map.get("steps")).intValue());
+            st.setDouble(8, ((Double) map.get("distance")).intValue());
+            st.setInt(9, ((Double) map.get("minutes_asleep")).intValue());
+            st.setInt(10, ((Double) map.get("minutes_awake")).intValue());
             st.executeUpdate();
             conn.close();
             return true;
